@@ -13,6 +13,23 @@
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" />
 
+	<!-- 
+		mvc:resouces에 대한 설명
+		즉.. 원래는 모든 요청을 dispatcher servlet으로 요청을 처리하는데
+		static 파일에 대해서 모든 요청을 dispatcher에게 보내면 dispatcher의 처리가 복잡해져서
+		아래의 맵핑된 방식에 따라 tomcat의 default servlet으로 바로 요청을 보내는 방식입니다.
+		
+		따라서 mapping 된 방식에 따라 static 파일을 위치해주시면 됩니다.
+		(현재는 default servlet을 제대로 사용하지 못하시네요 ㅠㅠ)
+		
+		조금 더 설명을 하자면..
+		<mvc:resources location="/img/" mapping="/WEB-INF/static/images/**" /> 된 코드는 
+		jsp에서 "/img/**" 의 요청을 받으면 "WEB-INF/static/images/**" 하위에서 자료를 찾고 보내준다는 의미입니다 :) 
+		
+		참고자료.
+		1. http://blog.whitelife.co.kr/213
+		2. http://egloos.zum.com/springmvc/v/504151
+	 -->
 	<mvc:resources location="/img/" mapping="/img/**" />
 	<mvc:resources location="/css/" mapping="/css/**" />
 	<mvc:resources location="/js/" mapping="/js/**" />
