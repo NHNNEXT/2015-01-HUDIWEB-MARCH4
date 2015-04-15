@@ -3,6 +3,13 @@
 * 삭제, 수정 구현
 */
 
+/*
+ * angular를 사용할 경우
+ * 기존 jquery의 sortable을 구현한 angular-ui-sortable 이 있습니다.
+ * 
+ * https://github.com/angular-ui/ui-sortable 참고 바랍니다 :)
+ */
+
 jQuery(document).ready(function($) {
     $('.sortableContainer').on('mousedown', '.sortable', function(e) {
         e.stopPropagation();
@@ -78,6 +85,7 @@ jQuery(document).ready(function($) {
         return position;
     };
 });
+
 
 angular.module('roadmap', [])
 .controller('roadmapCtrl', function() {

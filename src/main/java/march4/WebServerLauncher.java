@@ -4,15 +4,15 @@ import java.io.File;
 
 import org.apache.catalina.startup.Tomcat;
 
-public class WebServerLauncher {	
+public class WebServerLauncher {
 	public static void main(String[] args) throws Exception {
-        String webappDirLocation = "webapp/";
-        Tomcat tomcat = new Tomcat();
-        tomcat.setPort(8080);
+		String webappDirLocation = "webapp/";
+		Tomcat tomcat = new Tomcat();
+		tomcat.setPort(8080);
 
-        tomcat.addWebapp("/", new File(webappDirLocation).getAbsolutePath());
-  
-        tomcat.start();
-        tomcat.getServer().await();
-    }
+		tomcat.addWebapp("/", new File(webappDirLocation).getAbsolutePath());
+
+		tomcat.start();
+		tomcat.getServer().await();
+	}
 }
