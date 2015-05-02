@@ -3,6 +3,12 @@
 * 삭제, 수정 구현
 */
 
+// YG: 전반적으로 라인 수를 줄이려는 듯한 느낌의 코딩 스타일이 보입니다.
+//     하지만 jQuery 스타일 가이드는
+//     https://contribute.jquery.org/style-guide/js/#spacing
+//     (과장하자면) 가능한 최대한 띄어쓰기를 권장하고 있습니다.
+//     한 번 참고해보세요.
+
 jQuery(document).ready(function($) {
     $('.sortableContainer').on('mousedown', '.sortable', function(e) {
         e.stopPropagation();
