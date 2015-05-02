@@ -15,11 +15,18 @@
         };
     }
 
+
     march4.app = angular.module('march4', ['ngRoute'], function($controllerProvider){
+        
+        // YG: 앵귤러에서 제공하는 $blabla를 밖에서 접근 가능하게 보여주는 것이 좋은 방법은 아닌 것 같습니다.
         march4.app.$controllerProvider = $controllerProvider;
+        // YG: 이런 방식은 어떨까요?
+        // march4.app.registerController = function(name, controller) {
+        //     $controllerProvider.register(name, controller);
+        // }
     });
 
-    march4.app.config(['$routeProvider', '$locationProvider', '$controllerProvider', function($routeProvider, $locationProvider) {
+    march4.app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
         $routeProvider
             .when('/',{
                 templateUrl: '/div/frontpage',
