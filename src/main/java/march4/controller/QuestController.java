@@ -43,9 +43,20 @@ public class QuestController {
 //		// TODO
 //		return q.selectByqID(pId, qId);
 //	}
-	
+
+	/*
+	 * @see march4.controller.QuestControllerMockTest
+	 * 
+	 * request body는 model에 대해서도 자동적용됩니다.
+	 */
 	@RequestMapping(value = {""}, method = RequestMethod.POST, headers = {"content-type=application/json"}, produces=MediaType.APPLICATION_JSON_VALUE)
-	public String request(@RequestBody String body, @PathVariable String pId) {
+	public String request(@RequestBody Quest quest, @PathVariable int pId) {
+//		public String request(@RequestBody String body, @PathVariable String pId) {
+		
+		quest.setpId(pId);
+		q.insert(quest);
+		
+		/*
 		log.debug("roadmap POST");
 		System.out.println(body);
 		
@@ -73,6 +84,9 @@ public class QuestController {
 		}
 		
 		System.out.println("reach at the end of method");
+		*/
+		
+		
 		return "{\"result\":true}";
 	}
 }

@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class BuildingService {
 
+	// 특별한 이유가 없으면 접근자는 private이 좋습니다.
 	@Autowired
-	BuildingDao buildingDao;
+	private BuildingDao buildingDao;
 
 	public void addBuilding(Building building) {
 		buildingDao.add(building);

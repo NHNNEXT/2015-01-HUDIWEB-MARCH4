@@ -26,8 +26,21 @@ public class QuestDao {
 		DatabasePopulatorUtils.execute(populator, jdbcTemplate.getDataSource());
 	}
 
+	/*
+	 * last_insert_id에 대해서
+	 * - oracle ref: https://goo.gl/FOUAOj
+	 * - 동시성 문제: http://goo.gl/1uqQHg
+	 * - http://goo.gl/yo5R6Q
+	 * 
+	 * "insert into quest values (NULL, LAST_INSERT_ID()+1, ?, ?, ?, ?, ?)";
+	 * 하면 될것 같은데.. 동시성 문제가 있다고 하네요.
+	 * 특히 오라클 ref에는 last_insert_id 구현내용상
+	 *  1. auto-increment 필드에 대해서 테이블에 하나씩만 동작하고
+	 *  2. batch 작업시 여러 행 중 최초 행의 id만 기억한다고 합니다..
+	 *  	- http://goo.gl/WhPkgj 
+	 */
 	public int insert(Quest quest) {
-		System.out.println("hi");
+		System.out.println("hi"); // 되도록 로거를 ㅠ
 		String sql = "insert into quest values (NULL, ?, ?, ?, ?, ?, ?)";
 		jdbcTemplate.update(sql, quest.getpId(), 
 				quest.getPosX(), quest.getPosY(), quest.getOrder(), quest.getContents(), quest.getDue());
