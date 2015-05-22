@@ -1,4 +1,6 @@
 (function(){
+    console.log("kuku");
+    
     var Sortable = march4.util.Sortable;
 
     march4.app.registerController('roadmapController', function($http, $scope, $routeParams) {
