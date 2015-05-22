@@ -16,36 +16,11 @@
             }
         };
 
-
         $scope.uid = {
             "uid": $routeParams.buildingId
         };
         $scope.panelOpened = ($routeParams.panel == "panel");
         $scope.panelID = $routeParams.panelId;
-        $scope.panels = [
-            {
-                ID: 0
-            }, {
-                ID: 1
-            }, {
-                ID: 2
-            }, {
-                ID: 3
-            }, {
-                ID: 4
-            }, {
-                ID: 5
-            }, {
-                ID: 6
-            }, {
-                ID: 7
-            }, {
-                ID: 8
-            }, {
-                ID: 9
-            }
- ];
-
         $scope.openPanel = function (index) {
             if (index === undefined) return;
 
@@ -181,6 +156,22 @@
             $("header").removeClass("blur");
             $(".bd-overlay ~ div").removeClass("blur");
         };
+        
+        $scope.changePosition = function(pid) {
+            
+            var el =  $(".buildingArea li[data-id=" + pid + "]");
+            console.log(el);
+            march4.util.Draggable(el,null,function(e){
+                e.preventDefault();
+            });
+        }
+        
+        $scope.positionable = function(el){
+            console.log(el);
+            new march4.util.Draggable(el,function(e, el){ 
+                console.log(el);
+            });
+        }
 
         $scope.default();
     });

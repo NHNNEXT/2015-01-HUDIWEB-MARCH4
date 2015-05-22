@@ -1,6 +1,4 @@
 <link rel="stylesheet" href="<%- cssDir %>/building.css" />
-
-
 <div class="wrap">
     <div class="bd-addform bd-effect" ng-class="{'bd-show' : floatingForm.show}">
         <div class="bd-content">
@@ -25,7 +23,7 @@
     </div>
     <div>
         <ul class="buildingArea">
-            <li ng-repeat="Building in Buildings" class="ani buildingBox" ng-class="{hide : Building.hide, delete : Building.delete}" ng-click="openPanel(2)">
+            <li ng-repeat="Building in Buildings" class="buildingBox" ng-class="{hide : Building.hide, delete : Building.delete}" repeat-func="positionable">
                 pid : {{Building.pid}}
                 <br> uid : {{Building.uid}}
                 <br> name : {{Building.name}}
@@ -38,12 +36,11 @@
     </div>
 </div>
 
-
-
-
 <div class="perspective">
-    <section class="panel" id="dummy-panel" ng-include="'/div/roadmap'" ng-class="{active: panelOpened}">
+    <section class="panel" id="dummy-panel" ng-class="{active: panelOpened}">
         <!--        <section class="panel" id="dummy-panel" ng-include="'/div/roadmap'" ng-class="{active: panelOpened}" ng-controller="roadmapController">-->
-
+        <button class="close" ng-click="closePanel()">Close</button>
+        <div ng-include="'/div/roadmap'">
+        </div>
     </section>
 </div>

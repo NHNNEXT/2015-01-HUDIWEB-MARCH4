@@ -45,6 +45,10 @@ var march4 = {
 };
 
 march4.util.Draggable = function(el, downFunc, moveFunc, upFunc) {
+    if(!(this instanceof march4.util.Draggable)){
+        return new march4.util.Draggable(el, downFunc, moveFunc, upFunc);
+    }
+    
     var that = this;
 
     downFunc = downFunc || function() {};
@@ -56,15 +60,22 @@ march4.util.Draggable = function(el, downFunc, moveFunc, upFunc) {
         downFunc(e, that.$el);
         var cursorX = e.clientX;
         var cursorY = e.clientY;
-        var elY = that.$el.offset().top - $(window).scrollTop();
-        var elX = that.$el.offset().left - $(window).scrollLeft();
+        var marginX = parseInt(that.$el.css('marginLeft'));
+        var marginY = parseInt(that.$el.css('marginTop'));
+        console.log("mx : " + marginX);
+        console.log("my : " + marginY);
+        var elY = that.$el.offset().top - $(window).scrollTop() - marginY;
+        var elX = that.$el.offset().left - $(window).scrollLeft() - marginX;
         var diffX = elX - cursorX;
         var diffY = elY - cursorY;
         var originalStyle = that.$el.attr('style') || "";
         setPos(e);
+        
         $(document).on('mousemove.drag', function(e) {
             moveFunc(e, that.$el);
             setPos(e);
+            console.log(1);
+            e.preventDefault();
         });
 
         function setPos(e) {
