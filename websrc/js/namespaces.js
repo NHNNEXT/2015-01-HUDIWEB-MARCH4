@@ -62,8 +62,6 @@ march4.util.Draggable = function(el, downFunc, moveFunc, upFunc) {
         var cursorY = e.clientY;
         var marginX = parseInt(that.$el.css('marginLeft'));
         var marginY = parseInt(that.$el.css('marginTop'));
-        console.log("mx : " + marginX);
-        console.log("my : " + marginY);
         var elY = that.$el.offset().top - $(window).scrollTop() - marginY;
         var elX = that.$el.offset().left - $(window).scrollLeft() - marginX;
         var diffX = elX - cursorX;
@@ -74,7 +72,6 @@ march4.util.Draggable = function(el, downFunc, moveFunc, upFunc) {
         $(document).on('mousemove.drag', function(e) {
             moveFunc(e, that.$el);
             setPos(e);
-            console.log(1);
             e.preventDefault();
         });
 

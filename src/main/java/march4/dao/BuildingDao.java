@@ -16,11 +16,11 @@ public class BuildingDao {
 	private JdbcTemplate jdbcTemplate;
 
 	public void add(Building building) {
-		String sql = "insert into project values(null, ?, ?, ?)";
+		String sql = "insert into project values(null, ?, ?, ?, ?, ?)";
 		jdbcTemplate.update(sql, building.getUid(), building.getName(),
-				building.getShared());
+				building.getShared(), building.getPosx(), building.getPosy());
 	}
-	
+
 	public void del(int pid) {
 		String sql = "delete from project where pid = ?";
 		jdbcTemplate.update(sql, pid);
@@ -34,9 +34,15 @@ public class BuildingDao {
 				new BeanPropertyRowMapper<Building>(Building.class));
 		return building;
 	}
-	
+
 	public Integer getLastpid() {
 		String sql = "select last_insert_id() as pid";
 		return jdbcTemplate.queryForObject(sql, Integer.class);
+	}
+
+	public void updatePositoin(Building building) {
+		String sql = "update project set posx = ?, posy = ? where pid = ?";
+		jdbcTemplate.update(sql, building.getPosx(), building.getPosy(),
+				building.getPid());
 	}
 }

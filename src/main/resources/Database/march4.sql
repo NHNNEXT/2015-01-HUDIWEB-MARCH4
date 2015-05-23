@@ -41,6 +41,8 @@ CREATE TABLE IF NOT EXISTS `mydb`.`project` (
   `host_uId` INT NOT NULL,
   `name` VARCHAR(45) NULL,
   `shared` VARCHAR(45) NULL,
+  `posX` INT NOT NULL,
+  `posY` INT NOT NULL,
   PRIMARY KEY (`pId`),
   INDEX `fk_project_user1_idx` (`host_uId` ASC),
   CONSTRAINT `fk_project_user1`

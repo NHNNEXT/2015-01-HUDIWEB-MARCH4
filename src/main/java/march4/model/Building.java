@@ -4,6 +4,8 @@ public class Building {
 
 	private Integer pid;
 	private Integer uid;
+	private Integer posx;
+	private Integer posy;
 	private String name;
 	private String shared;
 
@@ -17,11 +19,14 @@ public class Building {
 		this.name = name;
 		this.shared = shared;
 	}
-
-	public Building(Integer pid, Integer uid, String name, String shared) {
+	
+	public Building(Integer pid, Integer uid, Integer posx, Integer posy,
+			String name, String shared) {
 		super();
 		this.pid = pid;
 		this.uid = uid;
+		this.posx = posx;
+		this.posy = posy;
 		this.name = name;
 		this.shared = shared;
 	}
@@ -42,6 +47,22 @@ public class Building {
 		this.uid = uid;
 	}
 
+	public Integer getPosx() {
+		return posx;
+	}
+
+	public void setPosx(Integer posx) {
+		this.posx = posx;
+	}
+
+	public Integer getPosy() {
+		return posy;
+	}
+
+	public void setPosy(Integer posy) {
+		this.posy = posy;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -57,5 +78,4 @@ public class Building {
 	public void setShared(String shared) {
 		this.shared = shared;
 	}
-
 }

@@ -23,7 +23,7 @@
     </div>
     <div>
         <ul class="buildingArea">
-            <li ng-repeat="Building in Buildings" class="buildingBox" ng-class="{hide : Building.hide, delete : Building.delete}" repeat-func="positionable">
+            <li ng-repeat="Building in Buildings" class="buildingBox" ng-class="{hide : Building.hide, delete : Building.delete}" repeat-func="positionable" ng-mousedown="setPid(Building.pid)">
                 pid : {{Building.pid}}
                 <br> uid : {{Building.uid}}
                 <br> name : {{Building.name}}

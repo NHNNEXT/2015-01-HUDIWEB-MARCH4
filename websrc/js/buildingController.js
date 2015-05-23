@@ -2,9 +2,7 @@
     "use strict"
 
     march4.app.registerController('buildingController', function ($scope, $window, $http, $timeout, $routeParams, $location) {
-        $scope.data = {};
-        $scope.addData = {};
-        $scope.delData = {};
+        $scope.pid = {};
         $scope.floatingForm = {
             show: false
         };
@@ -15,12 +13,35 @@
                 margin: 20
             }
         };
-
         $scope.uid = {
             "uid": $routeParams.buildingId
         };
         $scope.panelOpened = ($routeParams.panel == "panel");
         $scope.panelID = $routeParams.panelId;
+        $scope.panels = [
+            {
+                ID: 0
+            }, {
+                ID: 1
+            }, {
+                ID: 2
+            }, {
+                ID: 3
+            }, {
+                ID: 4
+            }, {
+                ID: 5
+            }, {
+                ID: 6
+            }, {
+                ID: 7
+            }, {
+                ID: 8
+            }, {
+                ID: 9
+            }
+ ];
+
         $scope.openPanel = function (index) {
             if (index === undefined) return;
 
@@ -39,14 +60,19 @@
         };
 
         $scope.setPosition = function () {
-            var col = parseInt($(".buildingArea").outerWidth(true) / ($scope.pageSet.buildingBox.x + $scope.pageSet.buildingBox.margin));
-
             for (var i = 0; i < $(".buildingArea li").size(); i++) {
-                var posX = parseInt(i % col) * $scope.pageSet.buildingBox.x + $scope.pageSet.buildingBox.margin * parseInt(i % col);
-                var posY = parseInt(i / col) * $scope.pageSet.buildingBox.y + $scope.pageSet.buildingBox.margin * parseInt(i / col);
-                $(".buildingArea li").eq(i).css("left", posX);
-                $(".buildingArea li").eq(i).css("top", posY);
-            }
+                $(".buildingArea li").eq(i).css("left", $scope.Buildings[i].posx + "px");
+                $(".buildingArea li").eq(i).css("top", $scope.Buildings[i].posy + "px");
+            };
+
+            //            var col = parseInt($(".buildingArea").outerWidth(true) / ($scope.pageSet.buildingBox.x + $scope.pageSet.buildingBox.margin));
+            //
+            //            for (var i = 0; i < $(".buildingArea li").size(); i++) {
+            //                var posX = parseInt(i % col) * $scope.pageSet.buildingBox.x + $scope.pageSet.buildingBox.margin * parseInt(i % col);
+            //                var posY = parseInt(i / col) * $scope.pageSet.buildingBox.y + $scope.pageSet.buildingBox.margin * parseInt(i / col);
+            //                $(".buildingArea li").eq(i).css("left", posX);
+            //                $(".buildingArea li").eq(i).css("top", posY);
+            //            };
         };
 
         $scope.recalc = function (no) {
@@ -62,17 +88,18 @@
                 params: $scope.uid
             }).
             success(function (data, status, headers, config) {
+                console.log(data);
                 $scope.Buildings = data;
-
-                function closure(i) {
-                    $scope.Buildings[i].hide = true;
-                    $timeout(function () {
-                        $scope.Buildings[i].hide = false;
-                    }, i * 150);
-                }
-
-                for (var i = 0; i < $scope.Buildings.length; i++) closure(i);
+                for (var i = 0; i < $scope.Buildings.length; i++) {
+                    (function (i) {
+                        $scope.Buildings[i].hide = true;
+                        $timeout(function () {
+                            $scope.Buildings[i].hide = false;
+                        }, i * 150);
+                    })(i);
+                };
                 $timeout($scope.setPosition, 0);
+
             }).
             error(function (data, status, headers, config) {
                 if (status == 400) {
@@ -84,7 +111,10 @@
         };
 
         $scope.add = function () {
+            $scope.addData = {};
             $scope.addData.uid = $scope.uid.uid;
+            $scope.addData.posx = Math.round(($("main>.wrap").outerWidth() / 2) - ($scope.pageSet.buildingBox.x / 2));
+            $scope.addData.posy = Math.round(($("main>.wrap").outerHeight() / 2) - ($scope.pageSet.buildingBox.y / 2));
             $http({
                 method: 'POST',
                 url: '/building/add',
@@ -109,6 +139,7 @@
         };
 
         $scope.del = function (pid, e, i) {
+            $scope.delData = {};
             $scope.delData.pid = pid;
             $http({
                 method: 'POST',
@@ -132,13 +163,13 @@
             });
         };
 
-        $scope.resizeId = null;
+        $scope.resizeId;
         $(window).resize(function () {
             if ($scope.resizeId) $timeout.cancel($scope.resizeId);
 
             $scope.resizeId = $timeout(function () {
                 $timeout($scope.setPosition, 0);
-            }, 500);
+            }, 500)
         });
 
         $scope.openFloatingForm = function () {
@@ -156,21 +187,55 @@
             $("header").removeClass("blur");
             $(".bd-overlay ~ div").removeClass("blur");
         };
+
+        $scope.positionable = function (el) {
+            $scope.temp = {};
+            march4.util.Draggable(el,
+                function (e, el) {
+                    console.log("press");
+                    e.preventDefault();
+                },
+                function (e, el) {
+                    console.log("move");
+                    $scope.temp.posx = $(el).css("left");
+                    $scope.temp.posy = parseInt($(el).css("top")) - 172 + "px";
+                    e.preventDefault();
+                },
+                function (e, el) {
+                    console.log("realese");
+                    $(el).css("left", $scope.temp.posx);
+                    $(el).css("top", $scope.temp.posy);
+                    $scope.updatePosition(el);
+                    e.preventDefault();
+                });
+        };
         
-        $scope.changePosition = function(pid) {
+        $scope.updatePosition = function(el) {
+            $scope.updateData = {};
+            $scope.updateData.pid = $scope.pid;
+            $scope.updateData.posx = parseInt($(el).css("left"));
+            $scope.updateData.posy = parseInt($(el).css("top"));
             
-            var el =  $(".buildingArea li[data-id=" + pid + "]");
-            console.log(el);
-            march4.util.Draggable(el,null,function(e){
-                e.preventDefault();
+            $http({
+                method: 'POST',
+                url: '/building/updatePos',
+                data: $scope.updateData
+            }).
+            success(function (data, status, headers, config) {
+                
+            }).
+            error(function (data, status, headers, config) {
+                if (status == 400) {
+                    $scope.messages = data;
+                } else {
+                    alert('Unexpected server error.');
+                }
             });
-        }
+        };
         
-        $scope.positionable = function(el){
-            console.log(el);
-            new march4.util.Draggable(el,function(e, el){ 
-                console.log(el);
-            });
+        $scope.setPid = function(pid){
+            console.log(pid);
+            $scope.pid = pid;
         }
 
         $scope.default();
@@ -183,57 +248,57 @@
 
 //------------------------------------------------------------------
 
-(function(){
+(function () {
     "use strict"
     var Sortable = march4.util.Sortable;
 
-    march4.app.registerController('roadmapController', function($http, $scope, $routeParams) {
+    march4.app.registerController('roadmapController', function ($http, $scope, $routeParams) {
         $scope.lastOrder = 0;
         $scope.quests = [];
         $scope.path = '/api' + window.location.pathname;
-        $scope.initQuests = function() {
+        $scope.initQuests = function () {
             console.log('init', $scope.lastOrder);
             $scope.newQuest = {
                 order: ++($scope.lastOrder)
             };
         };
-        $scope.addQuest = function() {
+        $scope.addQuest = function () {
             console.log($scope.newQuest);
             $scope.quests.push($scope.newQuest);
             var data = $scope.newQuest;
-            $http.post($scope.path, data).success(function(data, status, headers, config) {
+            $http.post($scope.path, data).success(function (data, status, headers, config) {
                 console.log("post good", status, "!");
                 console.log(data);
                 $scope.showQuests();
-            }).error(function(data, status, headers, config) {
+            }).error(function (data, status, headers, config) {
                 console.log("post bad", status, "!");
                 console.log(data);
             });
             $scope.initQuests();
         };
-        $scope.showQuests = function() {
+        $scope.showQuests = function () {
             console.log('getting quests');
-            $http.get($scope.path).success(function(data, status, headers, config) {
+            $http.get($scope.path).success(function (data, status, headers, config) {
                 console.log("get good", status, "!");
                 console.log(data);
                 $scope.quests = data;
                 $scope.lastOrder = parseInt(data[data.length - 1].order);
-                if(typeof($scope.lastOrder) !== 'number') $scope.lastOrder = 0;
+                if (typeof ($scope.lastOrder) !== 'number') $scope.lastOrder = 0;
                 console.log('show', $scope.lastOrder);
                 $scope.initQuests();
-            }).error(function(data, status, headers, config) {
+            }).error(function (data, status, headers, config) {
                 console.log("get bad", status, "!");
                 console.log(data);
                 $scope.initQuests();
             });
         };
-        $scope.init = function() {
-        	$scope.initQuests();
+        $scope.init = function () {
+            $scope.initQuests();
             $scope.showQuests();
         };
-        $scope.makeItSortable = function(el) {
-            new Sortable(el, function(nFrom, nTo) {
-            	
+        $scope.makeItSortable = function (el) {
+            new Sortable(el, function (nFrom, nTo) {
+
             });
         };
         $scope.init();
