@@ -71,7 +71,7 @@ public class UserController {
 		}
 		log.debug("로그인 성공!!");
 		session.setAttribute("email", user.getEmail());
-		return "true";
+		return "true";//discerning  success(=== response.data)  in signin contorller
 	}
 
 	@RequestMapping(value = "/signout", method = RequestMethod.POST)
