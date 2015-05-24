@@ -8,14 +8,14 @@
         	$scope.loading = true;
         	UserService.Create($scope.user)
 	        	.then(function(response){
-	        		if(response.success){ //result by type of tootTip
-	        			console.log("success of data response ");
-	        			ToolTip.Success("Registration successful", true);
-                        $location.path('/signin');
-	        		} else{
-	        			ToolTip.Error(response.message);
+	        		if(typeof response.data === 'object'){ //typeof $scope.toolTip
+	        			ToolTip.Error(response.data);
 	        			$scope.loading = false;
-	        			console.log("error of data response ");
+	        			alert("error of data response ");
+	        		} else{
+	        			alert("success of data response ");
+	        			ToolTip.Success("Registration successful", true);
+	        			$location.path('/signin');
 	        		}
 	        		
 //	        		if(response.status == 200){

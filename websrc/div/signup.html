@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="<%- cssDir %>/signup.css" />
 
 <!--start register form-->
 <div id="">
@@ -5,7 +6,7 @@
 		<div class="">
 			<!--start  tooltips above login form  <<huh? this part overlapped between sign in n register.html  -->
 			<div
-				ng-class="{ 'alert': toolTip 
+				ng-class="{ 'alert': toolTip,
                'alert-success': toolTip.type === 'success', 
                'alert-danger': toolTip.type === 'error' }"
 				ng-if="toolTip" ng-bind="toolTip.message"></div>

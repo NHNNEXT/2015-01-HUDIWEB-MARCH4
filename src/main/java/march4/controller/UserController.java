@@ -34,10 +34,9 @@ public class UserController {
 
 	@ResponseStatus(value = HttpStatus.OK)
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public @ResponseBody List<String> createUser(@RequestBody @Valid User user,
-			BindingResult result) {
-
+	public @ResponseBody List<String> createUser(@RequestBody @Valid User user, BindingResult result) {
 		log.debug(user.toString());
+		
 		List<ObjectError> errors = result.getAllErrors();
 		if (errors.isEmpty()) {
 			userDao.signup(user);

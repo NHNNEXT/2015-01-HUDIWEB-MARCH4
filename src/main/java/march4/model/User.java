@@ -13,7 +13,7 @@ public class User {
 	@NotEmpty
 	private String email;
 
-	@Size(min = 8, max = 12)
+	@Size(min = 5, max = 12)
 	@NotNull
 	private String password;
 

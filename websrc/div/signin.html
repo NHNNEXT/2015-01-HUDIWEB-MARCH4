@@ -1,13 +1,15 @@
+<link rel="stylesheet" href="<%- cssDir %>/signup.css" />
+
 <!--start gate of login-->
 <div id="">
 	<div class="container">
 		<div class="">
 			<!--start  tooltips above login form -->
 			<div
-				ng-class="{ 'alert': flash, 
-               'alert-success': flash.type === 'success', 
-               'alert-danger': flash.type === 'error' }"
-				ng-if="flash" ng-bind="flash.message"></div>
+				ng-class="{ 'alert': toolTip, 
+               'alert-success': toolTip.type === 'success', 
+               'alert-danger': toolTip.type === 'error' }"
+				ng-if="toolTip" ng-bind="toolTip.message"></div>
 			<!--end tooltips above login form -->
 
 			<!--start login container -->

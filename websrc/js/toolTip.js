@@ -17,6 +17,9 @@
 
             function clearFlashMessage() {
                 var toolTip = $rootScope.toolTip;
+                //
+                //toolTip.type = 'success';
+                
                 if (toolTip) {
                     if (!toolTip.keepAfterLocationChange) {
                         delete $rootScope.toolTip;
