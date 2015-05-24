@@ -16,11 +16,11 @@
 			<div>
 				<h2>Login</h2>
 				<div ng-show="error" class="alert alert-danger">{{error}}</div>
-				<form name="" ng-submit="signin()">
+				<form name="form" ng-submit="signin()">
 					<div
 						ng-class="{ 'has-error': form.user.email.$dirty && form.user.email.$error.required }">
 						<label for="email">email</label> <input type="text" name="email"
-							id="email" ng-model="user.email" required /> <span
+							id="email" class="form-control" ng-model="user.email" required /> <span
 							ng-show="form.user.email.$dirty && form.user.email.$error.required">email
 							is required</span>
 					</div>
