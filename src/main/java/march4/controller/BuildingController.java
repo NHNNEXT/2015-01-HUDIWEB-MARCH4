@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,6 +39,22 @@ public class BuildingController {
 		return "building";
 	}
 	
+	/*
+	 * @see BuildingControllerMockTest
+	 * 
+	 * addBuilding과 delBuilding 메소드에 대해서 리팩토링을 해봤습니다.
+	 * 주석을 해제하고 전/후 코드에 대한 테스트코드를 돌려보면 결과는 동일합니다.
+	 * 
+	 * 1. json string으로 넘어오는 값을 객체로 받을 수 있고, 각 field의 이름에 맞추어 바인딩된 결과를 받을 수 있습니다.
+	 * 2. controller의 exceptionHandler 사용방법입니다.
+	 * 		- 참고: http://goo.gl/HALjY7
+	 * 		- 요약하자면. globalExceptionHandler뿐 아니라 controller별 exceptionHandler를 만들 수 있고 HandlerExceptionResolver를 구현하여 사용할 수도 있습니다.
+	 * 		- delBuilding은 controller별 예외핸들러를 사용해서 조금 더 명확하게 바꿔보았습니다.
+	 * 3. BuildingControllerMockTest를 참고하여 MockTest도 만들어보세요 :)
+	 * 		- MockTest는 SpringTest와 다르게 Spring에 종속적이지 않아서 로직검증에 효율적인것 같습니다..!! 
+	 */
+	
+	/*
 	@ResponseStatus(value = HttpStatus.OK)
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public @ResponseBody Building addBuilding(@RequestBody String body, ModelMap model) {
@@ -62,8 +79,20 @@ public class BuildingController {
 		//받아온 pid와 나머지 정보 조합하여 building만듬.
 		return addBuilding;
 		//그리고 그거 리턴.
+	}*/
+	@ResponseStatus(value = HttpStatus.OK)
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public @ResponseBody Building addBuilding(@RequestBody Building building, ModelMap model) {
+		buildingService.addBuilding(building);
+		
+		int pid = buildingService.getLastpId();
+		building.setPid(pid);
+		
+		return building;
 	}
 	
+	
+	/*
 	@ResponseStatus(value = HttpStatus.OK)
 	@RequestMapping(value = "/del", method = RequestMethod.POST)
 	public @ResponseBody String delBuilding(@RequestBody String body, ModelMap model) {
@@ -83,6 +112,20 @@ public class BuildingController {
 		} catch (Exception e) {
 			log.debug("빌딩을 삭제하지 못했어!! 난 무능한 서버야!!");
 		}
+		return "false";
+	}*/
+	@ResponseStatus(value = HttpStatus.OK)
+	@RequestMapping(value = "/del", method = RequestMethod.POST)
+	public @ResponseBody String delBuilding(@RequestBody Building building, ModelMap model) {
+		
+		buildingService.delBuilding(building.getPid());
+		
+		return "true";
+	}
+	
+	@ExceptionHandler(value=Exception.class)
+	public @ResponseBody String etc() {
+		
 		return "false";
 	}
 	

@@ -20,6 +20,20 @@ public class QuestService {
 		return questDao.selectBypID(pId);
 	}
 	
+	/*
+	 * 한 것과 하지 못한 것의 차이는 생각보다 큰 것 같아요.
+	 * 시간이 없더라도 단 한 분이라도 시도해보시고 결과를 팀원과 공유하시는게 좋을 것 같아요 :)
+	 * 
+	 * 참고
+	 * - https://goo.gl/7PJAud / 설정
+	 * - https://goo.gl/iCdUyP / transaction service
+	 * - https://goo.gl/C8laSd
+	 * 
+	 * - 블로그
+	 * 		- http://blog.outsider.ne.kr/869
+	 * 		- http://blog.outsider.ne.kr/870
+	 * 
+	 */
 	public String swapOrder(int qId1, int qId2) {
 		int order1 = questDao.getOrderOf(qId1);
 		int order2 = questDao.getOrderOf(qId2);
