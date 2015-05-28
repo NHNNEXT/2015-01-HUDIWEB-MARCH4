@@ -23,8 +23,8 @@
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/"/>
 			<mvc:exclude-mapping path="/users/"/>
-			<mvc:exclude-mapping path="/signin"/>
-			<mvc:exclude-mapping path="/signup"/>
+			<mvc:exclude-mapping path="/users/signin"/>
+			<mvc:exclude-mapping path="/users/signup"/>
 			<mvc:exclude-mapping path="/div/signin"/>
 			<mvc:exclude-mapping path="/div/signup"/>
 			<mvc:exclude-mapping path="/js/**"/>

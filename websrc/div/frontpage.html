@@ -1,8 +1,7 @@
 <!-- start dive into app -->
-<h2>welcome~ {{user.email}}</h2>
-<br>
-signed in
-<p><a href = "#">signout</a></p>
+<h2>welcome~ <br><span ng-show="user">{{user.name}} ({{user.email}}) signed in</span></h2>
+
+<p ng-show="user"><a href="/signout">sign out</a></p>
 <!-- end dive into app -->
 
 <!--start sign in form -->
