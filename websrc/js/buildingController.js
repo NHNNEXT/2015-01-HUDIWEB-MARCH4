@@ -163,14 +163,14 @@
             });
         };
 
-        $scope.resizeId;
-        $(window).resize(function () {
-            if ($scope.resizeId) $timeout.cancel($scope.resizeId);
-
-            $scope.resizeId = $timeout(function () {
-                $timeout($scope.setPosition, 0);
-            }, 500)
-        });
+//        $scope.resizeId;
+//        $(window).resize(function () {
+//            if ($scope.resizeId) $timeout.cancel($scope.resizeId);
+//
+//            $scope.resizeId = $timeout(function () {
+//                $timeout($scope.setPosition, 0);
+//            }, 500)
+//        });
 
         $scope.openFloatingForm = function () {
             $scope.floatingForm.show = true;
@@ -189,40 +189,43 @@
         };
 
         $scope.positionable = function (el) {
-            $scope.temp = {};
+            $scope.dragpos = {};
+
             march4.util.Draggable(el,
                 function (e, el) {
                     console.log("press");
+                    $scope.dragpos.startx = e.pageX;
+                    $scope.dragpos.starty = e.pageY;
                     e.preventDefault();
                 },
                 function (e, el) {
                     console.log("move");
-                    $scope.temp.posx = $(el).css("left");
-                    $scope.temp.posy = parseInt($(el).css("top")) - 172 + "px";
                     e.preventDefault();
                 },
                 function (e, el) {
                     console.log("realese");
-                    $(el).css("left", $scope.temp.posx);
-                    $(el).css("top", $scope.temp.posy);
+                    var diffx = e.pageX - $scope.dragpos.startx;
+                    var diffy = e.pageY - $scope.dragpos.starty;
+                    $(el).css("left", parseInt($(el).css("left")) + diffx + "px");
+                    $(el).css("top", parseInt($(el).css("top")) + diffy + "px");
                     $scope.updatePosition(el);
                     e.preventDefault();
                 });
         };
-        
-        $scope.updatePosition = function(el) {
+
+        $scope.updatePosition = function (el) {
             $scope.updateData = {};
             $scope.updateData.pid = $scope.pid;
             $scope.updateData.posx = parseInt($(el).css("left"));
             $scope.updateData.posy = parseInt($(el).css("top"));
-            
+
             $http({
                 method: 'POST',
                 url: '/building/updatePos',
                 data: $scope.updateData
             }).
             success(function (data, status, headers, config) {
-                
+
             }).
             error(function (data, status, headers, config) {
                 if (status == 400) {
@@ -232,8 +235,8 @@
                 }
             });
         };
-        
-        $scope.setPid = function(pid){
+
+        $scope.setPid = function (pid) {
             console.log(pid);
             $scope.pid = pid;
         }
