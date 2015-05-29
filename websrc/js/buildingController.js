@@ -199,7 +199,7 @@
             $(".bd-overlay").css("opacity", 1);
             $("header").addClass("blur");
             $(".bd-overlay ~ div").addClass("blur");
-        }; 
+        };
 
         $scope.closeFloatingForm = function () {
             $scope.floatingForm.show = false;
@@ -216,16 +216,39 @@
         $scope.positionable = function (el) {
 
             $scope.dragpos = {};
+            $scope.boxDiff = {};
+    
             march4.util.Draggable(el,
                 function (e, el) {
                     console.log("press");
                     $scope.dragpos.startx = e.pageX;
                     $scope.dragpos.starty = e.pageY;
+                    
+                    $scope.boxDiff.x = e.pageX - $(el).offset().left;
+                    $scope.boxDiff.y = e.pageY - $(el).offset().top;
                     e.preventDefault();
                 },
-                function (e, el) {
+                function (e, el, position) {
+
+                //마우스 위치를 전역으로 잡아서 빼주지
+                //클릭시에 저장해요.
+                
+                    var collision = {};
+                    $scope.collisionDetect(e, el, collision, $scope.boxDiff)
+                    console.log(collision);
+                    console.log($scope.boxDiff);
+                    if (collision.top !== false)
+                        position.y = collision.top + $scope.boxDiff.y;
+                    if (collision.left !== false)
+                        position.x = collision.left + $scope.boxDiff.x;
+                    if (collision.bottom !== false)
+                        position.y = collision.bottom + ($(el).outerHeight - $scope.boxDiff.y);
+                    if (collision.right !== false)
+                        position.x = collision.right + ($(el).outerWidth - $scope.boxDiff.x);
+                
                     console.log("move");
                     e.preventDefault();
+                    return position;
                 },
                 function (e, el) {
                     console.log("realese");
@@ -260,6 +283,52 @@
                 }
             });
         };
+
+        $scope.collisionDetect = function (e, el, collision, boxDiff) {
+            var currentX = e.pageX;
+            var currentY = e.pageY;
+            var areaX = $(".wrap.ng-scope").offset().left;
+            var areaY = $(".wrap.ng-scope").offset().top;
+            var areaWidth = $(".wrap.ng-scope").outerWidth();
+            var areaHeight = $(".wrap.ng-scope").outerHeight();
+            var boxX = $(el).offset().left;
+            var boxY = $(el).offset().top;
+            var boxWidth = $(el).outerWidth(true);
+            var boxHeight = $(el).outerHeight(true);
+
+            //박스 마우스 거리
+            var boxintX = boxDiff.x;
+            var boxintY = boxDiff.y;
+
+            //만약 area 바깥으로 나가면 멈춤
+
+            //왼쪽 막아
+            if (areaX > (currentX - boxintX))
+                collision.left = areaX;
+            else
+                collision.left = false;
+
+            //위쪽 막아
+            if (areaY > (currentY - boxintY))
+                collision.top = areaY;
+            else
+                collision.top = false;
+
+            //오른쪽 막아
+            if ((areaX + areaWidth) < currentX + (boxWidth - boxintX))
+                collision.right = (areaX + areaWidth);
+            else
+                collision.right = false;
+
+            //아래 막아
+            if ((areaY + areaHeight) < currentY + (boxHeight - boxintY))
+                collision.bottom = (areaY + areaHeight);
+            else
+                collision.bottom = false;
+
+            //마우스 거리 - 차거리 //위 왼쪽
+            //마우스 거리 + (박스크기 - 차거리) // 아래 오른쪽            
+        }
 
         $scope.setPid = function (pid) {
             console.log(pid);
