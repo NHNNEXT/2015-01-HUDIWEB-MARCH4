@@ -1,9 +1,7 @@
 (function(){
-    console.log("kuku");
-    
     var Sortable = march4.util.Sortable;
 
-    march4.app.registerController('roadmapController', function($http, $scope, $routeParams) {
+    march4.app.registerController('roadmapController', function($http, $scope, $routeParams, $interval) {
         $scope.lastOrder = 0;
         $scope.quests = [];
         $scope.path = '/api' + window.location.pathname;
@@ -53,5 +51,12 @@
             });
         };
         $scope.init();
+        $interval(function(){
+            var output;
+            for (var i = $scope.quests.length - 1; i >= 0; i--) {
+                output+=$scope.quests[i];
+            };
+            console.log(output);
+        },1000)
     });
 })();

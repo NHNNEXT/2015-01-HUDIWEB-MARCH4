@@ -2,30 +2,26 @@
 	'use strict';
 	march4.app.registerController('signupController', function($scope, $http, $location, UserService) {
 		$scope.user ={};
-        $scope.signup = signup;
-       
-        function signup(){
-        	$scope.loading = true;
-        	UserService.Create($scope.user)
-	        	.then(function(response){
-	        		if(response.status == 200){
-	        			//error
-	        			if(response.data !== ""){
-	                    	alert('you failed!');
-	                        //FlashService.Error(response.message);
-	                        $scope.loading = false;
-	                    
-	                    //success
-	                    } else {
-	                    	var errors = response.data;
-	        				alert('success!');
-	        				//FlashService.Success('Registration successful', true);
-	                        $location.path('/signin');
-	                    }
-	        		}else{
-	        			//do something	
-	        		}
-	        	});
+        $scope.signUp = function(){
+        	$scope.dataLoading = true;
+        	UserService.create($scope.user)
+        	.success(function(response){
+				var errors = response.data;
+				alert('회원가입이 완료되었습니다.');
+                $location.path('/signin');
+        	})
+	        .error(function(response, status, headers, config){
+                if (status == 400) {
+                	var alertString = "";
+                    for (var i = 0; i < response.length; i++)
+                        alertString += response[i]+"\n";
+
+                    alert(alertString); 
+                	$scope.dataLoading = false;
+	            } else {
+	                alert('Unexpected server error.');
+	            }
+            });
         } 
 	});
 }());

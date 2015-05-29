@@ -7,7 +7,14 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class User {
-
+	
+	@NotNull
+	private int uId;
+	
+	@NotNull
+	@Size(min = 2, max = 24)
+	private String name;
+	
 	@Email
 	@NotNull
 	@NotEmpty
@@ -17,6 +24,7 @@ public class User {
 	@NotNull
 	private String password;
 
+	public User(){}
 	public User(String email, String password) {
 		super();
 		this.email = email;
@@ -38,10 +46,25 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	@Override
-	public String toString() {
-		return "User [email=" + email + ", password=" + password + "]";
+	
+	public int getuId() {
+		return uId;
 	}
 
+	public void setuId(int uId) {
+		this.uId = uId;
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	@Override
+	public String toString() {
+		return "User [uId=" + uId + ", name=" + name + ", email=" + email
+				+ ", password=" + password + "]";
+	}
 }

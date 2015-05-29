@@ -1,34 +1,27 @@
 (function() {
 	'use strict';
-	march4.app.registerController('signinController', function($scope, $http) {
-		$scope.user ={};
-		
-        $scope.signin = signin;
-        
-        function signin(){
-        	$scope.loading = true;
-        	//
-        } 		
-		
-		
-	    
-//	    $scope.signin = function () {
-//	        $http({
-//	            method: 'POST',
-//	            url: '/sign/signin',
-//	            data: $scope.user
-//	        }).
-//	        success(function (data, status, headers, config) {
-//	            console.log(data);
-//	        }).
-//	        error(function (data, status, headers, config) {
-//	            if (status == 400) {
-//	                $scope.messages = data;
-//	            } else {
-//	                alert('Unexpected server error.');
-//	            }
-//	        });
-//	    };
-	     
+	march4.app.registerController('signinController', function($scope, $http, $location, $rootScope, UserService) {
+		$scope.loginUser ={};
+		console.log($scope.user);
+		$scope.signIn = function () {
+			$scope.loading = true;
+			UserService.signin($scope.loginUser)
+			.success(function(){
+				$rootScope.getUser();
+				$location.path('/');
+			})
+			.error(function (response, status, headers, config) {
+				if (status == 400) {
+					var alertString = "";
+					for (var i = 0; i < response.length; i++)
+						alertString += response[i]+"\n";
+
+					alert(alertString);
+					$scope.loading = false;
+				} else {
+					alert('Unexpected server error.');
+				}
+			});
+		};
 	});
 }());

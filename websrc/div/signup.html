@@ -17,7 +17,7 @@
 				<div ng-show="error" class="alert alert-danger">{{error}}{{signupMessage}}
 				</div>
 				<!-- asap:to apply this css class effect, link in minimum bootstrap  -->
-				<form name="" ng-submit="signup()">
+				<form name="" ng-submit="signUp()">
 					<div
 						ng-class="{ 'has-error': form.user.email.$dirty && form.user.email.$error.required }">
 						<label for="email">email</label> <input type="text" name="email"
@@ -34,12 +34,20 @@
 							is required</span>
 					</div>
 
+					<div
+						ng-class="{ 'has-error': form.user.name.$dirty && form.user.name.$error.required }">
+						<label for="name">Name</label> <input type="text"
+							name="name" id="name" class="form-control"
+							ng-model="user.name" required /> <span
+							ng-show="form.user.name.$dirty && form.user.name.$error.required">Name
+							is required</span>
+					</div>
+
 					<div class="btnAction">
 						<button type="submit" ng-disabled="form.$invalid || dataLoading">Register</button>
 						<!--image of loading -->
 						<img ng-if="dataLoading"
 							src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-						<a href="#">cancle</a>
 					</div>
 				</form>
 			</div>
