@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="<%- cssDir %>/signup.css" />
 
 <!--start register form-->
 <div id="">
@@ -5,49 +6,55 @@
 		<div class="">
 			<!--start  tooltips above login form  <<huh? this part overlapped between sign in n register.html  -->
 			<div
-				ng-class="{ 'alert': flash, 
-               'alert-success': flash.type === 'success', 
-               'alert-danger': flash.type === 'error' }"
-				ng-if="flash" ng-bind="flash.message"></div>
+				ng-class="{ 'alert': toolTip,
+               'alert-success': toolTip.type === 'success', 
+               'alert-danger': toolTip.type === 'error' }"
+				ng-if="toolTip" ng-bind="toolTip.message"></div>
 			<!--end tooltips above login form -->
 
 			<!--start register container -->
 			<div>
 				<h2>Register</h2>
-				<div ng-show="error" class="alert alert-danger">{{error}}{{signupMessage}}
-				</div>
+				<div ng-show="error" class="alert alert-danger">{{error}}</div>
 				<!-- asap:to apply this css class effect, link in minimum bootstrap  -->
-				<form name="" ng-submit="signUp()">
+				<form name="form" ng-submit="signup()" novalidate>
 					<div
-						ng-class="{ 'has-error': form.user.email.$dirty && form.user.email.$error.required }">
-						<label for="email">email</label> <input type="text" name="email"
-							id="email" ng-model="user.email" required /> <span
-							ng-show="form.user.email.$dirty && form.user.email.$error.required">email
-							is required</span>
+						ng-class="{ 'has-error': form.email.$invalid && !form.email.$pristine}">
+						<label for="email">email</label> <input type="email" name="email"
+							id="email" class="form-control" ng-model="newUser.email" required />
+						<span class="help-block"
+							ng-show="form.email.$invalid && !form.email.$pristine">format
+							is invalid email</span>
 					</div>
 					<div
-						ng-class="{ 'has-error': form.user.password.$dirty && form.user.password.$error.required }">
+						ng-class="{ 'has-error':form.password.$invalid && !form.password.$pristine}">
 						<label for="password">Password</label> <input type="password"
 							name="password" id="password" class="form-control"
-							ng-model="user.password" required /> <span
-							ng-show="form.user.password.$dirty && form.user.password.$error.required">Password
-							is required</span>
+							ng-model="newUser.password" ng-minlength="8" ng-maxlength="12"
+							required /> <span class="help-block"
+							ng-show="form.password.$dirty && form.password.$error.required">Password
+							is required</span> <span class="help-block"
+							ng-show="form.password.$error.minlength">Password is too
+							short</span><span class="help-block"
+							ng-show="form.password.$error.maxlength">Password is too
+							long</span>
 					</div>
 
 					<div
-						ng-class="{ 'has-error': form.user.name.$dirty && form.user.name.$error.required }">
+						ng-class="{ 'has-error': form.newUser.name.$dirty && form.newUser.name.$error.required }">
 						<label for="name">Name</label> <input type="text"
 							name="name" id="name" class="form-control"
-							ng-model="user.name" required /> <span
-							ng-show="form.user.name.$dirty && form.user.name.$error.required">Name
+							ng-model="newUser.name" required /> <span
+							ng-show="form.newUser.name.$dirty && form.newUser.name.$error.required">Name
 							is required</span>
 					</div>
 
 					<div class="btnAction">
-						<button type="submit" ng-disabled="form.$invalid || dataLoading">Register</button>
+						<button type="submit" ng-disabled="form.$invalid || loading">Register</button>
 						<!--image of loading -->
-						<img ng-if="dataLoading"
+						<img ng-if="loading"
 							src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+						<a href="/signin">cancel</a>
 					</div>
 				</form>
 			</div>

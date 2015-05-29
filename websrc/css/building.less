@@ -29,14 +29,18 @@
 }
 
 .buildingBox {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    margin: 10px 10px 10px 10px;
-    border-style: solid;
-    border-width: 5px;
-    height: 200px;
-    width: 200px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 10px 10px 10px 10px;
+  height: 160px;
+  width: 150px;
+  background: #F7DFBF;
+  border: solid 4px #5A2E2E;
+  padding: 23px 10px 10px 10px;
+  border-radius: 10px 10px 4px 4px;
+  z-index: 4;
+  box-shadow: -5px 3px 40px 0 rgba(0,0,0,.7);
 }
 
 .delete {
@@ -63,6 +67,10 @@
     -moz-transform: translateX(-50%) translateY(-50%);
     -ms-transform: translateX(-50%) translateY(-50%);
     transform: translateX(-50%) translateY(-50%);
+}
+
+.bd-hide {
+    visibility: hidden;
 }
 
 .bd-show {
@@ -136,7 +144,7 @@
     -ms-transform: scale(1);
     transform: scale(1);
     opacity: 1;
-}
+} 
 
 .bd-overlay {
     position: fixed;
@@ -152,7 +160,7 @@
     -moz-transition: all 0.3s;
     transition: all 0.3s;
 }
-
+ 
 .blur {
     -webkit-filter: blur(6px);
     -moz-filter: blur(6px);
@@ -161,6 +169,7 @@
 /*------------------------------------------*/
 
 .active {
+    visibility: visible;
     transform: perspective( 1000px) rotateX(0deg) translate3D(0, 0, 0)!important;
     webkit-transform: perspective( 1000px) rotateX(0deg) translate3D(0, 0, 0)!important;
     transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -188,9 +197,11 @@ html, body {
     overflow: hidden;
 }
 
-main > .wrap {
+.building-wrap{
+    background: url(../img/map_background.jpg);
+    overflow: hidden;
     position: absolute;
-    top: 150px;
+    top: 80px;
     left: 0px;
     right: 0px;
     bottom: 0px;
