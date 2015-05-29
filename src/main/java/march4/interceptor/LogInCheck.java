@@ -17,16 +17,16 @@ public class LogInCheck extends HandlerInterceptorAdapter {
 		log.debug("enter interceptor -------------------------------");
 		log.debug("session : {}", request.getSession().getAttribute("email"));
 
-//		if (request.getSession().getAttribute("email") == null) {
-//			if (request.getHeader("accept").contains("application/json")) {
-//				response.setStatus(401);
-//				log.debug("json");
-//				return false;
-//			}
-//			response.sendRedirect("/");
-//			log.debug("http");
-//			return false;
-//		}
+		if (request.getSession().getAttribute("email") == null) {
+			if (request.getHeader("accept").contains("application/json")) {
+				response.setStatus(401);
+				log.debug("json");
+				return false;
+			}
+			response.sendRedirect("/");
+			log.debug("http");
+			return false;
+		}
 		return true;
 	}
 }

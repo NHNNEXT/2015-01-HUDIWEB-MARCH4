@@ -40,28 +40,11 @@ public class BuildingController {
 	
 	@ResponseStatus(value = HttpStatus.OK)
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public @ResponseBody Building addBuilding(@RequestBody String body, ModelMap model) {
-		log.debug("빌띵이 올라온다!!");
-		Map<String,String> map = new HashMap<String,String>();
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			map = mapper.readValue(body, new TypeReference<HashMap<String,String>>(){});
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		log.debug("uid : {}", map.get("uid"));
-		log.debug("name : {}", map.get("name"));
-		
-		log.debug("빌띵이 들어간다!!!!");
-		
-		Building building = new Building(Integer.parseInt(map.get("uid")), map.get("name"), map.get("shared"));
-		buildingService.addBuilding(building);
-		
-		//pid를 받아온다.
-		Building addBuilding = new Building(buildingService.getLastpId(), Integer.parseInt(map.get("uid")), map.get("name"), map.get("shared"));
-		//받아온 pid와 나머지 정보 조합하여 building만듬.
-		return addBuilding;
-		//그리고 그거 리턴.
+	public @ResponseBody Building addBuilding(@RequestBody Building building, ModelMap model) {
+		log.debug("Add building!");
+		buildingService.addBuilding(building);		
+		building.setPid(buildingService.getLastpId());
+		return building;
 	}
 	
 	@ResponseStatus(value = HttpStatus.OK)
@@ -89,9 +72,18 @@ public class BuildingController {
 	
 	@RequestMapping(value = "/default", method = RequestMethod.GET)
 	public @ResponseBody List<Building> defaultBuilding(@RequestParam("uid") String uid) {
-		List<Building> buildings = buildingService.getDefaultBuilding(Integer.parseInt(uid));
 		log.debug(uid);
+		List<Building> buildings = buildingService.getDefaultBuilding(Integer.parseInt(uid));
+		
 		log.debug("building {}", buildings);
 		return buildings;
+	}
+	
+	@ResponseStatus(value = HttpStatus.OK)
+	@RequestMapping(value = "/updatePos", method = RequestMethod.POST)
+	public @ResponseBody String updatePos(@RequestBody Building building) {
+		log.debug("update building position!");
+		buildingService.updateBuilding(building);
+		return "true";
 	}
 }

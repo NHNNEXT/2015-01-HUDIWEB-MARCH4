@@ -17,7 +17,7 @@ public class CustomExceptionController {
 	private static final Logger log = LoggerFactory.getLogger(CustomExceptionController.class);
 
 	@ExceptionHandler(EmailDuplicationExeption.class)
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public @ResponseBody String EmailDuplicationExeption() {
 		String str = "이미 존재하는 이메일 입니다.";
 		log.debug("{}", str);

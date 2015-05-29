@@ -1,29 +1,32 @@
 (function() {
 	'use strict';
 	march4.app.registerController('signinController', function($scope, $http,
-			$location, UserService, ToolTip) {//'$cookieStore'
-		$scope.user = {};
-		//$rootScope.session = {};
-		$scope.signin = signin;
-
-		function signin() {
+			$location, $rootScope, UserService, ToolTip) {
+		$scope.loginUser = {};
+		
+		$scope.signin = function () {
 			$scope.loading = true;
-			UserService.GetByUser($scope.user).then(function(response) {
-				if (!(response.data === true)) {
-        			ToolTip.Error(response.data);
-        			$scope.loading = false;
-					console.log("didn't sign in");
-				} else {
-        			ToolTip.Success("sign in successful", true);
-        			
-//        			$cookieStore.put('email',$scope.user);
-//        			$rootScope.session = $cookieStore.get('email');
-        			
-        			$location.path('/');
-					console.log("succeed in login");
-				}
+			
+			UserService.getByUser($scope.loginUser)
+			.success(function(){
+				ToolTip.Success("sign in successful", true);
+				$rootScope.getUser();
+    			$location.path('/');
+    			console.log("succeed in login");
+			})
+			.error(function (response, status, headers, config) {
+					if (status == 400) {
+						var alertString = "";
+						for (var i = 0; i < response.length; i++)
+							alertString += response[i]+"\n";
+						
+						ToolTip.Error(alertString);
+	        			$scope.loading = false;
+						console.log("didn't sign in");
+					}else{
+						ToolTip.Error('Unexpected server error.');
+					}
 			});
 		}
-		
 	});
 }());

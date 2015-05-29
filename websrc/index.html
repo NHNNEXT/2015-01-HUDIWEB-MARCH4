@@ -10,24 +10,24 @@
     <script src="<%- jsLibDir %>/<%- jsLibFile %>"></script>
     <script src="<%- jsDir %>/namespaces.js"></script>
     <script src="<%- jsDir %>/main.js"></script>
-    <script src="<%- jsDir %>/userService.js"></script>
     <script src="<%- jsDir %>/toolTip.js"></script>
     <script src="<%- jsDir %>/urlMapping.js"></script>
     <base href="/">
 </head>
 
-<body ng-app="march4">
+<body ng-app="march4" ng-controller="mainController">
     <div  id="main-controller">
         <header id="main-header">
             <div class="wrap">
                 <h1 id="main-title">
                     <a href="/">March4</a>
                 </h1>
-                
-                <section id="user-information" >
+                <section id="user-information" ng-show="user">
                     <figure>
                         <div class="avatar">
-                            <img width="32" height="32" ng-src="{{user.avatarImg}}" alt="{{user.name}}">
+                            <div class="default" ng-class="user.defaultImg" ng-show="user.defaultImg"></div>
+                            <img width="32" height="32" ng-show="user.avatarImg" 
+                            ng-src="{{user.avatarImg}}" alt="{{user.name}}">
                         </div>
                         <figcaption>
                             <span class="name">{{user.name}}</span><br />
@@ -36,30 +36,23 @@
                     </figure>
                 </section>
                 <!--//user-->
-
+                
                 <nav id="main-navigation">
                     <ul>
-                        <li><a href="/">Home</a>
-                        </li>
                         <li><a href="/signin">signin</a>
                         </li>
                         <li><a href="/signup">signup</a>
                         </li>
-                        <li><a href="/user/1">User</a>
-                        </li>
-                        <li><a href="/world/my">World : my</a>
-                        </li>
                         <li><a href="/building/1">building</a>
                         </li>
                         <li><a href="/projects/2/quests">roadmap</a>
-                        </li>
-                        <li><a href="/dummy/1">dummy</a>
                         </li>
                     </ul>
                 </nav>
                 <!--//navigation-->
             </div>
         </header>
+        {{$scope.user}}
         <main ng-view></main>
     </div>
     <%=liveReload%>

@@ -48,6 +48,10 @@
 					templateUrl : '/div/signin',
 					controller : 'signinController',
 					resolve : addControllerJs()
+				}).when('/signout', {
+					templateUrl : '/div/signout',
+					controller : 'signoutController',
+					resolve : addControllerJs()
 				}).when('/errorPage/:errorNumber?', {
 					templateUrl : '/div/errorPage/',
 					controller : 'errorController',
@@ -87,7 +91,8 @@
 	            return response;
 	        },
 	        responseError: function (rejection) {
-                $location.path('/errorPage/'+rejection.status);
+	        	if(rejection.status === 401)
+                	$location.path('/errorPage/'+rejection.status);
 	            return $q.reject(rejection);
 	        }
 	    };
