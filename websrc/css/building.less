@@ -65,6 +65,10 @@
     transform: translateX(-50%) translateY(-50%);
 }
 
+.bd-hide {
+    visibility: hidden;
+}
+
 .bd-show {
     visibility: visible;
 }
@@ -136,7 +140,7 @@
     -ms-transform: scale(1);
     transform: scale(1);
     opacity: 1;
-}
+} 
 
 .bd-overlay {
     position: fixed;
@@ -152,7 +156,7 @@
     -moz-transition: all 0.3s;
     transition: all 0.3s;
 }
-
+ 
 .blur {
     -webkit-filter: blur(6px);
     -moz-filter: blur(6px);
@@ -161,6 +165,7 @@
 /*------------------------------------------*/
 
 .active {
+    visibility: visible;
     transform: perspective( 1000px) rotateX(0deg) translate3D(0, 0, 0)!important;
     webkit-transform: perspective( 1000px) rotateX(0deg) translate3D(0, 0, 0)!important;
     transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);

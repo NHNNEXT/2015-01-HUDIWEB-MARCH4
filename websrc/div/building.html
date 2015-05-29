@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="<%- cssDir %>/building.css" />
 <div class="wrap">
-    <div class="bd-addform bd-effect" ng-class="{'bd-show' : floatingForm.show}">
+    <div class="bd-addform bd-effect bd-hide" ng-class="{'bd-show' : floatingForm.show}">
         <div class="bd-content">
             <h3>Create Building</h3>
             <div>
@@ -11,8 +11,7 @@
                     <input ng-model="addData.shared" type="text" placeholder="shared">
                 </div>
                 <div>
-                    <input ng-click="add()" type="button" value="Create">
-                    </button>
+                    <input ng-click="add(addData)" type="button" value="Create"> 
                 </div>
             </div>
         </div>

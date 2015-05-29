@@ -49,6 +49,7 @@ public class UserController {
 		List<String> messages = new ArrayList<String>();
 		for (ObjectError error : errors) {
 			log.debug("error : {}", error.getDefaultMessage());
+			resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			messages.add(error.getDefaultMessage());
 		}
 		return messages;
