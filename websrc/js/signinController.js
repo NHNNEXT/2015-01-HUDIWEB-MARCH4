@@ -1,9 +1,9 @@
 (function() {
 	'use strict';
 	march4.app.registerController('signinController', function($scope, $http,
-			$location, UserService, ToolTip, $cookieStore) {
+			$location, UserService, ToolTip) {//'$cookieStore'
 		$scope.user = {};
-		$rootScope.session = {};
+		//$rootScope.session = {};
 		$scope.signin = signin;
 
 		function signin() {
@@ -16,13 +16,14 @@
 				} else {
         			ToolTip.Success("sign in successful", true);
         			
-        			$cookieStore.put('email',$scope.user);
-        			$rootScope.session = $cookieStore.get('email');
+//        			$cookieStore.put('email',$scope.user);
+//        			$rootScope.session = $cookieStore.get('email');
         			
         			$location.path('/');
 					console.log("succeed in login");
 				}
 			});
 		}
+		
 	});
 }());

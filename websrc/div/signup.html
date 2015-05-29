@@ -31,7 +31,7 @@
 						ng-class="{ 'has-error':form.password.$invalid && !form.password.$pristine}">
 						<label for="password">Password</label> <input type="password"
 							name="password" id="password" class="form-control"
-							ng-model="user.password" ng-minlength="3" ng-maxlength="5"
+							ng-model="user.password" ng-minlength="8" ng-maxlength="12"
 							required /> <span class="help-block"
 							ng-show="form.password.$dirty && form.password.$error.required">Password
 							is required</span> <span class="help-block"
