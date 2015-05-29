@@ -77,12 +77,12 @@ public class QuestDao {
 		String sql = "update quest set `order` = ? where qId = ?";
 		jdbcTemplate.update(sql, order, qId);
 	}
-	public void increaseOrderAfter(int qId) {
+	public void increaseOrderEqualAndAfter(int qId) {
 		Quest quest = jdbcTemplate.queryForObject("SELECT * FROM quest WHERE qId = ?",
 					new BeanPropertyRowMapper<Quest>(Quest.class), qId);
 		log.debug("quest:{}, pid:{}, order:{}", quest, quest.getpId(), quest.getOrder());
 		
-		String sql = "UPDATE quest SET `order`=`order`+1 WHERE pId=? AND `order`>? ORDER BY `order` DESC";
+		String sql = "UPDATE quest SET `order`=`order`+1 WHERE pId=? AND `order`>=? ORDER BY `order` DESC";
 		jdbcTemplate.update(sql, quest.getpId(), quest.getOrder());
 	}
 //	public void decreaseOrderAfter(int qId) throws EmptyResultDataAccessException {

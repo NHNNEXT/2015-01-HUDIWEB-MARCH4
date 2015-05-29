@@ -50,9 +50,10 @@ public class QuestController {
 	}
 	
 	@RequestMapping(value = "/{qId}/movetobefore", method = RequestMethod.PUT)
-	public List<Quest> test(@PathVariable("qId") int movingQuestId, @RequestParam("qId") int targetQuestId) {
+	public List<Quest> test(@PathVariable("qId") int movingQuestId, @RequestParam("qId") int targetQuestId, @PathVariable("qId") int pId) {
 		q.moveToBefore(movingQuestId, targetQuestId);
 		log.debug("movingQuestId : {}, targetQuestId : {}", movingQuestId, targetQuestId);
-		return q.getQuestListOfSameProjectOrderedAsc(movingQuestId);	// 테스트용.
+		
+		return q.getQuestListOrderedAsc(Integer.toString(pId));	// 테스트용.
 	}
 }

@@ -101,6 +101,6 @@ public class Quest {
 	
 	@Override
 	public String toString() {
-		return "Quest [contents="+contents+"]";
+		return "Quest [contents="+contents+",order="+order+",qId="+qId+",pId="+pId+"]";
 	}
 }

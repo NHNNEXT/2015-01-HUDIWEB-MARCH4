@@ -22,9 +22,9 @@ public class QuestService {
 	public List<Quest> selectBypIdOrderedAsc(String pId) {
 		return questDao.selectBypIdOrderedAsc(pId);
 	}
-	public List<Quest> getQuestListOfSameProjectOrderedAsc(int qId) {
+	public List<Quest> getQuestListOrderedAsc(String pId) {
 		// 숫자를 가지는 필드에 대해서 타입들이 중구난방(int, string, Integer..). ???.
-		return questDao.selectBypIdOrderedAsc(Integer.toString(questDao.select(qId).getpId()));
+		return questDao.selectBypIdOrderedAsc(pId);
 	}
 	
 	//TODO 트랜잭션. storedProcedure가 낫나.
@@ -42,7 +42,7 @@ public class QuestService {
 		Quest targetQuest = questDao.select(targetQuestId);
 		newQuest.setOrder(targetQuest.getOrder());
 		log.debug("newQuest : {}, order : {}", newQuest, newQuest.getOrder());
-		questDao.increaseOrderAfter(targetQuestId);
+		questDao.increaseOrderEqualAndAfter(targetQuestId);
 		questDao.insert(newQuest);
 	}
 	public void moveToBefore(int movingQuestId, int targetQuestId) {
