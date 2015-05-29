@@ -49,9 +49,4 @@ public class QuestDaoTest {
 	public void getOrder() {
 		System.out.println(questDao.getOrderOf(1));
 	}
-	
-	@Test
-	public void getMaxOrder() {
-		System.out.println(questDao.getMaxOrder());
-	}
 }

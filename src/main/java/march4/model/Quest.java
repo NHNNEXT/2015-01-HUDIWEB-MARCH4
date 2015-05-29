@@ -2,7 +2,7 @@ package march4.model;
 
 public class Quest {
 	// primitive type(int)은 db의 NULL 값을 만나면 TypeMismatchException 발생.
-//	private Integer qId;
+	private Integer qId;
 	private Integer pId;
 	private Integer posX;
 	private Integer posY;
@@ -33,13 +33,13 @@ public class Quest {
 		this.due = due;
 	}
 
-//	public Integer getqId() {
-//		return qId;
-//	}
-//
-//	public void setqId(Integer qId) {
-//		this.qId = qId;
-//	}
+	public Integer getqId() {
+		return qId;
+	}
+
+	public void setqId(Integer qId) {
+		this.qId = qId;
+	}
 
 	public Integer getpId() {
 		return pId;

@@ -31,6 +31,12 @@ public class QuestDao {
 				quest.getPosX(), quest.getPosY(), quest.getOrder(), quest.getContents(), quest.getDue());
 		return 0; // lastInsertId(); 가져와서 Quest.setId(); 하고 싶음.
 	}
+	
+	public void delete(int qId) {
+		String sql = "DELETE FROM quest WHERE qId = ?";
+		jdbcTemplate.update(sql, qId);
+		// 남은 퀘스트 개수 리턴??
+	}
 
 	public Quest select(int qId) {
 		String sql = "select * from quest where qId = ?";
@@ -50,7 +56,7 @@ public class QuestDao {
 	}
 	
 	
-	public List<Quest> selectBypID(String pId) {
+	public List<Quest> selectBypIdOrderedAsc(String pId) {
 		String sql = "select * from quest where pId = "+pId+" order by `order`";
 		List<Quest> quests = jdbcTemplate.query(sql, new BeanPropertyRowMapper<Quest>(Quest.class));
 		return quests;
@@ -64,8 +70,22 @@ public class QuestDao {
 		String sql = "update quest set `order` = ? where qId = ?";
 		jdbcTemplate.update(sql, order, qId);
 	}
+	public void increaseOrderAfter(int qId) throws EmptyResultDataAccessException {
+		Quest quest = jdbcTemplate.queryForObject("SELECT * FROM quest WHERE qId="+qId,
+					new BeanPropertyRowMapper<Quest>(Quest.class), qId);
+		
+		String sql = "UPDATE quest SET `order`=`order`+1 WHERE pId=? AND order>?";
+		jdbcTemplate.update(sql, quest.getpId(), quest.getOrder());
+	}
+	public void decreaseOrderAfter(int qId) throws EmptyResultDataAccessException {
+		Quest quest = jdbcTemplate.queryForObject("SELECT * FROM quest WHERE qId="+qId,
+				new BeanPropertyRowMapper<Quest>(Quest.class), qId);
+		
+		String sql = "UPDATE quest SET `order`=`order`-1 WHERE pId=? AND order>?";
+		jdbcTemplate.update(sql, quest.getpId(), quest.getOrder());
+	}
 	
-	public int getMaxOrder() {
-		return jdbcTemplate.queryForObject("SELECT max(`order`)+1 FROM quest", Integer.class);
+	public int getMaxOrderOfProject(int pId) {
+		return jdbcTemplate.queryForObject("SELECT max(`order`)+1 FROM quest WHERE pId="+pId, Integer.class);
 	}
 }

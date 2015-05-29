@@ -30,7 +30,7 @@ public class QuestController {
 	@RequestMapping(value = {""}, method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<Quest> get(@PathVariable("pId") String pId) {
 		log.debug("roadmap GET", pId);
-		return q.selectBypID(pId);
+		return q.selectBypIdOrderedAsc(pId);
 	}
 	
 //	@RequestMapping(value = {"/{qId}"}, method = RequestMethod.GET, produces="application/json")
@@ -49,8 +49,10 @@ public class QuestController {
 		return "{\"result\":true}";
 	}
 	
-	@RequestMapping(value = "/{qId}/swap", method = RequestMethod.PUT)
-	public String test(@PathVariable("qId") int qId1, @RequestParam("qId") int qId2) {
-		return q.swapOrder(qId1, qId2);
+	@RequestMapping(value = "/{qId}/movetobefore", method = RequestMethod.PUT)
+	public List<Quest> test(@PathVariable("qId") int movingQuestId, @RequestParam("qId") int targetQuestId) {
+		q.moveToBefore(movingQuestId, targetQuestId);
+		log.debug("movingQuestId : {}, targetQuestId : {}", movingQuestId, targetQuestId);
+		return q.getQuestListOfSameProjectOrderedAsc(movingQuestId);	// 테스트용.
 	}
 }
