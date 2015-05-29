@@ -2,6 +2,7 @@
     "use strict"
 
     march4.app.registerController('buildingController', function ($scope, $window, $http, $timeout, $routeParams, $location) {
+
         $scope.pid = {};
         $scope.floatingForm = {
             show: false
@@ -110,11 +111,19 @@
             });
         };
 
-        $scope.add = function () {
+        $scope.add = function (addData) {
             $scope.addData = {};
+            $scope.addData.name = addData.name;
+            $scope.addData.shared = addData.shared;
             $scope.addData.uid = $scope.uid.uid;
             $scope.addData.posx = Math.round(($("main>.wrap").outerWidth() / 2) - ($scope.pageSet.buildingBox.x / 2));
             $scope.addData.posy = Math.round(($("main>.wrap").outerHeight() / 2) - ($scope.pageSet.buildingBox.y / 2));
+
+            var addSetPosition = function (data) {
+                $(".buildingArea li").eq($(".buildingArea li").length - 1).css("left", data.posx + "px");
+                $(".buildingArea li").eq($(".buildingArea li").length - 1).css("top", data.posy + "px");
+            }
+
             $http({
                 method: 'POST',
                 url: '/building/add',
@@ -122,12 +131,16 @@
             }).
             success(function (data, status, headers, config) {
                 $scope.Buildings.push(data);
+                $timeout(function () {
+                    addSetPosition(data)
+                }, 0);
 
                 $timeout(function () {
                     $scope.Buildings[$scope.Buildings.length - 1].hide = true;
                     $scope.Buildings[$scope.Buildings.length - 1].hide = false;
                 }, 0);
-                $timeout($scope.setPosition, 0);
+
+
             }).
             error(function (data, status, headers, config) {
                 if (status == 400) {
@@ -151,7 +164,7 @@
                 $(e.target.parentElement).css("opacity", 0);
                 $timeout(function () {
                     $scope.Buildings.splice(i, 1);
-                    $timeout($scope.setPosition, 0);
+                    //$timeout($scope.setPosition, 0);
                 }, 150);
             }).
             error(function (data, status, headers, config) {
@@ -163,66 +176,81 @@
             });
         };
 
-        $scope.resizeId;
-        $(window).resize(function () {
-            if ($scope.resizeId) $timeout.cancel($scope.resizeId);
+        //        $scope.resizeId;
+        //        $(window).resize(function () {
+        //            if ($scope.resizeId) $timeout.cancel($scope.resizeId);
+        //
+        //            $scope.resizeId = $timeout(function () {
+        //                $timeout($scope.setPosition, 0);
+        //            }, 500)
+        //        });
 
-            $scope.resizeId = $timeout(function () {
-                $timeout($scope.setPosition, 0);
-            }, 500)
-        });
+        $scope.floatingFormInit = function () {
+            console.log(0);
+
+            $(".bd-overlay").css("visibility", "hidden");
+            $(".bd-effect .bd-content").css("visibility", "hidden");
+        };
 
         $scope.openFloatingForm = function () {
             $scope.floatingForm.show = true;
             $(".bd-overlay").css("visibility", "visible");
+            $(".bd-effect .bd-content").css("visibility", "visible");
             $(".bd-overlay").css("opacity", 1);
             $("header").addClass("blur");
             $(".bd-overlay ~ div").addClass("blur");
-        };
+        }; 
 
         $scope.closeFloatingForm = function () {
             $scope.floatingForm.show = false;
+
             $(".bd-overlay").css("visibility", "hidden");
+            $(".bd-effect .bd-content").css("visibility", "hidden");
+
             $(".bd-overlay").css("opacity", 0);
             $("header").removeClass("blur");
             $(".bd-overlay ~ div").removeClass("blur");
         };
+        $scope.closeFloatingForm();
 
         $scope.positionable = function (el) {
-            $scope.temp = {};
+
+            $scope.dragpos = {};
             march4.util.Draggable(el,
                 function (e, el) {
                     console.log("press");
+                    $scope.dragpos.startx = e.pageX;
+                    $scope.dragpos.starty = e.pageY;
                     e.preventDefault();
                 },
                 function (e, el) {
                     console.log("move");
-                    $scope.temp.posx = $(el).css("left");
-                    $scope.temp.posy = parseInt($(el).css("top")) - 172 + "px";
                     e.preventDefault();
                 },
                 function (e, el) {
                     console.log("realese");
-                    $(el).css("left", $scope.temp.posx);
-                    $(el).css("top", $scope.temp.posy);
+                    var diffx = e.pageX - $scope.dragpos.startx;
+                    var diffy = e.pageY - $scope.dragpos.starty;
+                    $(el).css("left", parseInt($(el).css("left")) + diffx + "px");
+                    $(el).css("top", parseInt($(el).css("top")) + diffy + "px");
                     $scope.updatePosition(el);
                     e.preventDefault();
                 });
         };
-        
-        $scope.updatePosition = function(el) {
+
+        $scope.updatePosition = function (el) {
             $scope.updateData = {};
             $scope.updateData.pid = $scope.pid;
             $scope.updateData.posx = parseInt($(el).css("left"));
             $scope.updateData.posy = parseInt($(el).css("top"));
-            
+
             $http({
                 method: 'POST',
                 url: '/building/updatePos',
                 data: $scope.updateData
             }).
             success(function (data, status, headers, config) {
-                
+
             }).
             error(function (data, status, headers, config) {
                 if (status == 400) {
@@ -232,11 +260,17 @@
                 }
             });
         };
-        
-        $scope.setPid = function(pid){
+
+        $scope.setPid = function (pid) {
             console.log(pid);
             $scope.pid = pid;
         }
+
+        $scope.panelInit = function () {
+            $(".panel").css("visibility", "hidden");
+        };
+        $scope.panelInit();
+
 
         $scope.default();
     });

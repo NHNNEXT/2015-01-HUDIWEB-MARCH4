@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
@@ -9,10 +9,20 @@
 	<context:component-scan base-package="march4.dao" />
 	<context:component-scan base-package="march4.controller" />
 	<context:component-scan base-package="march4.service" />
-	<mvc:annotation-driven />
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-		p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" />
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<!-- @ResponseBody로 String 처리할때 한글처리 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" p:contentType="text/html; charset=UTF-8" />
 
 	<mvc:resources location="/img/" mapping="/img/**" />
 	<mvc:resources location="/css/" mapping="/css/**" />
@@ -21,18 +31,18 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
-			<mvc:exclude-mapping path="/"/>
-			<mvc:exclude-mapping path="/users/"/>
-			<mvc:exclude-mapping path="/users/signin"/>
-			<mvc:exclude-mapping path="/users/signup"/>
-			<mvc:exclude-mapping path="/div/signin"/>
-			<mvc:exclude-mapping path="/div/signup"/>
-			<mvc:exclude-mapping path="/js/**"/>
-			<mvc:exclude-mapping path="/img/**"/>
-			<mvc:exclude-mapping path="/css/**"/>
-			<mvc:exclude-mapping path="/div/frontpage"/>
-			<mvc:exclude-mapping path="/errorPage/**"/>
-			<mvc:exclude-mapping path="/div/errorPage/**"/>
+			<mvc:exclude-mapping path="/" />
+			<mvc:exclude-mapping path="/users/" />
+			<mvc:exclude-mapping path="/users/signin" />
+			<mvc:exclude-mapping path="/users/signup" />
+			<mvc:exclude-mapping path="/div/signin" />
+			<mvc:exclude-mapping path="/div/signup" />
+			<mvc:exclude-mapping path="/js/**" />
+			<mvc:exclude-mapping path="/img/**" />
+			<mvc:exclude-mapping path="/css/**" />
+			<mvc:exclude-mapping path="/div/frontpage" />
+			<mvc:exclude-mapping path="/errorPage/**" />
+			<mvc:exclude-mapping path="/div/errorPage/**" />
 			<bean class="march4.interceptor.LogInCheck"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
