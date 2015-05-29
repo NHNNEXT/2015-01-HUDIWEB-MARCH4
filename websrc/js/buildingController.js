@@ -111,8 +111,10 @@
             });
         };
 
-        $scope.add = function () {
+        $scope.add = function (addData) {
             $scope.addData = {};
+            $scope.addData.name = addData.name;
+            $scope.addData.shared = addData.shared;
             $scope.addData.uid = $scope.uid.uid;
             $scope.addData.posx = Math.round(($("main>.wrap").outerWidth() / 2) - ($scope.pageSet.buildingBox.x / 2));
             $scope.addData.posy = Math.round(($("main>.wrap").outerHeight() / 2) - ($scope.pageSet.buildingBox.y / 2));

@@ -35,7 +35,7 @@ public class UserController {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public @ResponseBody List<String> createUser(@RequestBody @Valid User user,
-			BindingResult result) {
+			BindingResult result, HttpServletResponse resp) {
 
 		log.debug(user.toString());
 		List<ObjectError> errors = result.getAllErrors();
@@ -48,6 +48,7 @@ public class UserController {
 		List<String> messages = new ArrayList<String>();
 		for (ObjectError error : errors) {
 			log.debug("error : {}", error.getDefaultMessage());
+			resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			messages.add(error.getDefaultMessage());
 		}
 		return messages;
