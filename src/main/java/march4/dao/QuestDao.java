@@ -30,9 +30,17 @@ public class QuestDao {
 	}
 
 	public int insert(Quest quest) {
-		String sql = "insert into quest values (NULL, ?, ?, ?, ?, ?, ?)";
-		jdbcTemplate.update(sql, quest.getpId(), 
-				quest.getPosX(), quest.getPosY(), quest.getOrder(), quest.getContents(), quest.getDue());
+		log.debug("quest:{}", quest);
+		Integer qId = quest.getqId();
+		if(qId != null) {
+			String sql = "insert into quest values (?, ?, ?, ?, ?, ?, ?)";
+			jdbcTemplate.update(sql, quest.getqId(), quest.getpId(), 
+					quest.getPosX(), quest.getPosY(), quest.getOrder(), quest.getContents(), quest.getDue());
+		} else {
+			String sql = "insert into quest values (NULL, ?, ?, ?, ?, ?, ?)";
+			jdbcTemplate.update(sql, quest.getpId(), 
+					quest.getPosX(), quest.getPosY(), quest.getOrder(), quest.getContents(), quest.getDue());
+		}
 		return 0; // lastInsertId(); 가져와서 Quest.setId(); 하고 싶음.
 	}
 	

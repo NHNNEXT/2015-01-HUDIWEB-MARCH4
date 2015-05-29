@@ -22,9 +22,9 @@ public class QuestService {
 	public List<Quest> selectBypIdOrderedAsc(String pId) {
 		return questDao.selectBypIdOrderedAsc(pId);
 	}
-	public List<Quest> getQuestListOrderedAsc(String pId) {
+	public List<Quest> getQuestListOfSameProjectOrderedAsc(int qId) {
 		// 숫자를 가지는 필드에 대해서 타입들이 중구난방(int, string, Integer..). ???.
-		return questDao.selectBypIdOrderedAsc(pId);
+		return questDao.selectBypIdOrderedAsc(Integer.toString(questDao.select(qId).getpId()));
 	}
 	
 	//TODO 트랜잭션. storedProcedure가 낫나.

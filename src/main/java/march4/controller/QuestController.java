@@ -54,6 +54,6 @@ public class QuestController {
 		q.moveToBefore(movingQuestId, targetQuestId);
 		log.debug("movingQuestId : {}, targetQuestId : {}", movingQuestId, targetQuestId);
 		
-		return q.getQuestListOrderedAsc(Integer.toString(pId));	// 테스트용.
+		return q.getQuestListOfSameProjectOrderedAsc(movingQuestId);	// 테스트용.
 	}
 }
