@@ -30,10 +30,10 @@ public class QuestService {
 	//TODO 트랜잭션. storedProcedure가 낫나.
 	public Quest remove(int qId) {
 		Quest removedQuest = questDao.select(qId);
-		log.debug("quest : {}", removedQuest);
-		
+		int prevOrder = questDao.getOrderOf(qId);
 		questDao.changeOrder(qId, questDao.getMaxOrderOfProject(removedQuest.getpId()));
-		questDao.decreaseOrderAfter(qId);
+		log.debug("qId:{} || quest : {}, qid : {}, pid : {}, order : {}", qId, removedQuest, removedQuest.getqId(), removedQuest.getpId(), removedQuest.getOrder());
+		questDao.decreaseOrderAfter(removedQuest.getpId(), prevOrder);
 		questDao.delete(qId);
 		return removedQuest;
 	}
@@ -41,10 +41,13 @@ public class QuestService {
 		//TODO 두 퀘스트의 pId 가 다를경우에 대해서도 에러처리를 해야 함.
 		Quest targetQuest = questDao.select(targetQuestId);
 		newQuest.setOrder(targetQuest.getOrder());
+		log.debug("newQuest : {}, order : {}", newQuest, newQuest.getOrder());
 		questDao.increaseOrderAfter(targetQuestId);
 		questDao.insert(newQuest);
 	}
 	public void moveToBefore(int movingQuestId, int targetQuestId) {
-		insertBefore(remove(movingQuestId), targetQuestId);
+		Quest removedQuest = remove(movingQuestId);
+		log.debug("quest : {}, qid : {}", removedQuest, targetQuestId);
+		insertBefore(removedQuest, targetQuestId);
 	}
 }

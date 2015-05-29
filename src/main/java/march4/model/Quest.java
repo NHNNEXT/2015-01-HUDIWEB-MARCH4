@@ -13,6 +13,16 @@ public class Quest {
 	// RowMapper 에서 기본생성자 필요.
 	public Quest(){}
 	
+	public Quest(Integer qId, Integer pId, Integer posX, Integer posY, Integer order,
+			String contents, String due) {
+		this.qId = qId;
+		this.pId = pId;
+		this.posX = posX;
+		this.posY = posY;
+		this.order = order;
+		this.contents = contents;
+		this.due = due;
+	}
 	public Quest(Integer pId, Integer posX, Integer posY, Integer order,
 			String contents, String due) {
 		this.pId = pId;

@@ -40,7 +40,7 @@ public class QuestDaoTest {
 	
 	@Test
 	public void select(){
-		Quest quest = questDao.select(18);
+		Quest quest = questDao.select(19);
 //		List<Quest> quest = questDao.selectAll();
 		log.debug("Select quest : {}", quest);
 	}
