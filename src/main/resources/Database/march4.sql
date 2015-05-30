@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`quest` (
   `qId` INT NOT NULL AUTO_INCREMENT,
   `pId` INT NOT NULL,
   `posX` INT NULL,
-  `poxY` INT NULL,
+  `posY` INT NULL,
   `order` INT NULL,
   `contents` TEXT NULL,
   `due` DATETIME NULL,

@@ -38,6 +38,7 @@ public class UserController {
 			BindingResult result, HttpServletResponse resp) {
 
 		log.debug(user.toString());
+		
 		List<ObjectError> errors = result.getAllErrors();
 		if (errors.isEmpty()) {
 			userDao.signup(user);

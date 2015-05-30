@@ -18,14 +18,14 @@
             getByEmail : function(email){
                 return $http.get('/users/' + email);
             },
+            getByUser : function(user){
+                return $http.post('/users/signin', user);
+            },
             create : function(user) {
                 return $http.post('/users/', user);
             },
             signout : function() {
                 return $http.post('/users/signout');
-            },
-            signin : function(user){
-                return $http.post('/users/signin', user);
             },
             delete : function(id) {
                 return $http.delete('' + user.id);

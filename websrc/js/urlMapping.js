@@ -24,10 +24,6 @@
 					templateUrl : '/div/frontpage',
 					controller : 'frontpageController',
 					resolve : addControllerJs()
-				}).when('/world/:worldId?', {
-					templateUrl : '/div/world',
-					controller : 'worldController',
-					resolve : addControllerJs()
 				}).when('/building/:buildingId?/:panel?/:panelId?', {
 					templateUrl : '/div/building',
 					controller : 'buildingController',
@@ -35,10 +31,6 @@
 				}).when('/projects/:pId/quests', {
 					templateUrl : '/div/roadmap',
 					controller : 'roadmapController',
-					resolve : addControllerJs()
-				}).when('/dummy/:dummyId?/:panel?/:panelId?', {
-					templateUrl : '/div/dummy',
-					controller : 'dummyController',
 					resolve : addControllerJs()
 				}).when('/signup', {
 					templateUrl : '/div/signup',

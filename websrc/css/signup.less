@@ -1,0 +1,96 @@
+/*div sign*/
+.container {
+	padding:50px;
+}
+
+/*input form for sign in/up */
+.form-control {
+    display: block;
+    width: 20%;
+    height: 20px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    margin-bottom: 5px;
+    
+    &:focus {
+	    border-color: #66afe9;
+	    outline: 0;
+	    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+	    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+	    }
+
+}
+
+/*tooltip for sign in/up */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px
+}
+.alert-success {
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    color: #3c763d;
+    width: 20%;
+}
+.alert-danger {
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    color: #a94442;
+    width: 20%;
+}
+
+/*btn */
+button {
+    cursor: pointer;
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #f90b4f;
+    border-color: #357ebd;
+    border-style: none;
+    
+    &[disabled]{
+		cursor: not-allowed;
+	    pointer-events: none;
+	    opacity: .35;
+	    filter: alpha(opacity=35);
+	    -webkit-box-shadow: none;
+	    box-shadow: none;
+    }
+}
+
+.btnAction {
+	margin-top: 15px;
+}
+
+/*validation for sign in/up */
+
+.has-error {
+	.form-control{
+	    border-color: #a94442;
+	    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+	    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+	    
+	    &:focus {
+			border-color: #843534;
+		    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 6px #ce8483;
+		    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 6px #ce8483;
+	    }		
+	}
+	.help-block {
+		color: #a94442;
+	}
+}
+

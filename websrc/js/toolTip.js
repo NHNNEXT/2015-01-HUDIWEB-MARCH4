@@ -1,6 +1,6 @@
 (function() {
 	'use strict';
-	march4.app.factory('ToolTip', function('$rootScope') {
+	march4.app.factory('ToolTip', function($rootScope) {
         var service = {};
 
         service.Success = Success;
@@ -16,20 +16,23 @@
             });
 
             function clearFlashMessage() {
-                var flash = $rootScope.flash;
-                if (flash) {
-                    if (!flash.keepAfterLocationChange) {
-                        delete $rootScope.flash;
+                var toolTip = $rootScope.toolTip;
+                //
+                //toolTip.type = 'success';
+                
+                if (toolTip) {
+                    if (!toolTip.keepAfterLocationChange) {
+                        delete $rootScope.toolTip;
                     } else {
                         // only keep for a single location change
-                        flash.keepAfterLocationChange = false;
+                    	toolTip.keepAfterLocationChange = false;
                     }
                 }
             }
         }
 
         function Success(message, keepAfterLocationChange) {
-            $rootScope.flash = {
+            $rootScope.toolTip = {
                 message: message,
                 type: 'success', 
                 keepAfterLocationChange: keepAfterLocationChange
@@ -37,7 +40,7 @@
         }
 
         function Error(message, keepAfterLocationChange) {
-            $rootScope.flash = {
+            $rootScope.toolTip = {
                 message: message,
                 type: 'error',
                 keepAfterLocationChange: keepAfterLocationChange
