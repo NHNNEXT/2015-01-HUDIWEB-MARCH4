@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    march4.app.registerController('buildingController', function ($scope, $window, $http, $timeout, $routeParams, $location) {
+    march4.app.registerController('buildingController', function ($scope, $window, $http, $timeout, $routeParams, $location, $rootScope) {
 
         $scope.pid = {};
         $scope.floatingForm = {
@@ -14,34 +14,21 @@
                 margin: 20
             }
         };
-        $scope.host_uid = {
-            "host_uid": $routeParams.buildingId
-        };
+        $scope.host_uid = $rootScope.user.uId;
         $scope.panelOpened = ($routeParams.panel == "panel");
         $scope.panelID = $routeParams.panelId;
         $scope.panels = [
-            {
-                ID: 0
-            }, {
-                ID: 1
-            }, {
-                ID: 2
-            }, {
-                ID: 3
-            }, {
-                ID: 4
-            }, {
-                ID: 5
-            }, {
-                ID: 6
-            }, {
-                ID: 7
-            }, {
-                ID: 8
-            }, {
-                ID: 9
-            }
- ];
+            {ID: 0 },
+            {ID: 1 },
+            {ID: 2 },
+            {ID: 3 },
+            {ID: 4 },
+            {ID: 5 },
+            {ID: 6 },
+            {ID: 7 },
+            {ID: 8 },
+            {ID: 9 }
+        ];
 
         $scope.openPanel = function (index) {
             if (index === undefined) return;
@@ -86,7 +73,7 @@
             $http({
                 method: 'GET',
                 url: '/building/default',
-                params: $scope.host_uid
+                params: {"host_uid" : $scope.host_uid}
             }).
             success(function (data, status, headers, config) {
                 $scope.Buildings = data;
@@ -116,7 +103,7 @@
             $scope.addData = {};
             $scope.addData.name = addData.name;
             $scope.addData.shared = addData.shared;
-            $scope.addData.host_uid = $scope.host_uid.host_uid;
+            $scope.addData.host_uid = $scope.host_uid;
             $scope.addData.posx = Math.round(($("main>.building-wrap").outerWidth() / 2) - ($scope.pageSet.buildingBox.x / 2));
             $scope.addData.posy = Math.round(($("main>.building-wrap").outerHeight() / 2) - ($scope.pageSet.buildingBox.y / 2));
 
