@@ -4,8 +4,11 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import march4.controller.QuestController;
 import march4.model.Quest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Repository;
 public class QuestDao {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	private static final Logger log = LoggerFactory.getLogger(QuestController.class);
 
 	@PostConstruct
 	public void initialize() {
@@ -26,10 +30,24 @@ public class QuestDao {
 	}
 
 	public int insert(Quest quest) {
-		String sql = "insert into quest values (NULL, ?, ?, ?, ?, ?, ?)";
-		jdbcTemplate.update(sql, quest.getpId(), 
-				quest.getPosX(), quest.getPosY(), quest.getOrder(), quest.getContents(), quest.getDue());
+		log.debug("quest:{}", quest);
+		Integer qId = quest.getqId();
+		if(qId != null) {
+			String sql = "insert into quest values (?, ?, ?, ?, ?, ?, ?)";
+			jdbcTemplate.update(sql, quest.getqId(), quest.getpId(), 
+					quest.getPosX(), quest.getPosY(), quest.getOrder(), quest.getContents(), quest.getDue());
+		} else {
+			String sql = "insert into quest values (NULL, ?, ?, ?, ?, ?, ?)";
+			jdbcTemplate.update(sql, quest.getpId(), 
+					quest.getPosX(), quest.getPosY(), quest.getOrder(), quest.getContents(), quest.getDue());
+		}
 		return 0; // lastInsertId(); 가져와서 Quest.setId(); 하고 싶음.
+	}
+	
+	public void delete(int qId) {
+		String sql = "DELETE FROM quest WHERE qId = ?";
+		jdbcTemplate.update(sql, qId);
+		// 남은 퀘스트 개수 리턴??
 	}
 
 	public Quest select(int qId) {
@@ -50,22 +68,45 @@ public class QuestDao {
 	}
 	
 	
-	public List<Quest> selectBypID(String pId) {
+	public List<Quest> selectBypIdOrderedAsc(String pId) {
 		String sql = "select * from quest where pId = "+pId+" order by `order`";
 		List<Quest> quests = jdbcTemplate.query(sql, new BeanPropertyRowMapper<Quest>(Quest.class));
 		return quests;
 	}
 	
 	public int getOrderOf(int qId) {
-		return jdbcTemplate.queryForObject("SELECT `order` FROM quest WHERE qId = ?", Integer.class, qId);
+		log.debug("qid : {}", qId);
+		int order = jdbcTemplate.queryForObject("SELECT `order` FROM quest WHERE qId = ?", Integer.class, qId);
+		log.debug("order : {}", order);
+		return order;
 	}
 	
 	public void changeOrder(int qId, int order) {
 		String sql = "update quest set `order` = ? where qId = ?";
 		jdbcTemplate.update(sql, order, qId);
 	}
+	public void increaseOrderEqualAndAfter(int qId) {
+		Quest quest = jdbcTemplate.queryForObject("SELECT * FROM quest WHERE qId = ?",
+					new BeanPropertyRowMapper<Quest>(Quest.class), qId);
+		log.debug("quest:{}, pid:{}, order:{}", quest, quest.getpId(), quest.getOrder());
+		
+		String sql = "UPDATE quest SET `order`=`order`+1 WHERE pId=? AND `order`>=? ORDER BY `order` DESC";
+		jdbcTemplate.update(sql, quest.getpId(), quest.getOrder());
+	}
+//	public void decreaseOrderAfter(int qId) throws EmptyResultDataAccessException {
+//		Quest quest = jdbcTemplate.queryForObject("SELECT * FROM quest WHERE qId="+qId,
+//				new BeanPropertyRowMapper<Quest>(Quest.class), qId);
+//		
+//		String sql = "UPDATE quest SET `order`=`order`-1 WHERE pId=? AND order>?";
+//		jdbcTemplate.update(sql, quest.getpId(), quest.getOrder());
+//	}
+	public void decreaseOrderAfter(int pId, int order) throws EmptyResultDataAccessException {
+		String sql = "UPDATE quest SET `order`=`order`-1 WHERE pId=? AND `order`>?";
+		jdbcTemplate.update(sql, pId, order);
+	}
+		
 	
-	public int getMaxOrder() {
-		return jdbcTemplate.queryForObject("SELECT max(`order`)+1 FROM quest", Integer.class);
+	public int getMaxOrderOfProject(int pId) {
+		return jdbcTemplate.queryForObject("SELECT max(`order`)+1 FROM quest WHERE pId="+pId, Integer.class);
 	}
 }

@@ -120,6 +120,7 @@ march4.util.Sortable = function(el, upFunc) {
                 if (!that.$el.is(that.sortableList[i])) {
                     if (march4.util.isMouseOver(e, that.sortableList[i])) {
                         that.constructor.prototype.exchangeEl = that.sortableList[i];
+                        that.constructor.prototype.lastExchangeEl = that.constructor.prototype.exchangeEl;
                     }
                 }
             }
@@ -127,14 +128,18 @@ march4.util.Sortable = function(el, upFunc) {
 
     }, function(e, $el) {
         march4.util.swap(that.exchangeEl, that.$dummy);
+        console.log('tt',that.$el,that.constructor.prototype.lastExchangeEl);
+        
         that.constructor.prototype.exchangeEl = null;
     }, function(e) {
         march4.util.swap(that.$el, that.$dummy);
         that.$dummy.remove();
         $(document).off('.sort');
-        upFunc(0,0);
+        console.log(that.$el,that.constructor.prototype.lastExchangeEl,'tt');
+        upFunc(that.$el,that.constructor.prototype.lastExchangeEl);
     });
 };
 
 march4.util.Sortable.prototype.exchangeEl = null;
+march4.util.Sortable.prototype.lastExchangeEl = null;
 march4.util.Sortable.prototype.sortableList = [];

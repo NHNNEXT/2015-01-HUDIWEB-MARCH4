@@ -40,7 +40,7 @@ public class QuestDaoTest {
 	
 	@Test
 	public void select(){
-		Quest quest = questDao.select(18);
+		Quest quest = questDao.select(19);
 //		List<Quest> quest = questDao.selectAll();
 		log.debug("Select quest : {}", quest);
 	}
@@ -48,10 +48,5 @@ public class QuestDaoTest {
 	@Test
 	public void getOrder() {
 		System.out.println(questDao.getOrderOf(1));
-	}
-	
-	@Test
-	public void getMaxOrder() {
-		System.out.println(questDao.getMaxOrder());
 	}
 }
