@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import march4.model.Building;
@@ -41,12 +40,6 @@ public class BuildingController {
 	private static final Logger log = LoggerFactory
 			.getLogger(BuildingController.class);
 
-	@RequestMapping(value = { "", "/" }, method = RequestMethod.GET)
-	public String building(ModelMap model) {
-		log.debug("빌띵빌띵삘띵삘띵!!!!!");
-		return "building";
-	}
-	
 	@ResponseStatus(value = HttpStatus.OK)
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public @ResponseBody String addBuilding(@RequestBody @Valid Building building, BindingResult result, ModelMap model) throws JsonGenerationException, JsonMappingException, IOException {

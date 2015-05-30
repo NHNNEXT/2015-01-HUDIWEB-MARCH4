@@ -24,7 +24,7 @@
 					templateUrl : '/div/frontpage',
 					controller : 'frontpageController',
 					resolve : addControllerJs()
-				}).when('/building/:buildingId?/:panel?/:panelId?', {
+				}).when('/building/:buildingId?', {
 					templateUrl : '/div/building',
 					controller : 'buildingController',
 					resolve : addControllerJs()
