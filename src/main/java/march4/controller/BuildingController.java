@@ -71,11 +71,11 @@ public class BuildingController {
 	
 	
 	@RequestMapping(value = "/default", method = RequestMethod.GET)
-	public @ResponseBody List<Building> defaultBuilding(@RequestParam("uid") String uid) {
+	public @ResponseBody List<Building> defaultBuilding(@RequestParam("host_uId") String uid) {
 		log.debug(uid);
 		List<Building> buildings = buildingService.getDefaultBuilding(Integer.parseInt(uid));
 		
-		log.debug("building {}", buildings);
+		log.debug("building {}", buildings.toString());
 		return buildings;
 	}
 	

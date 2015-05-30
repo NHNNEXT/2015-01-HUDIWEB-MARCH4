@@ -1,5 +1,5 @@
 (function () {
-    "use strict"
+    "use strict";
 
     march4.app.registerController('buildingController', function ($scope, $window, $http, $timeout, $routeParams, $location) {
 
@@ -14,8 +14,8 @@
                 margin: 20
             }
         };
-        $scope.uid = {
-            "uid": $routeParams.buildingId
+        $scope.host_uId = {
+            "host_uId": $routeParams.buildingId
         };
         $scope.panelOpened = ($routeParams.panel == "panel");
         $scope.panelID = $routeParams.panelId;
@@ -64,7 +64,7 @@
             for (var i = 0; i < $(".buildingArea li").size(); i++) {
                 $(".buildingArea li").eq(i).css("left", $scope.Buildings[i].posx + "px");
                 $(".buildingArea li").eq(i).css("top", $scope.Buildings[i].posy + "px");
-            };
+            }
 
             //            var col = parseInt($(".buildingArea").outerWidth(true) / ($scope.pageSet.buildingBox.x + $scope.pageSet.buildingBox.margin));
             //
@@ -86,11 +86,11 @@
             $http({
                 method: 'GET',
                 url: '/building/default',
-                params: $scope.uid
+                params: $scope.host_uId
             }).
             success(function (data, status, headers, config) {
                 $scope.Buildings = data;
-                $scope.arrange();
+                console.log($scope.Buildings);
                 for (var i = 0; i < $scope.Buildings.length; i++) {
                     (function (i) {
                         $scope.Buildings[i].hide = true;
@@ -98,9 +98,10 @@
                             $scope.Buildings[i].hide = false;
                         }, i * 150);
                     })(i);
-                };
+                }
+                
                 $timeout($scope.setPosition, 0);
-
+                $timeout($scope.arrange, 0);
             }).
             error(function (data, status, headers, config) {
                 if (status == 400) {
@@ -115,7 +116,7 @@
             $scope.addData = {};
             $scope.addData.name = addData.name;
             $scope.addData.shared = addData.shared;
-            $scope.addData.uid = $scope.uid.uid;
+            $scope.addData.host_uId = $scope.host_uId.host_uId;
             $scope.addData.posx = Math.round(($("main>.building-wrap").outerWidth() / 2) - ($scope.pageSet.buildingBox.x / 2));
             $scope.addData.posy = Math.round(($("main>.building-wrap").outerHeight() / 2) - ($scope.pageSet.buildingBox.y / 2));
 
@@ -125,7 +126,7 @@
             var addSetPosition = function (data) {
                 $(".buildingArea li").eq($(".buildingArea li").length - 1).css("left", data.posx + "px");
                 $(".buildingArea li").eq($(".buildingArea li").length - 1).css("top", data.posy + "px");
-            }
+            };
 
             $http({
                 method: 'POST',
@@ -135,7 +136,7 @@
             success(function (data, status, headers, config) {
                 $scope.Buildings.push(data);
                 $timeout(function () {
-                    addSetPosition(data)
+                    addSetPosition(data);
                 }, 0);
 
                 $timeout(function () {
@@ -233,7 +234,7 @@
                     e.preventDefault();
                 },
                 function (e, el, position) {
-                    $scope.collisionDetect(e, el, collision, $scope.boxDiff)
+                    $scope.collisionDetect(e, el, collision, $scope.boxDiff);
                         //                    console.log(collision);
                         //                    console.log($scope.boxDiff);
                     if (collision.top !== false)
@@ -252,8 +253,8 @@
                 },
                 function (e, el) {
                     console.log("realese");
-                    var mouseX = e.pageX
-                    var mouseY = e.pageY
+                    var mouseX = e.pageX;
+                    var mouseY = e.pageY;
 
                     if (collision.top !== false)
                         mouseY = collision.top + $scope.boxDiff.y;
@@ -305,14 +306,14 @@
                 if (!elements.eq(i).css("top")) {
                     continue;
                 }
-                var sortPart = parseInt(elements.eq(i).css("top"))
+                var sortPart = parseInt(elements.eq(i).css("top"));
 
                 sortMe.push([1 * sortPart, elements[i]]);
             }
             sortMe.sort(function (x, y) {
                 return x[0] - y[0];
             });
-            for (var i = 0; i < sortMe.length; i++) {
+            for (i = 0; i < sortMe.length; i++) {
                 container.append(sortMe[i][1]);
             }
 
@@ -362,11 +363,11 @@
 
             //마우스 거리 - 차거리 //위 왼쪽
             //마우스 거리 + (박스크기 - 차거리) // 아래 오른쪽            
-        }
+        };
 
         $scope.setPid = function (pid) {
             $scope.pid = pid;
-        }
+        };
 
         $scope.panelInit = function () {
             $(".panel").css("visibility", "hidden");
@@ -385,7 +386,7 @@
 //------------------------------------------------------------------
 
 (function () {
-    "use strict"
+    "use strict";
     var Sortable = march4.util.Sortable;
 
     march4.app.registerController('roadmapController', function ($http, $scope, $routeParams) {

@@ -24,7 +24,7 @@
         <ul class="buildingArea">
             <li ng-repeat="Building in Buildings" class="buildingBox" ng-class="{hide : Building.hide, delete : Building.delete}" repeat-func="positionable" ng-mousedown="setPid(Building.pid)">
                 pid : {{Building.pid}}
-                <br> uid : {{Building.uid}}
+                <br> host_uid : {{Building.host_uid}}
                 <br> name : {{Building.name}}
                 <br> shared : {{Building.shared}}
                 <br>

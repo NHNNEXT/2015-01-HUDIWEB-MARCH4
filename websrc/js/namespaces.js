@@ -60,7 +60,7 @@ march4.util.Draggable = function(el, downFunc, moveFunc, upFunc) {
         var position = {
             x:e.clientX,
             y:e.clientY
-        }
+        };
         
         position = downFunc(e, that.$el, position) || position;
         var cursorX = e.clientX;
@@ -78,7 +78,7 @@ march4.util.Draggable = function(el, downFunc, moveFunc, upFunc) {
             position = {
                 x:e.clientX,
                 y:e.clientY
-            }   
+            };   
             
             position = moveFunc(e, that.$el, position) || position;
             setPos(position);
