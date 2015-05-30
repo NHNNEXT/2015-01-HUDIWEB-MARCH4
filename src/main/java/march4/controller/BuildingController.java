@@ -1,12 +1,19 @@
 package march4.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import march4.model.Building;
 import march4.service.BuildingService;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
@@ -15,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,11 +49,24 @@ public class BuildingController {
 	
 	@ResponseStatus(value = HttpStatus.OK)
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public @ResponseBody Building addBuilding(@RequestBody Building building, ModelMap model) {
+	public @ResponseBody String addBuilding(@RequestBody @Valid Building building, BindingResult result, ModelMap model) throws JsonGenerationException, JsonMappingException, IOException {
 		log.debug("Add building!");
-		buildingService.addBuilding(building);		
-		building.setPid(buildingService.getLastpId());
-		return building;
+
+		List<ObjectError> errors = result.getAllErrors();
+		if (errors.isEmpty()) {
+			ObjectMapper mapper = new ObjectMapper();
+			buildingService.addBuilding(building);		
+			building.setPid(buildingService.getLastpId());
+			String jsonString = mapper.writeValueAsString(building);
+			return jsonString;
+		}
+		
+		List<String> messages = new ArrayList<String>();
+		for (ObjectError error : errors) {
+			log.debug("error : {}", error.getDefaultMessage());
+			messages.add(error.getDefaultMessage());
+		}
+		return null;
 	}
 	
 	@ResponseStatus(value = HttpStatus.OK)
@@ -71,11 +93,11 @@ public class BuildingController {
 	
 	
 	@RequestMapping(value = "/default", method = RequestMethod.GET)
-	public @ResponseBody List<Building> defaultBuilding(@RequestParam("uid") String uid) {
+	public @ResponseBody List<Building> defaultBuilding(@RequestParam("host_uid") String uid) {
 		log.debug(uid);
 		List<Building> buildings = buildingService.getDefaultBuilding(Integer.parseInt(uid));
 		
-		log.debug("building {}", buildings);
+		log.debug("building {}", buildings.toString());
 		return buildings;
 	}
 	

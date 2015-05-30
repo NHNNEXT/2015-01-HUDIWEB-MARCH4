@@ -3,7 +3,7 @@ package march4.model;
 public class Building {
 
 	private Integer pid;
-	private Integer uid;
+	private Integer host_uid;
 	private Integer posx;
 	private Integer posy;
 	private String name;
@@ -15,20 +15,29 @@ public class Building {
 
 	public Building(Integer uid, String name, String shared) {
 		super();
-		this.uid = uid;
+		this.host_uid = uid;
 		this.name = name;
 		this.shared = shared;
 	}
 	
-	public Building(Integer pid, Integer uid, Integer posx, Integer posy,
+	public Building(Integer pid, Integer host_uid, Integer posx, Integer posy,
 			String name, String shared) {
 		super();
 		this.pid = pid;
-		this.uid = uid;
+		this.host_uid = host_uid;
 		this.posx = posx;
 		this.posy = posy;
 		this.name = name;
 		this.shared = shared;
+	}
+
+	
+	
+	@Override
+	public String toString() {
+		return "Building [pid=" + pid + ", uid=" + host_uid + ", posx=" + posx
+				+ ", posy=" + posy + ", name=" + name + ", shared=" + shared
+				+ "]";
 	}
 
 	public Integer getPid() {
@@ -39,12 +48,12 @@ public class Building {
 		this.pid = pid;
 	}
 
-	public Integer getUid() {
-		return uid;
+	public Integer getHost_uid() {
+		return host_uid;
 	}
 
-	public void setUid(Integer uid) {
-		this.uid = uid;
+	public void setHost_uid(Integer host_uid) {
+		this.host_uid = host_uid;
 	}
 
 	public Integer getPosx() {

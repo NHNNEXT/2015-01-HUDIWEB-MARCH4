@@ -24,13 +24,13 @@
         <ul class="buildingArea">
             <li ng-repeat="Building in Buildings" class="buildingBox" ng-class="{hide : Building.hide, delete : Building.delete}" repeat-func="positionable" ng-mousedown="setPid(Building.pid)">
                 pid : {{Building.pid}}
-                <br> uid : {{Building.uid}}
+                <br> host_uid : {{Building.host_uid}}
                 <br> name : {{Building.name}}
                 <br> shared : {{Building.shared}}
-                <br>
-                <input ng-click="del(Building.pid, $event, $index)" type="button" value="삭제">
+                <br> 
+                <input class="building-button" ng-click="del(Building.pid, $event, $index)" type="button" value="삭제">
 
-            </li>
+            </li> 
         </ul>
     </div>
 </div>
