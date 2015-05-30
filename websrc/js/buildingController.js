@@ -89,8 +89,8 @@
                 params: $scope.uid
             }).
             success(function (data, status, headers, config) {
-                console.log(data);
                 $scope.Buildings = data;
+                $scope.arrange();
                 for (var i = 0; i < $scope.Buildings.length; i++) {
                     (function (i) {
                         $scope.Buildings[i].hide = true;
@@ -116,8 +116,11 @@
             $scope.addData.name = addData.name;
             $scope.addData.shared = addData.shared;
             $scope.addData.uid = $scope.uid.uid;
-            $scope.addData.posx = Math.round(($("main>.wrap").outerWidth() / 2) - ($scope.pageSet.buildingBox.x / 2));
-            $scope.addData.posy = Math.round(($("main>.wrap").outerHeight() / 2) - ($scope.pageSet.buildingBox.y / 2));
+            $scope.addData.posx = Math.round(($("main>.building-wrap").outerWidth() / 2) - ($scope.pageSet.buildingBox.x / 2));
+            $scope.addData.posy = Math.round(($("main>.building-wrap").outerHeight() / 2) - ($scope.pageSet.buildingBox.y / 2));
+
+            console.log($scope.addData.posx);
+            console.log($scope.addData.posy);
 
             var addSetPosition = function (data) {
                 $(".buildingArea li").eq($(".buildingArea li").length - 1).css("left", data.posx + "px");
@@ -217,26 +220,22 @@
 
             $scope.dragpos = {};
             $scope.boxDiff = {};
-    
+            var collision = {};
+
             march4.util.Draggable(el,
                 function (e, el) {
                     console.log("press");
                     $scope.dragpos.startx = e.pageX;
                     $scope.dragpos.starty = e.pageY;
-                    
+
                     $scope.boxDiff.x = e.pageX - $(el).offset().left;
                     $scope.boxDiff.y = e.pageY - $(el).offset().top;
                     e.preventDefault();
                 },
                 function (e, el, position) {
-
-                //마우스 위치를 전역으로 잡아서 빼주지
-                //클릭시에 저장해요.
-                
-                    var collision = {};
                     $scope.collisionDetect(e, el, collision, $scope.boxDiff)
-                    console.log(collision);
-                    console.log($scope.boxDiff);
+                        //                    console.log(collision);
+                        //                    console.log($scope.boxDiff);
                     if (collision.top !== false)
                         position.y = collision.top + $scope.boxDiff.y;
                     if (collision.left !== false)
@@ -245,18 +244,32 @@
                         position.y = collision.bottom + ($(el).outerHeight - $scope.boxDiff.y);
                     if (collision.right !== false)
                         position.x = collision.right + ($(el).outerWidth - $scope.boxDiff.x);
-                
+
                     console.log("move");
+                    $scope.arrange();
                     e.preventDefault();
                     return position;
                 },
                 function (e, el) {
                     console.log("realese");
-                    var diffx = e.pageX - $scope.dragpos.startx;
-                    var diffy = e.pageY - $scope.dragpos.starty;
+                    var mouseX = e.pageX
+                    var mouseY = e.pageY
+
+                    if (collision.top !== false)
+                        mouseY = collision.top + $scope.boxDiff.y;
+                    if (collision.left !== false)
+                        mouseX = collision.left + $scope.boxDiff.x;
+                    if (collision.bottom !== false)
+                        mouseY = collision.bottom + ($(el).outerHeight - $scope.boxDiff.y);
+                    if (collision.right !== false)
+                        mouseX = collision.right + ($(el).outerWidth - $scope.boxDiff.x);
+
+                    var diffx = mouseX - $scope.dragpos.startx;
+                    var diffy = mouseY - $scope.dragpos.starty;
                     $(el).css("left", parseInt($(el).css("left")) + diffx + "px");
                     $(el).css("top", parseInt($(el).css("top")) + diffy + "px");
                     $scope.updatePosition(el);
+                    $scope.arrange();
                     e.preventDefault();
                 });
         };
@@ -284,17 +297,38 @@
             });
         };
 
+        $scope.arrange = function () {
+            var container = $(".buildingArea");
+            var elements = container.children();
+            var sortMe = [];
+            for (var i = 0; i < elements.length; i++) {
+                if (!elements.eq(i).css("top")) {
+                    continue;
+                }
+                var sortPart = parseInt(elements.eq(i).css("top"))
+
+                sortMe.push([1 * sortPart, elements[i]]);
+            }
+            sortMe.sort(function (x, y) {
+                return x[0] - y[0];
+            });
+            for (var i = 0; i < sortMe.length; i++) {
+                container.append(sortMe[i][1]);
+            }
+
+        };
+
         $scope.collisionDetect = function (e, el, collision, boxDiff) {
             var currentX = e.pageX;
             var currentY = e.pageY;
-            var areaX = $(".wrap.ng-scope").offset().left;
-            var areaY = $(".wrap.ng-scope").offset().top;
-            var areaWidth = $(".wrap.ng-scope").outerWidth();
-            var areaHeight = $(".wrap.ng-scope").outerHeight();
+            var areaX = $(".building-wrap.ng-scope").offset().left;
+            var areaY = $(".building-wrap.ng-scope").offset().top;
+            var areaWidth = $(".building-wrap.ng-scope").outerWidth();
+            var areaHeight = $(".building-wrap.ng-scope").outerHeight();
             var boxX = $(el).offset().left;
             var boxY = $(el).offset().top;
-            var boxWidth = $(el).outerWidth(true);
-            var boxHeight = $(el).outerHeight(true);
+            var boxWidth = $(el).outerWidth();
+            var boxHeight = $(el).outerHeight();
 
             //박스 마우스 거리
             var boxintX = boxDiff.x;
@@ -331,7 +365,6 @@
         }
 
         $scope.setPid = function (pid) {
-            console.log(pid);
             $scope.pid = pid;
         }
 
