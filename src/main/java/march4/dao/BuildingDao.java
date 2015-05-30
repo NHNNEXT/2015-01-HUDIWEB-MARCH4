@@ -17,7 +17,7 @@ public class BuildingDao {
 
 	public void add(Building building) {
 		String sql = "insert into project values(null, ?, ?, ?, ?, ?)";
-		jdbcTemplate.update(sql, building.getUid(), building.getName(),
+		jdbcTemplate.update(sql, building.getHost_uid(), building.getName(),
 				building.getShared(), building.getPosx(), building.getPosy());
 	}
 

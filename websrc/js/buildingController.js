@@ -14,8 +14,8 @@
                 margin: 20
             }
         };
-        $scope.host_uId = {
-            "host_uId": $routeParams.buildingId
+        $scope.host_uid = {
+            "host_uid": $routeParams.buildingId
         };
         $scope.panelOpened = ($routeParams.panel == "panel");
         $scope.panelID = $routeParams.panelId;
@@ -86,7 +86,7 @@
             $http({
                 method: 'GET',
                 url: '/building/default',
-                params: $scope.host_uId
+                params: $scope.host_uid
             }).
             success(function (data, status, headers, config) {
                 $scope.Buildings = data;
@@ -116,7 +116,7 @@
             $scope.addData = {};
             $scope.addData.name = addData.name;
             $scope.addData.shared = addData.shared;
-            $scope.addData.host_uId = $scope.host_uId.host_uId;
+            $scope.addData.host_uid = $scope.host_uid.host_uid;
             $scope.addData.posx = Math.round(($("main>.building-wrap").outerWidth() / 2) - ($scope.pageSet.buildingBox.x / 2));
             $scope.addData.posy = Math.round(($("main>.building-wrap").outerHeight() / 2) - ($scope.pageSet.buildingBox.y / 2));
 
@@ -156,6 +156,7 @@
         };
 
         $scope.del = function (pid, e, i) {
+            debugger;
             $scope.delData = {};
             $scope.delData.pid = pid;
             $http({
