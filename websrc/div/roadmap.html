@@ -1,36 +1,29 @@
 <link rel="stylesheet" href="<%- cssDir %>/roadmap.css" />
-<form ng-submit="addQuest()">
-	<label>내용</label> <input ng-model="newQuest.contents" name="contents" type="text">
-	<!-- [type=datetime-local]은 mysql.datetime 이랑 형식이 달라서 불편. 일단 text 로 테스트.
-	<label>마감</label> <input ng-model="newQuest.due" name="due" type="datetime-local"> -->
-	<label>마감</label> <input ng-model="newQuest.due" name="due" type="text">
-	<!-- input[type=hidden] + ng-submit 이 안 된다. ng-value={{0}} ng-value="0" value="{{0}}" 다 안 된다.
-	<input ng-model="newQuest.posX" name="posX" type="hidden" ng-value="testdata">
-	<input ng-model="newQuest.posY" name="posY" type="hidden" ng-value="testdata">
-	<input ng-model="newQuest.order" name="order" type="hidden" ng-value="testdata">
-	-->
-	<label>위치</label> 
-	<input ng-model="newQuest.posX" name="posX" type="number">
-	<input ng-model="newQuest.posY" name="posY" type="number">
-	<input ng-model="newQuest.order" name="order" type="number" style="display:none;" ng-value="$scope.lastId">
-	<!-- <input ng-model="newQuest.order" name="order" type="hidden" ng-value="getOrder(newQuest.due)"> -->
-	<input type="submit">
-	{{pid}}
-</form>
-<ul class="sortableContainer">
-	<p>
-	<span>{{newQuest.contents}}</span>
-	<span>{{newQuest.due}}</span>
-	순서
-	<span>{{newQuest.order}}</span>
-	번째
-	</p>
-	<li class="sortable" ng-repeat="quest in quests" repeat-func="makeItSortable">
-		<span style="display:inline-block;width:25px;">{{quest.qId}}</span> <!-- for debugging -->
-		<span style="display:inline-block;width:20px;">{{quest.order}}</span> <!-- for debugging -->
-		<span>{{quest.contents}}</span>
-		<span>{{quest.due}}</span>
-		<button name="delete">X</button>
-	</li>
-</ul>
-<button ng-click="asdf()">asdfasdf</button>
+<div class="input-container">
+	<ul class="sortableContainer">
+		<li class="sortable" ng-repeat="quest in quests" repeat-func="makeItSortable">
+			<span style="display:inline-block;width:25px;">{{quest.qId}}</span> <!-- for debugging -->
+			<span style="display:inline-block;width:20px;">{{quest.order}}</span> <!-- for debugging -->
+			<span>{{quest.contents}}</span>
+			<span>{{quest.due}}</span>
+			<button name="delete">X</button>
+		</li>
+	</ul>
+	<form ng-submit="addQuest()">
+		<label>내용</label> <input ng-model="newQuest.contents" name="contents" type="text">
+		<label>마감</label> <input ng-model="newQuest.due" name="due" type="text" value="2011-05-25 04:52:23"><br />
+		<label>위치</label> 
+		<input ng-model="newQuest.posX" name="posX" type="number">
+		<input ng-model="newQuest.posY" name="posY" type="number">
+		<input ng-model="newQuest.order" name="order" type="number" style="display:none;" ng-value="$scope.lastId">
+		<input type="submit">
+	</form>
+</div>
+<div class="field">
+	<ul class="quests">
+		<li class="quest" ng-repeat="quest in quests" style="bottom:{{quest.position}}px; left:50%">
+			{{quest.contents}}
+		</li>
+	</ul>
+
+</div>

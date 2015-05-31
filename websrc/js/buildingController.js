@@ -394,7 +394,7 @@
         $scope.$watch(function(){
             return QuestService.quests;
         }, function (quests) {
-            $scope.quests = quests;
+            $scope.updateQuests(quests);
         });
 
         $scope.$watch(function(){
@@ -403,12 +403,6 @@
             $scope.pid = pid;
             $scope.path = '/api/projects/'+$scope.pid+'/quests';
         });
-
-        $scope.asdf = function(){
-            console.log("ewwehpr");
-            console.log(QuestService.printQuests());
-        };
-
 
         $scope.initQuest = function() {
             console.log(QuestService);
@@ -423,6 +417,7 @@
             $scope.lastOrder = parseInt(data[data.length - 1].order);
             if(typeof($scope.lastOrder) !== 'number') $scope.lastOrder = 0;
             console.log('update last order', $scope.lastOrder);
+            $scope.updatePosition();
         };
         
         $scope.addQuest = function() {
@@ -499,6 +494,38 @@
         $scope.getqId = function(element) {
             var scope = angular.element(element).scope();
             return (scope)? scope.quest.qId : 0;
+        };
+
+        $scope.toMillisec = function(sqlDatetime) {
+            var t = sqlDatetime.split(/[- :]/);
+            var d = new Date(t[0], t[1]-1, t[2], t[3] || 0, t[4] || 0, t[5] || 0);
+            var s = d.getTime();
+            return s;
+        };
+
+        $scope.calculatePosition = function(millisec) {
+        };
+
+        $scope.updatePosition = function() {
+            var baseDuesec = $scope.toMillisec('2010-01-01 00:00:00');
+            // var baseDuesec = new Date(); // 혹은 제일 가까운 날짜.
+            var viewMaxHeight = 500;
+
+            var accumulatedDuesec = 0;
+            for (var i = $scope.quests.length - 1; i >= 0; i--) {
+                var q = $scope.quests[i];
+                q.duesec = ($scope.toMillisec(q.due) - baseDuesec) / 1000;
+                accumulatedDuesec += q.duesec;
+            };
+
+            if($scope.quests.length > 0) $scope.quests[0].position = 0;
+            for (var i = 1; i < $scope.quests.length; i++) {
+                var q = $scope.quests[i];
+                q.position = $scope.quests[i-1].position
+                    + parseInt((q.duesec * viewMaxHeight) / accumulatedDuesec);
+            };
+            // debugger;
+            $scope.calculatePosition();
         };
         
         $scope.init();
