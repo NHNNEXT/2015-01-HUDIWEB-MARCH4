@@ -142,7 +142,6 @@
         };
 
         $scope.del = function (pid, e, i) {
-            debugger;
             $scope.delData = {};
             $scope.delData.pid = pid;
             $http({
@@ -205,11 +204,16 @@
         $scope.closeFloatingForm();
 
         $scope.positionable = function (el) {
+            
+            console.dir($(el).find('button.building-button'));
+            
+            $(el).find('button.building-button').click(function(){
+                alert(1);
+            });
 
             $scope.dragpos = {};
             $scope.boxDiff = {};
             var collision = {};
-
             march4.util.Draggable(el,
                 function (e, el) {
                     console.log("press");
@@ -241,7 +245,7 @@
                     console.log("realese");
                     var mouseX = e.pageX;
                     var mouseY = e.pageY;
-
+                    
                     if (collision.top !== false)
                         mouseY = collision.top + $scope.boxDiff.y;
                     if (collision.left !== false)
@@ -255,10 +259,12 @@
                     var diffy = mouseY - $scope.dragpos.starty;
                     $(el).css("left", parseInt($(el).css("left")) + diffx + "px");
                     $(el).css("top", parseInt($(el).css("top")) + diffy + "px");
+                    
                     $scope.updatePosition(el);
                     $scope.arrange();
                     e.preventDefault();
-                },500);
+                    
+                },0,"button.building-button");
         };
 
         $scope.updatePosition = function (el) {
@@ -288,21 +294,23 @@
             var container = $(".buildingArea");
             var elements = container.children();
             var sortMe = [];
+            
             for (var i = 0; i < elements.length; i++) {
                 if (!elements.eq(i).css("top")) {
                     continue;
                 }
+
                 var sortPart = parseInt(elements.eq(i).css("top"));
 
                 sortMe.push([1 * sortPart, elements[i]]);
             }
+
             sortMe.sort(function (x, y) {
                 return x[0] - y[0];
             });
             for (i = 0; i < sortMe.length; i++) {
                 container.append(sortMe[i][1]);
             }
-
         };
 
         $scope.collisionDetect = function (e, el, collision, boxDiff) {
