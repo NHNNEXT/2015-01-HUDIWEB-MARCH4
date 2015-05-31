@@ -1,34 +1,35 @@
 <link rel="stylesheet" href="<%- cssDir %>/signup.css" />
 
 <!--start register form-->
-<div id="">
-	<div class="container">
-		<div class="">
-			<!--start  tooltips above login form  <<huh? this part overlapped between sign in n register.html  -->
+<div id="background">
+	<div class="container" >
+		<div class="card contain-sm style-transparent">
 			<div
 				ng-class="{ 'alert': toolTip,
                'alert-success': toolTip.type === 'success', 
                'alert-danger': toolTip.type === 'error' }"
 				ng-if="toolTip" ng-bind="toolTip.message"></div>
 			<!--end tooltips above login form -->
-
+			<div class = "col-sm-6 posTxt">
+				<img src="../img/logoMarch.gif" class = "card cardImg ">
+				<h2 class = "text-primary card">Register</h2>					
+			</div>
 			<!--start register container -->
-			<div>
-				<h2>Register</h2>
+			<div class="col-sm-6 posSignup">
 				<div ng-show="error" class="alert alert-danger">{{error}}</div>
 				<!-- asap:to apply this css class effect, link in minimum bootstrap  -->
-				<form name="form" ng-submit="signup()" novalidate>
-					<div
+				<form name="form" ng-submit="signup()" novalidate class="form">
+					<div class="form-group"
 						ng-class="{ 'has-error': form.email.$invalid && !form.email.$pristine}">
-						<label for="email">email</label> <input type="email" name="email"
+						<label class = "labelTxt" for="email">Email</label> <input type="email" name="email"
 							id="email" class="form-control" ng-model="newUser.email" required />
 						<span class="help-block"
 							ng-show="form.email.$invalid && !form.email.$pristine">format
 							is invalid email</span>
 					</div>
-					<div
+					<div class = "form-group"
 						ng-class="{ 'has-error':form.password.$invalid && !form.password.$pristine}">
-						<label for="password">Password</label> <input type="password"
+						<label for="password" class = "labelTxt">Password</label> <input type="password"
 							name="password" id="password" class="form-control"
 							ng-model="newUser.password" ng-minlength="8" ng-maxlength="12"
 							required /> <span class="help-block"
@@ -40,21 +41,21 @@
 							long</span>
 					</div>
 
-					<div
+					<div class = "form-group"
 						ng-class="{ 'has-error': form.newUser.name.$dirty && form.newUser.name.$error.required }">
-						<label for="name">Name</label> <input type="text"
-							name="name" id="name" class="form-control"
-							ng-model="newUser.name" required /> <span
-							ng-show="form.newUser.name.$dirty && form.newUser.name.$error.required">Name
+						<label for="name" class = "labelTxt">Name</label> <input type="text" name="name"
+							id="name" class="form-control " ng-model="newUser.name" required />
+						<span
+							ng-show="form.newUser.name.$dirty && form.newUser.name.$error.required" class=" has-error">Name
 							is required</span>
 					</div>
 
-					<div class="btnAction">
-						<button type="submit" ng-disabled="form.$invalid || loading">Register</button>
+					<div class="btnAction col-sm-6 ">
+						<button type="submit" ng-disabled="form.$invalid || loading" class ="btn-raised txtRight">Register</button>
 						<!--image of loading -->
 						<img ng-if="loading"
 							src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-						<a href="/signin">cancel</a>
+						<a class = "text-light planB"  href="/signin">sign in</a>
 					</div>
 				</form>
 			</div>
