@@ -20,9 +20,9 @@
         $scope.openPanel = function (pId) {
             alert(pId);
             if (pId === undefined) return;
-            
+
             $routeParams.buildingId = pId;
-            
+
             if (!$scope.panelOpened) {
                 march4.util.setPathNoReloading($location.path().match(/(.*?)\/?$/)[1] + "/" + $routeParams.buildingId);
                 $scope.panelOpened = true;
@@ -63,7 +63,9 @@
             $http({
                 method: 'GET',
                 url: '/building/default',
-                params: {"host_uid" : $scope.host_uid}
+                params: {
+                    "host_uid": $scope.host_uid
+                }
             }).
             success(function (data, status, headers, config) {
                 $scope.Buildings = data;
@@ -98,6 +100,9 @@
 
             $scope.addData = {};
             $scope.addData.name = addData.name;
+            if (addData.shared === "" || addData.shared === undefined)
+                addData.shared = false;
+            $scope.addData.shared = addData.shared;
             $scope.addData.shared = addData.shared;
             $scope.addData.host_uid = $scope.host_uid;
             $scope.addData.posx = Math.round(($("main>.building-wrap").outerWidth() / 2) - ($scope.pageSet.buildingBox.x / 2));
@@ -131,6 +136,8 @@
                 } else {
                     $scope.addFailMessage = data;
                 }
+                $timeout($scope.arrange, 0);
+                $scope.closeFloatingForm();
             }).
             error(function (data, status, headers, config) {
                 if (status == 400) {
@@ -142,7 +149,6 @@
         };
 
         $scope.del = function (pid, e, i) {
-            debugger;
             $scope.delData = {};
             $scope.delData.pid = pid;
             $http({
@@ -157,6 +163,8 @@
                     $scope.Buildings.splice(i, 1);
                     //$timeout($scope.setPosition, 0);
                 }, 150);
+                $timeout($scope.arrange, 160);
+
             }).
             error(function (data, status, headers, config) {
                 if (status == 400) {
@@ -258,7 +266,7 @@
                     $scope.updatePosition(el);
                     $scope.arrange();
                     e.preventDefault();
-                },500);
+                }, 500);
         };
 
         $scope.updatePosition = function (el) {
@@ -358,8 +366,8 @@
         $scope.panelInit = function () {
             $(".panel").css("visibility", "hidden");
         };
-        $scope.panelInit();
 
+        $scope.panelInit();
 
         $scope.default();
     });

@@ -29,26 +29,70 @@
 }
 
 .buildingBox {
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin: 10px 10px 10px 10px;
-  height: 160px;
-  width: 150px;
-  background: #F7DFBF;
-  border: solid 4px #5A2E2E;
-  padding: 23px 10px 10px 10px;
-  border-radius: 10px 10px 4px 4px;
-  z-index: 4;
-  box-shadow: -5px 3px 40px 0 rgba(0,0,0,.7);
-  /*transition: .3s;*/
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 10px 10px 10px 10px;
+    height: 160px;
+    width: 150px;
+    background: #F7DFBF;
+    border: solid 4px #5A2E2E;
+    padding: 23px 10px 10px 10px;
+    border-radius: 10px 10px 4px 4px;
+    z-index: 4;
+    box-shadow: -5px 3px 40px 0 rgba(0, 0, 0, .7);
+    /*transition: .3s;*/
 }
 
-.buildingBox.waiting{
-  transform: perspective(2000px) rotateX(20deg) translateZ(20px);
-  box-shadow: -1px 13px 40px 0 rgba(0,0,0,.7);
+.buildingBox:hover {
+
 }
 
+.buildingBox:hover .del {
+    opacity: 1;
+    top: -40px;
+    left: 0px;
+}
+
+.buildingBox:hover .modify {
+    opacity: 1;
+    top: -40px;
+    left: 40px;
+}
+
+.del {
+    border: solid 4px #5A2E2E;
+    background: #F7DFBF;
+    opacity: 0;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    transition: .3s;
+    
+}
+
+.modify {
+    border: solid 4px #5A2E2E;
+    background: #F7DFBF;
+    opacity: 0;
+    position: absolute;
+    top: 0px;
+    left: 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    transition: .3s;
+    transition-delay: .1s;
+}
+
+.buildingBox.waiting {
+    transform: perspective(2000px) rotateX(20deg) translateZ(20px);
+    box-shadow: -1px 13px 40px 0 rgba(0, 0, 0, .7);
+}
+/*
 .buildingBox.waiting:after {
     content: '';
     position: absolute;
@@ -62,17 +106,18 @@
     opacity: 0.3;
     animation: rotating 3s infinite linear;
 }
+*/
 
 .buildingBox.dragging {
     transform: perspective(1000px) translateZ(100px);
-    box-shadow: 0px 0px 60px 0 rgba(0,0,0,.7);
+    box-shadow: 0px 0px 60px 0 rgba(0, 0, 0, .7);
 }
 
 @-webkit-keyframes rotating {
-    from{
+    from {
         -webkit-transform: rotate(0deg);
     }
-    to{
+    to {
         -webkit-transform: rotate(360deg);
     }
 }
@@ -178,7 +223,7 @@
     -ms-transform: scale(1);
     transform: scale(1);
     opacity: 1;
-} 
+}
 
 .bd-overlay {
     position: fixed;
@@ -194,7 +239,7 @@
     -moz-transition: all 0.3s;
     transition: all 0.3s;
 }
- 
+
 .blur {
     -webkit-filter: blur(6px);
     -moz-filter: blur(6px);
@@ -226,12 +271,13 @@
 }
 /*------------------------------------------*/
 
-html, body {
+html,
+body {
     height: 100%;
     overflow: hidden;
 }
 
-.building-wrap{
+.building-wrap {
     background: url(../img/map_background.jpg);
     overflow: hidden;
     position: absolute;
@@ -241,8 +287,8 @@ html, body {
     bottom: 0px;
     overflow: auto;
 }
-
 /*--------------------------------------------*/
+
 .building-botton {
     position: relative;
     top: 0;

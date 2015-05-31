@@ -9,7 +9,7 @@
                     <input ng-model="addData.name" type="text" placeholder="Name">
                 </div>
                 <div>
-                    <input ng-model="addData.shared" type="text" placeholder="shared">
+                    <label>Shared<input type="checkbox" ng-model="addData.shared"></label>
                 </div>
                 <div>
                     <input ng-click="add(addData)" type="button" value="Create"> 
@@ -33,8 +33,11 @@
                     열기
                 </span>
 
-                <button class="building-button" ng-click="del(Building.pid, $event, $index)">
+                <button class="building-button del" ng-click="del(Building.pid, $event, $index)">
                     삭제
+                </button>
+                <button class="building-button modify" ng-click="del(Building.pid, $event, $index)">
+                    수정
                 </button>
             </li> 
         </ul>
