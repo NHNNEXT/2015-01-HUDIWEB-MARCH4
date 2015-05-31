@@ -1,0 +1,45 @@
+<h2>ERROR {{errorNumber}}</h2>
+<!--start login container -->
+<section ng-show="errorNumber==401" >
+	<h2>Login</h2>
+	<div class="alert alert-danger">{{error}}</div>
+	<form name="" ng-submit="signIn()">
+		<div
+			ng-class="{ 'has-error': form.user.email.$dirty && form.user.email.$error.required }">
+			<label for="email">email</label> <input type="text" name="email"
+				id="email" ng-model="user.email" required /> <span
+				ng-show="form.user.email.$dirty && form.user.email.$error.required">email
+				is required</span>
+		</div>
+		<div
+			ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
+			<label for="password">Password</label> <input type="password"
+				name="password" id="password" class="form-control"
+				ng-model="user.password" required /> <span
+				ng-show="form.user.password.$dirty && form.user.password.$error.required">Password
+				is required</span>
+		</div>
+
+		<!-- how come?
+	<div class="">
+		<label>
+			<input type="checkbox" value="">
+			<span>Remember me</span>
+		</label>
+	</div>	 -->
+
+		<div class="btnAction">
+			<button type="submit" ng-disabled="form.$invalid || dataLoading">Sign
+				in</button>
+			<!--image of loading 
+			image is the base 64 encoded string of data
+			<img src="/-/data:image/gif;base64,<DATA>"> 
+			<DATA> get by this site >> this http://software.hixie.ch/utilities/cgi/data/data
+			reference to http://stackoverflow.com/questions/18460684/how-to-read-a-binary-data-in-angularjs
+			-->
+			<img ng-if="vm.dataLoading"
+				src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+			<a href="#">signUp</a>
+		</div>
+	</form>
+</section>

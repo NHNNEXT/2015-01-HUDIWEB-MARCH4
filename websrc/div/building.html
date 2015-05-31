@@ -1,41 +1,54 @@
 <link rel="stylesheet" href="<%- cssDir %>/building.css" />
-<div>
+<div class="building-wrap">
+    <div class="bd-addform bd-effect bd-hide" ng-class="{'bd-show' : floatingForm.show}">
+        <div class="bd-content">
+            <h3>Create Building</h3>
+            <div>
+                {{addFailMessage}}
+                <div>
+                    <input ng-model="addData.name" type="text" placeholder="Name">
+                </div>
+                <div>
+                    <label>Shared<input type="checkbox" ng-model="addData.shared"></label>
+                </div>
+                <div>
+                    <input ng-click="add(addData)" type="button" value="Create"> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bd-overlay" ng-click="closeFloatingForm()"></div>
     <div>
-        <label>uid : </label>
-        <input data-ng-model="data.uid" type="text">
+        <button ng-click="openFloatingForm()">빌딩추가</button>
     </div>
     <div>
-        <input data-ng-click="default()" type="button" value="빌딩소환!!">
+        <ul class="buildingArea">
+            <li ng-repeat="Building in Buildings" class="buildingBox" ng-class="{hide : Building.hide, delete : Building.delete}" repeat-func="positionable" ng-mousedown="setPid(Building.pid)">
+                pid : {{Building.pid}}<br>
+                host_uid : {{Building.host_uid}}<br>
+                name : {{Building.name}}<br>
+                shared : {{Building.shared}}<br>
+                
+                <span class="building-button" ng-click="openPanel(Building.pid)">
+                    열기
+                </span>
+
+                <button class="building-button del" ng-click="del(Building.pid, $event, $index)">
+                    삭제
+                </button>
+                <button class="building-button modify" ng-click="del(Building.pid, $event, $index)">
+                    수정
+                </button>
+            </li> 
+        </ul>
     </div>
 </div>
 
-<div>
-    <div>
-        <label>uid : </label>
-        <input data-ng-model="addData.uid" type="text">
-    </div>
-    <div>
-        <label>name : </label>
-        <input data-ng-model="addData.name" type="text">
-    </div>
-    <div>
-        <label>shared : </label>
-        <input data-ng-model="addData.shared" type="text">
-    </div>
-    <div>
-        <input data-ng-click="add()" type="button" value="빌딩입력!!">
-    </div>
+<div class="perspective">
+    <section class="panel" id="dummy-panel" ng-class="{active: panelOpened}">
+        <!--        <section class="panel" id="dummy-panel" ng-include="'/div/roadmap'" ng-class="{active: panelOpened}" ng-controller="roadmapController">-->
+        <button class="close" ng-click="closePanel()">Close</button>
+        <div ng-include="'/div/roadmap'">
+        </div>
+    </section>
 </div>
-
-
-<ul data-ng-repeat="Building in Buildings">
-    <li class="ani" data-ng-class="{buildingBox : true, hide : Building.hide}">
-        pid : {{Building.pid}}
-        <br> uid : {{Building.uid}}
-        <br> name : {{Building.name}}
-        <br> shared : {{Building.shared}}
-        <br>
-        <input type="hidden" data-ng-model="delData.pid" value="kuku">
-        <input data-ng-click="del(Building.pid)" type="button" value="삭제">
-    </li>
-</ul>

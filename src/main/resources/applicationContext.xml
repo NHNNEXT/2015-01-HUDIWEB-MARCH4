@@ -30,4 +30,8 @@
 		class="march4.controller.DummyRestController"
 	/>
 
+	<bean id="localValidator"
+    	class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" 
+    />
+
 </beans>

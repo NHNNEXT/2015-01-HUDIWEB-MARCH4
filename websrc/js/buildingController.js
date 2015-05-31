@@ -1,32 +1,86 @@
-(function(){
-    'use strict';
+(function () {
+    "use strict";
 
-    march4.app.registerController('buildingController',function ($scope, $window, $http, $timeout) {
-        $scope.data = {};
-        $scope.addData = {};
-        $scope.delData = {};
+    march4.app.registerController('buildingController', function ($scope, $window, $http, $timeout, $routeParams, $location, $rootScope) {
+        $scope.host_uid = $rootScope.user.uId;
+        $scope.panelOpened = ($routeParams.panel == "panel");
+        $scope.pid = {};
 
-        //빌딩의 소유자를 보낸다. 
+        $scope.floatingForm = {
+            show: false
+        };
+        $scope.pageSet = {
+            buildingBox: {
+                x: 200,
+                y: 200,
+                margin: 20
+            }
+        };
+
+        $scope.openPanel = function (pId) {
+            alert(pId);
+            if (pId === undefined) return;
+
+            $routeParams.buildingId = pId;
+
+            if (!$scope.panelOpened) {
+                march4.util.setPathNoReloading($location.path().match(/(.*?)\/?$/)[1] + "/" + $routeParams.buildingId);
+                $scope.panelOpened = true;
+                $scope.panelID = index;
+            }
+        };
+
+        $scope.closePanel = function () {
+            if ($scope.panelOpened) {
+                march4.util.setPathNoReloading($location.path().replace(/\/panel\/.*/g, ""));
+                $scope.panelOpened = false;
+            }
+        };
+
+        $scope.setPosition = function () {
+            for (var i = 0; i < $(".buildingArea li").size(); i++) {
+                $(".buildingArea li").eq(i).css("left", $scope.Buildings[i].posx + "px");
+                $(".buildingArea li").eq(i).css("top", $scope.Buildings[i].posy + "px");
+            }
+
+            //            var col = parseInt($(".buildingArea").outerWidth(true) / ($scope.pageSet.buildingBox.x + $scope.pageSet.buildingBox.margin));
+            //
+            //            for (var i = 0; i < $(".buildingArea li").size(); i++) {
+            //                var posX = parseInt(i % col) * $scope.pageSet.buildingBox.x + $scope.pageSet.buildingBox.margin * parseInt(i % col);
+            //                var posY = parseInt(i / col) * $scope.pageSet.buildingBox.y + $scope.pageSet.buildingBox.margin * parseInt(i / col);
+            //                $(".buildingArea li").eq(i).css("left", posX);
+            //                $(".buildingArea li").eq(i).css("top", posY);
+            //            };
+        };
+
+        $scope.recalc = function (no) {
+            for (var i = no; i < $scope.Buildings.length; i++) {
+                $scope.Buildings[i].no = i;
+            }
+        };
+
         $scope.default = function () {
             $http({
-                method: 'POST',
+                method: 'GET',
                 url: '/building/default',
-                data: $scope.data
+                params: {
+                    "host_uid": $scope.host_uid
+                }
             }).
             success(function (data, status, headers, config) {
-                //$window.location.replace('/dummy/ajax');
                 $scope.Buildings = data;
-
-                function showBuildingsDelaying(i) {
-                    $scope.Buildings[i].hide = true;
-                    $timeout(function () {
-                        $scope.Buildings[i].hide = false;
-                    }, i * 100);
-                }
-                
+                console.log($scope.Buildings);
                 for (var i = 0; i < $scope.Buildings.length; i++) {
-                    showBuildingsDelaying(i);
+                    (function (i) {
+                        $scope.Buildings[i].hide = true;
+                        $timeout(function () {
+                            $scope.Buildings[i].hide = false;
+                        }, i * 150);
+                    })(i);
                 }
+
+                $timeout($scope.setPosition, 0);
+                $timeout($scope.arrange, 0);
             }).
             error(function (data, status, headers, config) {
                 if (status == 400) {
@@ -37,16 +91,53 @@
             });
         };
 
-        $scope.add = function () {
+        $scope.add = function (addData) {
+            if (addData === undefined) {
+                var addData = {};
+                addData.name = "";
+                addData.shared = "";
+            }
+
+            $scope.addData = {};
+            $scope.addData.name = addData.name;
+            if (addData.shared === "" || addData.shared === undefined)
+                addData.shared = false;
+            $scope.addData.shared = addData.shared;
+            $scope.addData.shared = addData.shared;
+            $scope.addData.host_uid = $scope.host_uid;
+            $scope.addData.posx = Math.round(($("main>.building-wrap").outerWidth() / 2) - ($scope.pageSet.buildingBox.x / 2));
+            $scope.addData.posy = Math.round(($("main>.building-wrap").outerHeight() / 2) - ($scope.pageSet.buildingBox.y / 2));
+
+            console.log($scope.addData.posx);
+            console.log($scope.addData.posy);
+
+            var addSetPosition = function (data) {
+                $(".buildingArea li").eq($(".buildingArea li").length - 1).css("left", data.posx + "px");
+                $(".buildingArea li").eq($(".buildingArea li").length - 1).css("top", data.posy + "px");
+            };
+
             $http({
                 method: 'POST',
                 url: '/building/add',
                 data: $scope.addData
             }).
             success(function (data, status, headers, config) {
-                //$window.location.replace('/dummy/ajax');
-                $scope.default();
-                //$scope.Dummies = data;
+
+                if (data.pid !== undefined) {
+                    $scope.Buildings.push(data);
+                    $timeout(function () {
+                        addSetPosition(data);
+                    }, 0);
+
+                    $timeout(function () {
+                        $scope.Buildings[$scope.Buildings.length - 1].hide = true;
+                        $scope.Buildings[$scope.Buildings.length - 1].hide = false;
+                    }, 0);
+                } else {
+                    $scope.addFailMessage = data;
+                }
+                $timeout($scope.arrange, 0);
+                $scope.closeFloatingForm();
             }).
             error(function (data, status, headers, config) {
                 if (status == 400) {
@@ -57,7 +148,8 @@
             });
         };
 
-        $scope.del = function (pid) {
+        $scope.del = function (pid, e, i) {
+            $scope.delData = {};
             $scope.delData.pid = pid;
             $http({
                 method: 'POST',
@@ -65,9 +157,14 @@
                 data: $scope.delData
             }).
             success(function (data, status, headers, config) {
-                //$window.location.replace('/dummy/ajax');
-                $scope.default();
-                //$scope.Dummies = data;
+                $(e.target.parentElement).css("margin-top", 100);
+                $(e.target.parentElement).css("opacity", 0);
+                $timeout(function () {
+                    $scope.Buildings.splice(i, 1);
+                    //$timeout($scope.setPosition, 0);
+                }, 150);
+                $timeout($scope.arrange, 160);
+
             }).
             error(function (data, status, headers, config) {
                 if (status == 400) {
@@ -77,5 +174,273 @@
                 }
             });
         };
+
+        //        $scope.resizeId;
+        //        $(window).resize(function () {
+        //            if ($scope.resizeId) $timeout.cancel($scope.resizeId);
+        //
+        //            $scope.resizeId = $timeout(function () {
+        //                $timeout($scope.setPosition, 0);
+        //            }, 500)
+        //        });
+
+        $scope.floatingFormInit = function () {
+            console.log(0);
+
+            $(".bd-overlay").css("visibility", "hidden");
+            $(".bd-effect .bd-content").css("visibility", "hidden");
+        };
+
+        $scope.openFloatingForm = function () {
+            $scope.floatingForm.show = true;
+            $(".bd-overlay").css("visibility", "visible");
+            $(".bd-effect .bd-content").css("visibility", "visible");
+            $(".bd-overlay").css("opacity", 1);
+            $("header").addClass("blur");
+            $(".bd-overlay ~ div").addClass("blur");
+        };
+
+        $scope.closeFloatingForm = function () {
+            $scope.floatingForm.show = false;
+
+            $(".bd-overlay").css("visibility", "hidden");
+            $(".bd-effect .bd-content").css("visibility", "hidden");
+
+            $(".bd-overlay").css("opacity", 0);
+            $("header").removeClass("blur");
+            $(".bd-overlay ~ div").removeClass("blur");
+        };
+        $scope.closeFloatingForm();
+
+        $scope.positionable = function (el) {
+            
+            console.dir($(el).find('button.building-button'));
+            
+            $(el).find('button.building-button').click(function(){
+                
+            });
+
+            $scope.dragpos = {};
+            $scope.boxDiff = {};
+            var collision = {};
+            march4.util.Draggable(el,
+                function (e, el) {
+                    console.log("press");
+                    $scope.dragpos.startx = e.pageX;
+                    $scope.dragpos.starty = e.pageY;
+                    $scope.boxDiff.x = e.pageX - $(el).offset().left;
+                    $scope.boxDiff.y = e.pageY - $(el).offset().top;
+                    e.preventDefault();
+                },
+                function (e, el, position) {
+                    $scope.collisionDetect(e, el, collision, $scope.boxDiff);
+                    //                    console.log(collision);
+                    //                    console.log($scope.boxDiff);
+                    if (collision.top !== false)
+                        position.y = collision.top + $scope.boxDiff.y;
+                    if (collision.left !== false)
+                        position.x = collision.left + $scope.boxDiff.x;
+                    if (collision.bottom !== false)
+                        position.y = collision.bottom + ($(el).outerHeight - $scope.boxDiff.y);
+                    if (collision.right !== false)
+                        position.x = collision.right + ($(el).outerWidth - $scope.boxDiff.x);
+
+                    console.log("move");
+                    $scope.arrange();
+                    e.preventDefault();
+                    return position;
+                },
+                function (e, el) {
+                    console.log("realese");
+                    var mouseX = e.pageX;
+                    var mouseY = e.pageY;
+                    
+                    if (collision.top !== false)
+                        mouseY = collision.top + $scope.boxDiff.y;
+                    if (collision.left !== false)
+                        mouseX = collision.left + $scope.boxDiff.x;
+                    if (collision.bottom !== false)
+                        mouseY = collision.bottom + ($(el).outerHeight - $scope.boxDiff.y);
+                    if (collision.right !== false)
+                        mouseX = collision.right + ($(el).outerWidth - $scope.boxDiff.x);
+
+                    var diffx = mouseX - $scope.dragpos.startx;
+                    var diffy = mouseY - $scope.dragpos.starty;
+                    $(el).css("left", parseInt($(el).css("left")) + diffx + "px");
+                    $(el).css("top", parseInt($(el).css("top")) + diffy + "px");
+                    
+                    $scope.updatePosition(el);
+                    $scope.arrange();
+                    e.preventDefault();
+                
+                },0,"button.building-button");
+        };
+
+        $scope.updatePosition = function (el) {
+            $scope.updateData = {};
+            $scope.updateData.pid = $scope.pid;
+            $scope.updateData.posx = parseInt($(el).css("left"));
+            $scope.updateData.posy = parseInt($(el).css("top"));
+
+            $http({
+                method: 'POST',
+                url: '/building/updatePos',
+                data: $scope.updateData
+            }).
+            success(function (data, status, headers, config) {
+
+            }).
+            error(function (data, status, headers, config) {
+                if (status == 400) {
+                    $scope.messages = data;
+                } else {
+                    alert('Unexpected server error.');
+                }
+            });
+        };
+
+        $scope.arrange = function () {
+            var container = $(".buildingArea");
+            var elements = container.children();
+            var sortMe = [];
+            
+            for (var i = 0; i < elements.length; i++) {
+                if (!elements.eq(i).css("top")) {
+                    continue;
+                }
+
+                var sortPart = parseInt(elements.eq(i).css("top"));
+
+                sortMe.push([1 * sortPart, elements[i]]);
+            }
+
+            sortMe.sort(function (x, y) {
+                return x[0] - y[0];
+            });
+            for (i = 0; i < sortMe.length; i++) {
+                container.append(sortMe[i][1]);
+            }
+        };
+
+        $scope.collisionDetect = function (e, el, collision, boxDiff) {
+            var currentX = e.pageX;
+            var currentY = e.pageY;
+            var areaX = $(".building-wrap.ng-scope").offset().left;
+            var areaY = $(".building-wrap.ng-scope").offset().top;
+            var areaWidth = $(".building-wrap.ng-scope").outerWidth();
+            var areaHeight = $(".building-wrap.ng-scope").outerHeight();
+            var boxX = $(el).offset().left;
+            var boxY = $(el).offset().top;
+            var boxWidth = $(el).outerWidth();
+            var boxHeight = $(el).outerHeight();
+
+            //박스 마우스 거리
+            var boxintX = boxDiff.x;
+            var boxintY = boxDiff.y;
+
+            //만약 area 바깥으로 나가면 멈춤
+
+            //왼쪽 막아
+            if (areaX > (currentX - boxintX))
+                collision.left = areaX;
+            else
+                collision.left = false;
+
+            //위쪽 막아
+            if (areaY > (currentY - boxintY))
+                collision.top = areaY;
+            else
+                collision.top = false;
+
+            //오른쪽 막아
+            if ((areaX + areaWidth) < currentX + (boxWidth - boxintX))
+                collision.right = (areaX + areaWidth);
+            else
+                collision.right = false;
+
+            //아래 막아
+            if ((areaY + areaHeight) < currentY + (boxHeight - boxintY))
+                collision.bottom = (areaY + areaHeight);
+            else
+                collision.bottom = false;
+
+            //마우스 거리 - 차거리 //위 왼쪽
+            //마우스 거리 + (박스크기 - 차거리) // 아래 오른쪽            
+        };
+
+        $scope.setPid = function (pid) {
+            $scope.pid = pid;
+        };
+
+        $scope.panelInit = function () {
+            $(".panel").css("visibility", "hidden");
+        };
+
+        $scope.panelInit();
+
+        $scope.default();
     });
-}());
+
+    march4.app.registerController('panelController', function ($scope, $routeParams) {
+
+    });
+})();
+
+//------------------------------------------------------------------
+
+(function () {
+    "use strict";
+    var Sortable = march4.util.Sortable;
+
+    march4.app.registerController('roadmapController', function ($http, $scope, $routeParams) {
+        $scope.lastOrder = 0;
+        $scope.quests = [];
+        $scope.path = '/api' + window.location.pathname;
+        $scope.initQuests = function () {
+            console.log('init', $scope.lastOrder);
+            $scope.newQuest = {
+                order: ++($scope.lastOrder)
+            };
+        };
+        $scope.addQuest = function () {
+            console.log($scope.newQuest);
+            $scope.quests.push($scope.newQuest);
+            var data = $scope.newQuest;
+            $http.post($scope.path, data).success(function (data, status, headers, config) {
+                console.log("post good", status, "!");
+                console.log(data);
+                $scope.showQuests();
+            }).error(function (data, status, headers, config) {
+                console.log("post bad", status, "!");
+                console.log(data);
+            });
+            $scope.initQuests();
+        };
+        $scope.showQuests = function () {
+            console.log('getting quests');
+            $http.get($scope.path).success(function (data, status, headers, config) {
+                console.log("get good", status, "!");
+                console.log(data);
+                $scope.quests = data;
+                $scope.lastOrder = parseInt(data[data.length - 1].order);
+                if (typeof ($scope.lastOrder) !== 'number') $scope.lastOrder = 0;
+                console.log('show', $scope.lastOrder);
+                $scope.initQuests();
+            }).error(function (data, status, headers, config) {
+                console.log("get bad", status, "!");
+                console.log(data);
+                $scope.initQuests();
+            });
+        };
+        $scope.init = function () {
+            $scope.initQuests();
+            $scope.showQuests();
+        };
+        $scope.makeItSortable = function (el) {
+            new Sortable(el, function (nFrom, nTo) {
+
+            });
+        };
+        $scope.init();
+    });
+})();

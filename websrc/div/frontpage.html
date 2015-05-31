@@ -1,11 +1,6 @@
-<h2>환영합니다</h2>
-<form action="post">
-    <label for="">ID</label>
-    <input type="text">
-    <br>
-    <label for="">Password</label>
-    <input type="password">
-    <br>
-    <input type="submit" value="Log In">
-    <a src="#">Register</a>
-</form>
+<!-- start dive into app -->
+<h2>welcome~ <br><span ng-show="user">{{user.name}} ({{user.email}}) signed in</span></h2>
+
+<p ng-show="user"><a href="/signout">sign out</a></p>
+<!-- end dive into app -->
+

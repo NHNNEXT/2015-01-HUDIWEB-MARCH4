@@ -25,4 +25,12 @@ public class BuildingService {
 	public void delBuilding(int pid) {
 		buildingDao.del(pid);
 	}
+	
+	public void updateBuilding(Building building){
+		buildingDao.updatePositoin(building);
+	}
+	
+	public Integer getLastpId(){
+		return buildingDao.getLastpid();
+	}
 }

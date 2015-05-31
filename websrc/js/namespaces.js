@@ -44,45 +44,101 @@ var march4 = {
 	roadmap:{}
 };
 
-march4.util.Draggable = function(el, downFunc, moveFunc, upFunc) {
+march4.util.Draggable = function(el, downFunc, moveFunc, upFunc, wait, exclude) {
+    if(!(this instanceof march4.util.Draggable)){
+        return new march4.util.Draggable(el, downFunc, moveFunc, upFunc, wait, exclude);
+    }
+    
     var that = this;
-
     downFunc = downFunc || function() {};
     moveFunc = moveFunc || function() {};
     upFunc = upFunc || function() {};
-    
+    wait = wait || 0;
     this.$el = $(el);
-    this.$el.on('mousedown', function(e) {
-        downFunc(e, that.$el);
+
+    function waitAnimationEnd(callback){
+        if(that.$el.css('transition').indexOf('0s') < 0){
+            that.$el.one('transitionend',function(){
+                callback();
+            });
+        }else{
+            callback();
+        }
+    }
+
+    function dragStart(e) {
+        var position = {
+            x:e.clientX,
+            y:e.clientY
+        };
+        
+        position = downFunc(e, that.$el, position) || position;
         var cursorX = e.clientX;
         var cursorY = e.clientY;
-        var elY = that.$el.offset().top - $(window).scrollTop();
-        var elX = that.$el.offset().left - $(window).scrollLeft();
+        var marginX = parseInt(that.$el.css('marginLeft'));
+        var marginY = parseInt(that.$el.css('marginTop'));
+        console.log(that.$el.offset().top, that.$el.offset().left);
+        var elY = that.$el.offset().top - $(window).scrollTop() - marginY;
+        var elX = that.$el.offset().left - $(window).scrollLeft() - marginX;
         var diffX = elX - cursorX;
         var diffY = elY - cursorY;
         var originalStyle = that.$el.attr('style') || "";
-        setPos(e);
+        
+        that.$el.addClass('dragging');
+        setPos(position);
+        
         $(document).on('mousemove.drag', function(e) {
-            moveFunc(e, that.$el);
-            setPos(e);
+            position = {
+                x:e.clientX,
+                y:e.clientY
+            };   
+            
+            position = moveFunc(e, that.$el, position) || position;
+            setPos(position);
+            e.preventDefault();
         });
 
-        function setPos(e) {
-            cursorX = e.clientX;
-            cursorY = e.clientY;
+        function setPos(position) {
             that.$el.css({
                 "position": "fixed",
-                "top": cursorY + diffY,
-                "left": cursorX + diffX,
+                "top": position.y + diffY,
+                "left": position.x + diffX,
             });
         }
+        
         $(document).on('mouseup.drag mouseleave.drag', function(e) {
-        	upFunc(e, that.$el);
+            that.$el.removeClass('dragging');
             that.$el.attr('style', originalStyle);
             $(document).off('.drag');
+            upFunc(e, that.$el, position);
         });
+
+        e.preventDefault();
+    }
+
+    this.$el.on('mousedown', function(e){
+        if(!wait){
+            dragStart(e)
+        }else{
+            that.$el.addClass('waiting');
+            var timeoutIdx = setTimeout(function(){
+                that.$el.removeClass('waiting');
+                dragStart(e)
+            },wait);
+
+            that.$el.one('mouseup mouseleave',function(){
+                that.$el.removeClass('waiting');
+                clearTimeout(timeoutIdx);
+            });
+        }
+
         e.preventDefault();
     });
+    if(exclude){
+        $(exclude).on('mousedown',function(event) {
+            event.stopPropagation();
+        });
+    }
 };
 
 

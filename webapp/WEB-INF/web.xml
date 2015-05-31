@@ -84,7 +84,7 @@
 	<!-- Error Page List -->
 	<!-- ============================================================= -->
 	
-	<error-page>
+	<!-- <error-page>
 		<error-code>404</error-code>
 		<location>/WEB-INF/jsp/error/404.jsp</location>
   	</error-page>
@@ -93,7 +93,7 @@
 		<error-code>500</error-code>
 		<location>/WEB-INF/jsp/error/500.jsp</location>
   	</error-page>
-
+ -->
 
 	<!-- ============================================================= -->
 	<!-- welcome file list -->
