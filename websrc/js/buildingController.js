@@ -18,15 +18,15 @@
         };
 
         $scope.openPanel = function (pId) {
-            alert(pId);
             if (pId === undefined) return;
 
             $routeParams.buildingId = pId;
 
             if (!$scope.panelOpened) {
-                march4.util.setPathNoReloading($location.path().match(/(.*?)\/?$/)[1] + "/" + $routeParams.buildingId);
+                console.log(pId);
+                /*march4.util.setPathNoReloading($location.path().match(/(.*?)\/?$/)[1] + "/" + pId);*/
                 $scope.panelOpened = true;
-                $scope.panelID = index;
+                $scope.panelID = pId;
             }
         };
 
@@ -213,7 +213,7 @@
         $scope.closeFloatingForm();
 
         $scope.positionable = function (el) {
-            
+           
             console.dir($(el).find('button.building-button'));
             
             $(el).find('button.building-button').click(function(){
@@ -273,7 +273,14 @@
                     $scope.arrange();
                     e.preventDefault();
                 
-                },0,"button.building-button");
+                },500,"button.building-button");
+
+
+
+
+                $(el).click(function(){
+                    $scope.openPanel(angular.element(el).scope().Building.pid);
+                });
         };
 
         $scope.updatePosition = function (el) {
@@ -371,12 +378,6 @@
         $scope.setPid = function (pid) {
             $scope.pid = pid;
         };
-
-        $scope.panelInit = function () {
-            $(".panel").css("visibility", "hidden");
-        };
-
-        $scope.panelInit();
 
         $scope.default();
     });

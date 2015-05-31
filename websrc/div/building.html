@@ -44,11 +44,9 @@
     </div>
 </div>
 
-<div class="perspective">
-    <section class="panel" id="dummy-panel" ng-class="{active: panelOpened}">
-        <!--        <section class="panel" id="dummy-panel" ng-include="'/div/roadmap'" ng-class="{active: panelOpened}" ng-controller="roadmapController">-->
-        <button class="close" ng-click="closePanel()">Close</button>
-        <div ng-include="'/div/roadmap'">
-        </div>
-    </section>
-</div>
+<section class="panel" id="dummy-panel" ng-class="{active: panelOpened}">
+    <!--        <section class="panel" id="dummy-panel" ng-include="'/div/roadmap'" ng-class="{active: panelOpened}" ng-controller="roadmapController">-->
+    <button class="close" ng-click="closePanel()">Close</button>
+    <div ng-include="'/div/roadmap'">
+    </div>
+</section>
