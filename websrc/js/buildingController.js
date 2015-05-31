@@ -217,7 +217,7 @@
             console.dir($(el).find('button.building-button'));
             
             $(el).find('button.building-button').click(function(){
-                alert(1);
+                
             });
 
             $scope.dragpos = {};
@@ -272,12 +272,8 @@
                     $scope.updatePosition(el);
                     $scope.arrange();
                     e.preventDefault();
-<<<<<<< HEAD
-                }, 500);
-=======
-                    
+                
                 },0,"button.building-button");
->>>>>>> 9842e93d1abf93935e4ffc6d876cd3592ca41c56
         };
 
         $scope.updatePosition = function (el) {
