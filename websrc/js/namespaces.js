@@ -44,19 +44,29 @@ var march4 = {
 	roadmap:{}
 };
 
-march4.util.Draggable = function(el, downFunc, moveFunc, upFunc) {
+march4.util.Draggable = function(el, downFunc, moveFunc, upFunc, wait) {
     if(!(this instanceof march4.util.Draggable)){
-        return new march4.util.Draggable(el, downFunc, moveFunc, upFunc);
+        return new march4.util.Draggable(el, downFunc, moveFunc, upFunc, wait);
     }
     
     var that = this;
-
     downFunc = downFunc || function() {};
     moveFunc = moveFunc || function() {};
     upFunc = upFunc || function() {};
-    
+    wait = wait || 0;
     this.$el = $(el);
-    this.$el.on('mousedown', function(e) {
+
+    function waitAnimationEnd(callback){
+        if(that.$el.css('transition').indexOf('0s') < 0){
+            that.$el.one('transitionend',function(){
+                callback();
+            });
+        }else{
+            callback();
+        }
+    }
+
+    function dragStart(e) {
         var position = {
             x:e.clientX,
             y:e.clientY
@@ -67,11 +77,14 @@ march4.util.Draggable = function(el, downFunc, moveFunc, upFunc) {
         var cursorY = e.clientY;
         var marginX = parseInt(that.$el.css('marginLeft'));
         var marginY = parseInt(that.$el.css('marginTop'));
+        console.log(that.$el.offset().top, that.$el.offset().left);
         var elY = that.$el.offset().top - $(window).scrollTop() - marginY;
         var elX = that.$el.offset().left - $(window).scrollLeft() - marginX;
         var diffX = elX - cursorX;
         var diffY = elY - cursorY;
         var originalStyle = that.$el.attr('style') || "";
+        
+        that.$el.addClass('dragging');
         setPos(position);
         
         $(document).on('mousemove.drag', function(e) {
@@ -93,12 +106,32 @@ march4.util.Draggable = function(el, downFunc, moveFunc, upFunc) {
             });
         }
         $(document).on('mouseup.drag mouseleave.drag', function(e) {
+            that.$el.removeClass('dragging');
             that.$el.attr('style', originalStyle);
             $(document).off('.drag');
             upFunc(e, that.$el, position);
         });
         e.preventDefault();
-    });
+    }
+
+    this.$el.on('mousedown', function(e){
+        if(!wait){
+            dragStart(e)
+        }else{
+            that.$el.addClass('waiting');
+            var timeoutIdx = setTimeout(function(){
+                that.$el.removeClass('waiting');
+                dragStart(e)
+            },wait);
+
+            that.$el.one('mouseup mouseleave',function(){
+                that.$el.removeClass('waiting');
+                clearTimeout(timeoutIdx);
+            });
+        }
+
+        e.preventDefault();
+    });    
 };
 
 

@@ -2,7 +2,6 @@
     "use strict";
 
     march4.app.registerController('buildingController', function ($scope, $window, $http, $timeout, $routeParams, $location, $rootScope) {
-        console.log($routeParams.buildingId);
         $scope.host_uid = $rootScope.user.uId;
         $scope.panelOpened = ($routeParams.panel == "panel");
         $scope.pid = {};
@@ -18,11 +17,14 @@
             }
         };
 
-        $scope.openPanel = function (index) {
-            if (index === undefined) return;
-
+        $scope.openPanel = function (pId) {
+            alert(pId);
+            if (pId === undefined) return;
+            
+            $routeParams.buildingId = pId;
+            
             if (!$scope.panelOpened) {
-                march4.util.setPathNoReloading($location.path().match(/(.*?)\/?$/)[1] + "/panel/" + index);
+                march4.util.setPathNoReloading($location.path().match(/(.*?)\/?$/)[1] + "/" + $routeParams.buildingId);
                 $scope.panelOpened = true;
                 $scope.panelID = index;
             }
@@ -213,7 +215,6 @@
                     console.log("press");
                     $scope.dragpos.startx = e.pageX;
                     $scope.dragpos.starty = e.pageY;
-
                     $scope.boxDiff.x = e.pageX - $(el).offset().left;
                     $scope.boxDiff.y = e.pageY - $(el).offset().top;
                     e.preventDefault();
@@ -257,7 +258,7 @@
                     $scope.updatePosition(el);
                     $scope.arrange();
                     e.preventDefault();
-                });
+                },500);
         };
 
         $scope.updatePosition = function (el) {
