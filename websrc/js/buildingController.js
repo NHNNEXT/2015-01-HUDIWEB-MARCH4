@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    march4.app.registerController('buildingController', function ($scope, $window, $http, $timeout, $routeParams, $location, $rootScope) {
+    march4.app.registerController('buildingController', function ($scope, $window, $http, $timeout, $routeParams, $location, $rootScope, QuestService) {
         $scope.host_uid = $rootScope.user.uId;
         $scope.panelOpened = ($routeParams.panel == "panel");
         $scope.pid = {};
@@ -23,7 +23,7 @@
             $routeParams.buildingId = pId;
 
             if (!$scope.panelOpened) {
-                console.log(pId);
+                QuestService.getQuests(pId);
                 /*march4.util.setPathNoReloading($location.path().match(/(.*?)\/?$/)[1] + "/" + pId);*/
                 $scope.panelOpened = true;
                 $scope.panelID = pId;
@@ -382,66 +382,123 @@
         $scope.default();
     });
 
-    march4.app.registerController('panelController', function ($scope, $routeParams) {
 
-    });
-})();
-
-//------------------------------------------------------------------
-
-(function () {
-    "use strict";
-    var Sortable = march4.util.Sortable;
-
-    march4.app.registerController('roadmapController', function ($http, $scope, $routeParams) {
+    march4.app.registerController('roadmapController', function($http, $scope, $routeParams, $q, QuestService) {
         $scope.lastOrder = 0;
         $scope.quests = [];
-        $scope.path = '/api' + window.location.pathname;
-        $scope.initQuests = function () {
+        $scope.pid = 2;
+        $scope.path = '/api/projects/'+$scope.pid+'/quests';
+
+        $scope.$watch(function(){
+            return QuestService.quests;
+        }, function (quests) {
+            $scope.quests = quests;
+        });
+
+        $scope.$watch(function(){
+            return QuestService.pid;
+        }, function (pid) {
+            $scope.pid = pid;
+            $scope.path = '/api/projects/'+$scope.pid+'/quests';
+        });
+
+        $scope.asdf = function(){
+            console.log("ewwehpr");
+            console.log(QuestService.printQuests());
+        };
+
+
+        $scope.initQuest = function() {
+            console.log(QuestService);
             console.log('init', $scope.lastOrder);
             $scope.newQuest = {
                 order: ++($scope.lastOrder)
             };
         };
-        $scope.addQuest = function () {
+        
+        $scope.updateQuests = function(data) {
+            $scope.quests = data;
+            $scope.lastOrder = parseInt(data[data.length - 1].order);
+            if(typeof($scope.lastOrder) !== 'number') $scope.lastOrder = 0;
+            console.log('update last order', $scope.lastOrder);
+        };
+        
+        $scope.addQuest = function() {
             console.log($scope.newQuest);
             $scope.quests.push($scope.newQuest);
             var data = $scope.newQuest;
-            $http.post($scope.path, data).success(function (data, status, headers, config) {
+            $http.post($scope.path, data).success(function(data, status, headers, config) {
                 console.log("post good", status, "!");
                 console.log(data);
-                $scope.showQuests();
-            }).error(function (data, status, headers, config) {
+                $scope.updateQuests(data);
+                $scope.initQuest();
+            }).error(function(data, status, headers, config) {
                 console.log("post bad", status, "!");
                 console.log(data);
+                debugger;
             });
-            $scope.initQuests();
         };
-        $scope.showQuests = function () {
+        
+        $scope.deleteQuest = function(deleteQuestElement) {
+            console.log('hohoho'+deleteQuestElement);
+            debugger;
+            var path = $scope.path+"/"+$scope.getqId(deleteQuestElement);
+            $http.delete(path).success(function(data, status, headers, config) {
+                console.log("delete good", status, "!");
+                console.log(data);
+                $scope.updateQuests(data);
+                debugger;
+                $scope.initQuest();
+                $scope.quests.pop($scope.newQuest);
+            }).error(function(data, status, headers, config) {
+                console.log("delete bad", status, "!");
+                console.log(data);
+                debugger;
+            });
+        };
+        
+        $scope.getQuests = function() {
             console.log('getting quests');
-            $http.get($scope.path).success(function (data, status, headers, config) {
+            $http.get($scope.path).success(function(data, status, headers, config) {
                 console.log("get good", status, "!");
                 console.log(data);
-                $scope.quests = data;
-                $scope.lastOrder = parseInt(data[data.length - 1].order);
-                if (typeof ($scope.lastOrder) !== 'number') $scope.lastOrder = 0;
-                console.log('show', $scope.lastOrder);
-                $scope.initQuests();
-            }).error(function (data, status, headers, config) {
+                $scope.updateQuests(data);
+                $scope.initQuest();
+            }).error(function(data, status, headers, config) {
                 console.log("get bad", status, "!");
                 console.log(data);
-                $scope.initQuests();
+                debugger;
             });
         };
-        $scope.init = function () {
-            $scope.initQuests();
-            $scope.showQuests();
+        
+        $scope.init = function() {
+            $scope.getQuests();
         };
-        $scope.makeItSortable = function (el) {
-            new Sortable(el, function (nFrom, nTo) {
-
+        
+        $scope.insertBefore = function(movingIdx, nextIdx) {
+            console.log('insert before path');
+            var path = $scope.path+"/"+movingIdx+"/movetobefore?qId="+nextIdx;
+            console.log(path);
+            $http.put(path).success(function(data, status, headers, config) {
+                console.log("insert success");
+                console.log(data);
+                $scope.updateQuests(data);
+            }).error(function(data, status, headers, config) {
+                console.log("insert fail");
             });
         };
+        
+        $scope.makeItSortable = function(el) {
+            new march4.util.Sortable(el, function(movingEl, nextEl){
+                $scope.insertBefore($scope.getqId(movingEl), $scope.getqId(nextEl));
+            });
+        };
+        
+        $scope.getqId = function(element) {
+            var scope = angular.element(element).scope();
+            return (scope)? scope.quest.qId : 0;
+        };
+        
         $scope.init();
     });
 })();

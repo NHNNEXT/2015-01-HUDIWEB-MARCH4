@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="<%- cssDir %>/roadmap.css" />
-
 <form ng-submit="addQuest()">
 	<label>내용</label> <input ng-model="newQuest.contents" name="contents" type="text">
 	<!-- [type=datetime-local]은 mysql.datetime 이랑 형식이 달라서 불편. 일단 text 로 테스트.
@@ -16,6 +15,7 @@
 	<input ng-model="newQuest.order" name="order" type="number" style="display:none;" ng-value="$scope.lastId">
 	<!-- <input ng-model="newQuest.order" name="order" type="hidden" ng-value="getOrder(newQuest.due)"> -->
 	<input type="submit">
+	{{pid}}
 </form>
 <ul class="sortableContainer">
 	<p>
@@ -33,3 +33,4 @@
 		<button name="delete">X</button>
 	</li>
 </ul>
+<button ng-click="asdf()">asdfasdf</button>

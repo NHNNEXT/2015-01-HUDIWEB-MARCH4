@@ -33,6 +33,28 @@
         };
     });
 
+    march4.app.factory('QuestService', function($http) {
+        return {
+            // data: {
+                quests:{},
+                pid:0,
+            // },
+            getQuests : function(pid){
+                console.log(pid);
+                $http.get('/api/projects/'+pid+'/quests').success(function(data, status, headers, config) {
+                    // this.data.quests = data;
+                    // this.data.pid = pid;
+                    this.quests = data;
+                    this.pid = pid;
+                    console.log(this);
+                }.bind(this));
+            },
+            printQuests : function(){
+                return this.data;
+            }
+        };
+    });
+
     march4.app.controller('mainController',function($scope, $rootScope, UserService){
         $rootScope.getUser = function(){
             UserService.getCurrent()
