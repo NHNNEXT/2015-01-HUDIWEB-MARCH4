@@ -86,18 +86,15 @@ march4.util.Draggable = function(el, downFunc, moveFunc, upFunc) {
 };
 
 
-march4.util.Sortable = function(el, beforeFunc, afterFunc) {
+march4.util.Sortable = function(el, upFunc) {
     var that = this;
     this.$el = $(el);
     this.$dummy = null;
     
-    beforeFunc = beforeFunc || function(beforeIdx) {console.log(beforeIdx);};
-    afterFunc = afterFunc || function(afterIdx) {console.log(afterIdx);};
+    upFunc = upFunc || function(movingEl, nextEl) {};
 
     this.sortableList.push(this.$el);
     new march4.util.Draggable(el, function() {
-    	var beforeIdx = that.$el.index();
-    	
         that.$dummy = that.$el.clone().css({
             'visibility': 'hidden'
         });
@@ -111,9 +108,6 @@ march4.util.Sortable = function(el, beforeFunc, afterFunc) {
                 }
             }
         });
-        
-        // 콜백함수의 위치는 어디가 좋을까. 맨밑? 맨위?
-        beforeFunc(beforeIdx);
     }, function(e, $el) {
         march4.util.swap(that.exchangeEl, that.$dummy);
         that.constructor.prototype.exchangeEl = null;
@@ -121,8 +115,7 @@ march4.util.Sortable = function(el, beforeFunc, afterFunc) {
         march4.util.swap(that.$el, that.$dummy);
         that.$dummy.remove();
         $(document).off('.sort');
-        var afterIdx = that.$el.index(); 
-        afterFunc(afterIdx);
+        upFunc(that.$el, that.$el.next());
     });
 };
 

@@ -1,7 +1,7 @@
 (function(){
     var Sortable = march4.util.Sortable;
 
-    march4.app.registerController('roadmapController', function($http, $scope, $routeParams) {
+    march4.app.registerController('roadmapController', function($http, $scope, $routeParams, $q) {
         $scope.lastOrder = 0;
         $scope.quests = [];
         $scope.path = '/api' + window.location.pathname;
@@ -45,8 +45,26 @@
         	$scope.initQuests();
             $scope.showQuests();
         };
+        $scope.insertBefore = function(movingIdx, nextIdx) {
+        	console.log('insert before path');
+        	var path = $scope.path+"/"+movingIdx+"/movetobefore?qId="+nextIdx;
+        	console.log(path);
+        	$http.put(path).success(function(data, status, headers, config) {
+                console.log("insert success");
+                $scope.showQuests();
+            }).error(function(data, status, headers, config) {
+            	console.log("insert fail");
+            });
+        };
+        
         $scope.makeItSortable = function(el) {
-            new Sortable(el);
+            new Sortable(el, function(movingEl, nextEl){
+            	function getqId(element) {
+            		return angular.element(element).scope().quest.qId;
+            	}
+            	console.log('hi');
+            	$scope.insertBefore(getqId(movingEl), getqId(nextEl));
+            });
         };
         $scope.init();
     });
