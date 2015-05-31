@@ -5,6 +5,7 @@
         $scope.host_uid = $rootScope.user.uId;
         $scope.panelOpened = ($routeParams.panel == "panel");
         $scope.pid = {};
+        $scope.newData = {};
 
         $scope.floatingForm = {
             show: false
@@ -92,6 +93,7 @@
         };
 
         $scope.add = function (addData) {
+            console.log($scope.newData);
             if (addData === undefined) {
                 var addData = {};
                 addData.name = "";
@@ -133,11 +135,17 @@
                         $scope.Buildings[$scope.Buildings.length - 1].hide = true;
                         $scope.Buildings[$scope.Buildings.length - 1].hide = false;
                     }, 0);
+                    
+                    $(".inputname").attr("value", "");
+                    addData.shared = false;
+                    $scope.closeFloatingForm();
+                    
                 } else {
                     $scope.addFailMessage = data;
+                     
                 }
                 $timeout($scope.arrange, 0);
-                $scope.closeFloatingForm();
+                
             }).
             error(function (data, status, headers, config) {
                 if (status == 400) {
@@ -175,6 +183,11 @@
             });
 
             e.stopPropagation();
+        };
+        
+        $scope.modify = function (pid, e, i){
+            alert("한 번 등록한 계획은 수정할 수 없습니다. 신중하세요");
+            $scope.st = 1;
         };
 
         //        $scope.resizeId;
@@ -214,6 +227,9 @@
         };
         $scope.closeFloatingForm();
 
+        //패널을 위한 상태 저장 변수
+        $scope.st = 0;
+        
         $scope.positionable = function (el) {
            
             console.dir($(el).find('button.building-button'));
@@ -225,9 +241,24 @@
             $scope.dragpos = {};
             $scope.boxDiff = {};
             var collision = {};
+            
+            //클릭의 시작
+            var openPanelStart = function(){
+                console.log($scope.st);
+                if($scope.st === 0){
+                    $scope.openPanel(angular.element(el).scope().Building.pid);
+                }else{
+                    $scope.st = 0;
+                }
+            };
+            $(el).on('click',openPanelStart);
+            
+            
+            
             march4.util.Draggable(el,
                 function (e, el) {
                     console.log("press");
+
                     $scope.dragpos.startx = e.pageX;
                     $scope.dragpos.starty = e.pageY;
                     $scope.boxDiff.x = e.pageX - $(el).offset().left;
@@ -250,6 +281,8 @@
                     console.log("move");
                     $scope.arrange();
                     e.preventDefault();
+                    //$(el).off('click',openPanelStart);
+                    $scope.st = $scope.st + 1;
                     return position;
                 },
                 function (e, el) {
@@ -274,15 +307,9 @@
                     $scope.updatePosition(el);
                     $scope.arrange();
                     e.preventDefault();
+                    //$(el).on('click',openPanelStart);
                 
                 },500,"button.building-button");
-
-
-
-
-                $(el).click(function(){
-                    $scope.openPanel(angular.element(el).scope().Building.pid);
-                });
         };
 
         $scope.updatePosition = function (el) {
@@ -326,8 +353,9 @@
             sortMe.sort(function (x, y) {
                 return x[0] - y[0];
             });
+            
             for (i = 0; i < sortMe.length; i++) {
-                container.append(sortMe[i][1]);
+                sortMe[i][1].style.zIndex = i;
             }
         };
 
