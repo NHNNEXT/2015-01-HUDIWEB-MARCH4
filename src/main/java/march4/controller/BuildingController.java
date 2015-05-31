@@ -41,7 +41,7 @@ public class BuildingController {
 			.getLogger(BuildingController.class);
 
 	@ResponseStatus(value = HttpStatus.OK)
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/add", method = RequestMethod.POST,  produces = "text/plain;charset=UTF-8")
 	public @ResponseBody String addBuilding(@RequestBody @Valid Building building, BindingResult result, ModelMap model) throws JsonGenerationException, JsonMappingException, IOException {
 		log.debug("Add building!");
 
@@ -59,7 +59,7 @@ public class BuildingController {
 			log.debug("error : {}", error.getDefaultMessage());
 			messages.add(error.getDefaultMessage());
 		}
-		return null;
+		return messages.get(0);
 	}
 	
 	@ResponseStatus(value = HttpStatus.OK)
