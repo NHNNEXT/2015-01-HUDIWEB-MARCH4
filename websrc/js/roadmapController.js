@@ -46,9 +46,7 @@
             $scope.showQuests();
         };
         $scope.makeItSortable = function(el) {
-            new Sortable(el, function(nFrom, nTo) {
-            	
-            });
+            new Sortable(el);
         };
         $scope.init();
     });
