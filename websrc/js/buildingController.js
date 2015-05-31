@@ -133,11 +133,12 @@
                         $scope.Buildings[$scope.Buildings.length - 1].hide = true;
                         $scope.Buildings[$scope.Buildings.length - 1].hide = false;
                     }, 0);
+                    $scope.closeFloatingForm();
                 } else {
                     $scope.addFailMessage = data;
                 }
                 $timeout($scope.arrange, 0);
-                $scope.closeFloatingForm();
+                
             }).
             error(function (data, status, headers, config) {
                 if (status == 400) {
