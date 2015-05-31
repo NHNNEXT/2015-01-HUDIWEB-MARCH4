@@ -1,12 +1,12 @@
 @base: #f938ab;
 .box-shadow(@style,
-@c) when (iscolor(@c)) {
+    @c) when (iscolor(@c)) {
     -webkit-box-shadow: @style @c;
     box-shadow: @style @c;
 }
 
 .box-shadow(@style,
-@alpha: 50%) when (isnumber(@alpha)) {
+    @alpha: 50%) when (isnumber(@alpha)) {
     .box-shadow(@style, rgba(0, 0, 0, @alpha));
 }
 
@@ -105,6 +105,7 @@
     margin: -35px 0 0 -35px;
     opacity: 0.3;
     animation: rotating 3s infinite linear;
+    z-index:-1;
 }
 */
 
@@ -293,4 +294,8 @@ body {
     position: relative;
     top: 0;
     left: 0;
+}
+
+button.building-button {
+    padding: 15px 30px;
 }
