@@ -33,27 +33,19 @@ public class QuestController {
 		return q.selectBypIdOrderedAsc(pId);
 	}
 	
-//	@RequestMapping(value = {"/{qId}"}, method = RequestMethod.GET, produces="application/json")
-//	@ResponseBody
-//	public List<Quest> getByqId(@PathVariable("pId") String pId, @PathVariable("qId") String qId) {
-//		log.debug("roadmap getByqId", pId, qId);
-//		// TODO
-//		return q.selectByqID(pId, qId);
-//	}
-	
 	@RequestMapping(value = {""}, method = RequestMethod.POST, consumes="application/json", produces=MediaType.APPLICATION_JSON_VALUE)
-	public String request(@RequestBody Quest quest, @PathVariable int pId) {
+	public List<Quest> request(@RequestBody Quest quest, @PathVariable("pId") String pId) {
 		log.debug("roadmap POST");
 		quest.setpId(pId);
 		q.insert(quest);
-		return "{\"result\":true}";
+		return q.selectBypIdOrderedAsc(pId);
 	}
 	
 	@RequestMapping(value = "/{qId}/movetobefore", method = RequestMethod.PUT)
-	public List<Quest> test(@PathVariable("qId") int movingQuestId, @RequestParam("qId") int targetQuestId, @PathVariable("qId") int pId) {
+	public List<Quest> test(@PathVariable("qId") int movingQuestId, @RequestParam("qId") int targetQuestId, @PathVariable("pId") String pId) {
 		q.moveToBefore(movingQuestId, targetQuestId);
 		log.debug("movingQuestId : {}, targetQuestId : {}", movingQuestId, targetQuestId);
 		
-		return q.getQuestListOfSameProjectOrderedAsc(movingQuestId);	// 테스트용.
+		return q.selectBypIdOrderedAsc(pId);
 	}
 }

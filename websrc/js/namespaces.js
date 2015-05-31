@@ -107,7 +107,7 @@ march4.util.Sortable = function(el, upFunc) {
     this.$el = $(el);
     this.$dummy = null;
     
-    upFunc = upFunc || function() {};
+    upFunc = upFunc || function(movingEl, nextEl) {};
 
     this.sortableList.push(this.$el);
     new march4.util.Draggable(el, function() {
@@ -120,26 +120,20 @@ march4.util.Sortable = function(el, upFunc) {
                 if (!that.$el.is(that.sortableList[i])) {
                     if (march4.util.isMouseOver(e, that.sortableList[i])) {
                         that.constructor.prototype.exchangeEl = that.sortableList[i];
-                        that.constructor.prototype.lastExchangeEl = that.constructor.prototype.exchangeEl;
                     }
                 }
             }
         });
-
     }, function(e, $el) {
         march4.util.swap(that.exchangeEl, that.$dummy);
-        console.log('tt',that.$el,that.constructor.prototype.lastExchangeEl);
-        
         that.constructor.prototype.exchangeEl = null;
     }, function(e) {
         march4.util.swap(that.$el, that.$dummy);
         that.$dummy.remove();
         $(document).off('.sort');
-        console.log(that.$el,that.constructor.prototype.lastExchangeEl,'tt');
-        upFunc(that.$el,that.constructor.prototype.lastExchangeEl);
+        upFunc(that.$el, that.$el.next());
     });
 };
 
 march4.util.Sortable.prototype.exchangeEl = null;
-march4.util.Sortable.prototype.lastExchangeEl = null;
 march4.util.Sortable.prototype.sortableList = [];
