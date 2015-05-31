@@ -101,7 +101,7 @@ public class QuestDao {
 //		jdbcTemplate.update(sql, quest.getpId(), quest.getOrder());
 //	}
 	public void decreaseOrderAfter(int pId, int order) throws EmptyResultDataAccessException {
-		String sql = "UPDATE quest SET `order`=`order`-1 WHERE pId=? AND `order`>?";
+		String sql = "UPDATE quest SET `order`=`order`-1 WHERE pId=? AND `order`>? ORDER BY `order` ASC";
 		jdbcTemplate.update(sql, pId, order);
 	}
 		

@@ -32,7 +32,7 @@ public class QuestService {
 		Quest removedQuest = questDao.select(qId);
 		int prevOrder = questDao.getOrderOf(qId);
 		questDao.changeOrder(qId, questDao.getMaxOrderOfProject(removedQuest.getpId()));
-		log.debug("qId:{} || quest : {}, qid : {}, pid : {}, order : {}", qId, removedQuest, removedQuest.getqId(), removedQuest.getpId(), removedQuest.getOrder());
+		log.debug("quest : {}, order : {}", removedQuest, prevOrder);
 		questDao.decreaseOrderAfter(removedQuest.getpId(), prevOrder);
 		questDao.delete(qId);
 		return removedQuest;
