@@ -173,6 +173,8 @@
                     alert('Unexpected server error.');
                 }
             });
+
+            e.stopPropagation();
         };
 
         //        $scope.resizeId;
