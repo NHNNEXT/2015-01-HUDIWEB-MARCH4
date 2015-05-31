@@ -99,7 +99,7 @@
                         }, i * 150);
                     })(i);
                 }
-                
+
                 $timeout($scope.setPosition, 0);
                 $timeout($scope.arrange, 0);
             }).
@@ -113,6 +113,12 @@
         };
 
         $scope.add = function (addData) {
+            if (addData === undefined) {
+                var addData = {};
+                addData.name = "";
+                addData.shared = "";
+            }
+
             $scope.addData = {};
             $scope.addData.name = addData.name;
             $scope.addData.shared = addData.shared;
@@ -134,17 +140,20 @@
                 data: $scope.addData
             }).
             success(function (data, status, headers, config) {
-                $scope.Buildings.push(data);
-                $timeout(function () {
-                    addSetPosition(data);
-                }, 0);
 
-                $timeout(function () {
-                    $scope.Buildings[$scope.Buildings.length - 1].hide = true;
-                    $scope.Buildings[$scope.Buildings.length - 1].hide = false;
-                }, 0);
+                if (data.pid !== undefined) {
+                    $scope.Buildings.push(data);
+                    $timeout(function () {
+                        addSetPosition(data);
+                    }, 0);
 
-
+                    $timeout(function () {
+                        $scope.Buildings[$scope.Buildings.length - 1].hide = true;
+                        $scope.Buildings[$scope.Buildings.length - 1].hide = false;
+                    }, 0);
+                } else {
+                    $scope.addFailMessage = data;
+                }
             }).
             error(function (data, status, headers, config) {
                 if (status == 400) {
@@ -236,8 +245,8 @@
                 },
                 function (e, el, position) {
                     $scope.collisionDetect(e, el, collision, $scope.boxDiff);
-                        //                    console.log(collision);
-                        //                    console.log($scope.boxDiff);
+                    //                    console.log(collision);
+                    //                    console.log($scope.boxDiff);
                     if (collision.top !== false)
                         position.y = collision.top + $scope.boxDiff.y;
                     if (collision.left !== false)
