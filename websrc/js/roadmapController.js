@@ -1,4 +1,17 @@
 (function(){
+	function jquerythings() {
+
+		jQuery('main').ready(function($) {
+			console.log('jquery ready');
+			$('.sortableContainer').on('click', '[name=delete]', function(e) {
+				e.stopPropagation();
+				event.preventDefault();
+				debugger;
+				angular.element(e.target).scope().deleteQuest();
+			});
+		});
+	}
+	
     var Sortable = march4.util.Sortable;
 
     march4.app.registerController('roadmapController', function($http, $scope, $routeParams, $q) {
@@ -36,6 +49,24 @@
             });
         };
         
+        $scope.deleteQuest = function(deleteQuestElement) {
+        	console.log('hohoho'+deleteQuestElement);
+        	debugger;
+        	var path = $scope.path+"/"+$scope.getqId(deleteQuestElement);
+        	$http.delete(path).success(function(data, status, headers, config) {
+        		console.log("delete good", status, "!");
+        		console.log(data);
+        		$scope.updateQuests(data);
+        		debugger;
+        		$scope.initQuest();
+        		$scope.quests.pop($scope.newQuest);
+        	}).error(function(data, status, headers, config) {
+        		console.log("delete bad", status, "!");
+        		console.log(data);
+        		debugger;
+        	});
+        };
+        
         $scope.getQuests = function() {
             console.log('getting quests');
             $http.get($scope.path).success(function(data, status, headers, config) {
@@ -69,14 +100,16 @@
         
         $scope.makeItSortable = function(el) {
             new Sortable(el, function(movingEl, nextEl){
-            	function getqId(element) {
-            		var scope = angular.element(element).scope();
-            		return (scope)? scope.quest.qId : 0;
-            	}
-            	console.log('hi');
-            	$scope.insertBefore(getqId(movingEl), getqId(nextEl));
+            	$scope.insertBefore($scope.getqId(movingEl), $scope.getqId(nextEl));
             });
         };
+        
+        $scope.getqId = function(element) {
+        	var scope = angular.element(element).scope();
+    		return (scope)? scope.quest.qId : 0;
+        };
+        
         $scope.init();
+        $scope.$on('$viewContentLoaded', jquerythings);
     });
 })();

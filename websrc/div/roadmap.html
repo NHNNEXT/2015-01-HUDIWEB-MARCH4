@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <form ng-submit="addQuest()">
 	<label>내용</label> <input ng-model="newQuest.contents" name="contents" type="text">
 	<!-- [type=datetime-local]은 mysql.datetime 이랑 형식이 달라서 불편. 일단 text 로 테스트.
@@ -24,6 +25,10 @@
 	번째
 	</p>
 	<li class="sortable" ng-repeat="quest in quests" repeat-func="makeItSortable">
-	<span>{{quest.contents}}</span>
-	<span>{{quest.due}}</span></li>
+		<span style="display:inline-block;width:25px;">{{quest.qId}}</span> <!-- for debugging -->
+		<span style="display:inline-block;width:20px;">{{quest.order}}</span> <!-- for debugging -->
+		<span>{{quest.contents}}</span>
+		<span>{{quest.due}}</span>
+		<button name="delete">X</button>
+	</li>
 </ul>

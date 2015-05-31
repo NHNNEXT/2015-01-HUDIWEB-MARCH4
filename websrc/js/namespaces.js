@@ -77,9 +77,9 @@ march4.util.Draggable = function(el, downFunc, moveFunc, upFunc) {
             });
         }
         $(document).on('mouseup.drag mouseleave.drag', function(e) {
+        	upFunc(e, that.$el);
             that.$el.attr('style', originalStyle);
             $(document).off('.drag');
-            upFunc(e, that.$el);
         });
         e.preventDefault();
     });
