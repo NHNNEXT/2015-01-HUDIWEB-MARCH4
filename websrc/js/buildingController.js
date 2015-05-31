@@ -420,8 +420,8 @@
         
         $scope.updateQuests = function(data) {
             $scope.quests = data;
-            $scope.lastOrder = parseInt(data[data.length - 1].order);
-            if(typeof($scope.lastOrder) !== 'number') $scope.lastOrder = 0;
+            $scope.lastOrder = parseInt(data[data.length - 1]);
+            $scope.lastOrder = (typeof($scope.lastOrder) !== 'number')? 0 : $scope.lastOrder.order;
             console.log('update last order', $scope.lastOrder);
         };
         
