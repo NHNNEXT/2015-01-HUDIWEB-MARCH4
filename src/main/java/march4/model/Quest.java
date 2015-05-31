@@ -58,6 +58,9 @@ public class Quest {
 	public void setpId(Integer pId) {
 		this.pId = pId;
 	}
+	public void setpId(String pId) {
+		this.pId = Integer.parseInt(pId);
+	}
 
 	public Integer getPosX() {
 		return posX;

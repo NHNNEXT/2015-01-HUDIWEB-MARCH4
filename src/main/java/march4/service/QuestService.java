@@ -39,10 +39,15 @@ public class QuestService {
 	}
 	public void insertBefore(Quest newQuest, int targetQuestId) {
 		//TODO 두 퀘스트의 pId 가 다를경우에 대해서도 에러처리를 해야 함.
-		Quest targetQuest = questDao.select(targetQuestId);
-		newQuest.setOrder(targetQuest.getOrder());
+		if(targetQuestId != 0) {
+			Quest targetQuest = questDao.select(targetQuestId);
+			newQuest.setOrder(targetQuest.getOrder());
+			questDao.increaseOrderEqualAndAfter(targetQuestId);
+			log.debug("targetQuest : {}", targetQuest);
+		} else {
+			newQuest.setOrder(questDao.getMaxOrderOfProject(newQuest.getpId()));
+		}
 		log.debug("newQuest : {}, order : {}", newQuest, newQuest.getOrder());
-		questDao.increaseOrderEqualAndAfter(targetQuestId);
 		questDao.insert(newQuest);
 	}
 	public void moveToBefore(int movingQuestId, int targetQuestId) {
