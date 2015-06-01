@@ -528,6 +528,17 @@
             },0,".delete");
         };
 
+        $scope.makeQuestDraggable = function (el){
+            new march4.util.Draggable(el, null,function(e, el, position){
+                var obj = angular.element(el).scope().quest;
+                console.log(obj);
+                console.log($scope.quests);
+                obj.posX =position.x;
+                obj.posY =position.y;
+
+            },null,500);
+        }
+
         $scope.getqId = function (element) {
             var scope = angular.element(element).scope();
             return (scope) ? scope.quest.qId : 0;

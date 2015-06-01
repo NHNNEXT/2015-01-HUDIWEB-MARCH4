@@ -15,15 +15,15 @@
 		<label>내용</label> <input ng-model="newQuest.contents" name="contents" type="text">
 		<label>마감</label> <input ng-model="newQuest.due" name="due" type="text" value="2011-05-25 04:52:23"><br />
 		<label>위치</label> 
-		<input ng-model="newQuest.posX" name="posX" type="number">
-		<input ng-model="newQuest.posY" name="posY" type="number">
+		x<input ng-model="newQuest.posX" name="posX" type="number">
+		y<input ng-model="newQuest.posY" name="posY" type="number">
 		<input ng-model="newQuest.order" name="order" type="number" style="display:none;" ng-value="$scope.lastId">
 		<input type="submit">
 	</form>
 </div>
 <div class="field">
 	<ul class="quests">
-		<li class="quest" ng-repeat="(index, quest) in quests" style="position:absolute; top:{{quest.posY}}px; left:{{quest.posX}}px;">
+		<li class="quest" ng-repeat="(index, quest) in quests" style="position:absolute; top:{{quest.posY}}px; left:{{quest.posX}}px;" repeat-func="makeQuestDraggable">
 			{{quest.contents}}
 		</li>
 	</ul>
