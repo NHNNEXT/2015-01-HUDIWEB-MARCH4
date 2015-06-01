@@ -423,6 +423,7 @@
             return QuestService.quests;
         }, function (quests) {
             $scope.updateQuests(quests);
+            $scope.initQuest();
         });
 
         $scope.$watch(function () {
@@ -443,8 +444,15 @@
         //프론트에 띄워주기 위함.
         $scope.updateQuests = function (data) {
             $scope.quests = data;
-            $scope.lastOrder = parseInt(data[data.length - 1]);
-            $scope.lastOrder = (typeof ($scope.lastOrder) !== 'number') ? 0 : $scope.lastOrder.order;
+            var lastQuest = data[data.length - 1];
+            var lastOrder = 0;
+            if(typeof (lastQuest) !== 'undefined') {
+            	var test = parseInt(lastQuest.order);
+            	if(typeof(test === 'number'))
+            		lastOrder = test;
+            }
+            $scope.lastOrder = lastOrder;
+//            debugger;
             console.log('update last order', $scope.lastOrder);
             //$scope.updatePosition();
         };

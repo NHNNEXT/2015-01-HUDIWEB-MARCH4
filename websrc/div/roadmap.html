@@ -10,6 +10,8 @@
 		</li>
 	</ul>
 	<form ng-submit="addQuest()">
+		<span>마지막 {{lastOrder}}번째</span>
+		<span>순서 {{newQuest.order}}번째</span><br />
 		<label>내용</label> <input ng-model="newQuest.contents" name="contents" type="text">
 		<label>마감</label> <input ng-model="newQuest.due" name="due" type="text" value="2011-05-25 04:52:23"><br />
 		<label>위치</label> 
