@@ -535,8 +535,21 @@
                 console.log($scope.quests);
                 obj.posX =position.x;
                 obj.posY =position.y;
+                angular.element(el).scope().$apply();
+                $(el).css({
+                    position:"absolute",
+                    left:obj.posX,
+                    top:obj.posY
+                });
 
-            },null,500);
+            },function(e, el, position){
+                var obj = angular.element(el).scope().quest;
+                $(el).css({
+                    position:"absolute",
+                    left:obj.posX,
+                    top:obj.posY
+                });
+            },500);
         }
 
         $scope.getqId = function (element) {
