@@ -28,10 +28,6 @@
 					templateUrl : '/div/building',
 					controller : 'buildingController',
 					resolve : addControllerJs()
-				}).when('/projects/:pId/quests', {
-					templateUrl : '/div/roadmap',
-					controller : 'roadmapController',
-					resolve : addControllerJs()
 				}).when('/signup', {
 					templateUrl : '/div/signup',
 					controller : 'signupController',

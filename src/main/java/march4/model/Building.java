@@ -13,9 +13,6 @@ public class Building {
 	@NotNull(message="이름을 반드시 입력하여야 합니다.")
 	@Size(min = 2, max = 24, message="2 ~ 24 사이의 이름을 입력해주세요!")
 	private String name;
-	
-	@NotNull(message="공유항목을 반드시 입력하여야 합니다.")
-	@Size(min = 2, max = 24 , message="2 ~ 24 사이의 공유항을 입력해주세요!")
 	private String shared;
 
 	public Building() {

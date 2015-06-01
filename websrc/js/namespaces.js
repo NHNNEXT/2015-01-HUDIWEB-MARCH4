@@ -44,9 +44,9 @@ var march4 = {
 	roadmap:{}
 };
 
-march4.util.Draggable = function(el, downFunc, moveFunc, upFunc, wait) {
+march4.util.Draggable = function(el, downFunc, moveFunc, upFunc, wait, exclude) {
     if(!(this instanceof march4.util.Draggable)){
-        return new march4.util.Draggable(el, downFunc, moveFunc, upFunc, wait);
+        return new march4.util.Draggable(el, downFunc, moveFunc, upFunc, wait, exclude);
     }
     
     var that = this;
@@ -105,12 +105,14 @@ march4.util.Draggable = function(el, downFunc, moveFunc, upFunc, wait) {
                 "left": position.x + diffX,
             });
         }
+        
         $(document).on('mouseup.drag mouseleave.drag', function(e) {
             that.$el.removeClass('dragging');
             that.$el.attr('style', originalStyle);
             $(document).off('.drag');
             upFunc(e, that.$el, position);
         });
+
         e.preventDefault();
     }
 
@@ -131,11 +133,16 @@ march4.util.Draggable = function(el, downFunc, moveFunc, upFunc, wait) {
         }
 
         e.preventDefault();
-    });    
+    });
+    if(exclude){
+        $(this.$el).find(exclude).on('mousedown',function(event) {
+            event.stopPropagation();
+        });
+    }
 };
 
 
-march4.util.Sortable = function(el, upFunc) {
+march4.util.Sortable = function(el, upFunc, wait, exclude) {
     var that = this;
     this.$el = $(el);
     this.$dummy = null;
@@ -165,7 +172,7 @@ march4.util.Sortable = function(el, upFunc) {
         that.$dummy.remove();
         $(document).off('.sort');
         upFunc(that.$el, that.$el.next());
-    });
+    }, wait, exclude);
 };
 
 march4.util.Sortable.prototype.exchangeEl = null;

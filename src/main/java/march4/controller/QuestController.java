@@ -25,27 +25,36 @@ public class QuestController {
 			.getLogger(QuestController.class);
 	
 	@Autowired
-	QuestService q;
+	QuestService qs;
 	
 	@RequestMapping(value = {""}, method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-	public List<Quest> get(@PathVariable("pId") String pId) {
+	public List<Quest> getQuests(@PathVariable("pId") String pId) {
 		log.debug("roadmap GET", pId);
-		return q.selectBypIdOrderedAsc(pId);
+		return qs.selectBypIdOrderedAsc(pId);
 	}
 	
 	@RequestMapping(value = {""}, method = RequestMethod.POST, consumes="application/json", produces=MediaType.APPLICATION_JSON_VALUE)
-	public List<Quest> request(@RequestBody Quest quest, @PathVariable("pId") String pId) {
+	public List<Quest> newQuest(@RequestBody Quest quest, @PathVariable("pId") String pId) {
 		log.debug("roadmap POST");
 		quest.setpId(pId);
-		q.insert(quest);
-		return q.selectBypIdOrderedAsc(pId);
+		//TODO order값이 있다면 insertBefore해줘야겠지만...... 흠. 그럴리없는걸로.
+		qs.insert(quest);
+		return qs.selectBypIdOrderedAsc(pId);
 	}
 	
-	@RequestMapping(value = "/{qId}/movetobefore", method = RequestMethod.PUT)
-	public List<Quest> test(@PathVariable("qId") int movingQuestId, @RequestParam("qId") int targetQuestId, @PathVariable("pId") String pId) {
-		q.moveToBefore(movingQuestId, targetQuestId);
+	@RequestMapping(value = "/{qId}/movetobefore", method = RequestMethod.PUT, produces=MediaType.APPLICATION_JSON_VALUE)
+	public List<Quest> updateOrder(@PathVariable("qId") int movingQuestId, @RequestParam("qId") int targetQuestId, @PathVariable("pId") String pId) {
+		log.debug("roadmap UPDATE", pId);
+		qs.moveToBefore(movingQuestId, targetQuestId);
 		log.debug("movingQuestId : {}, targetQuestId : {}", movingQuestId, targetQuestId);
 		
-		return q.selectBypIdOrderedAsc(pId);
+		return qs.selectBypIdOrderedAsc(pId);
+	}
+
+	@RequestMapping(value = {"/{qId}"}, method = RequestMethod.DELETE, produces=MediaType.APPLICATION_JSON_VALUE)
+	public List<Quest> deleteQuest(@PathVariable("qId") int qId, @PathVariable("pId") String pId) {
+		log.debug("roadmap DELETE", pId);
+		qs.remove(qId);
+		return qs.selectBypIdOrderedAsc(pId);
 	}
 }

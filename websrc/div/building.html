@@ -20,7 +20,7 @@
 	</div>
 	<div class="bd-overlay" ng-click="closeFloatingForm()"></div>
 	<div>
-		<button ng-click="openFloatingForm()"type="button" class="btn btn-block ink-reaction btn-default-dark">빌딩추가 </button>
+		<button class="add-building" ng-click="openFloatingForm()"type="button" class="btn btn-block ink-reaction btn-default-dark">빌딩추가 </button>
 	</div>
 	<div>
 		<ul class="buildingArea">
@@ -48,11 +48,9 @@
 	</div>
 </div>
 
-<div class="perspective">
-	<section class="panel" id="dummy-panel"
-		ng-class="{active: panelOpened}">
-		<!--        <section class="panel" id="dummy-panel" ng-include="'/div/roadmap'" ng-class="{active: panelOpened}" ng-controller="roadmapController">-->
-		<button class="close" ng-click="closePanel()">Close</button>
-		<div ng-include="'/div/roadmap'"></div>
-	</section>
-</div>
+<section class="panel" id="dummy-panel"
+	ng-class="{active: panelOpened}">
+	<!--        <section class="panel" id="dummy-panel" ng-include="'/div/roadmap'" ng-class="{active: panelOpened}" ng-controller="roadmapController">-->
+	<button class="close" ng-click="closePanel()">Close</button>
+	<div ng-include="'/div/roadmap'"></div>
+</section>
