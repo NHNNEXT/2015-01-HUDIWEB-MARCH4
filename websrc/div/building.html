@@ -6,13 +6,13 @@
             <div>
                 {{addFailMessage}}
                 <div>
-                    <input ng-model="addData.name" type="text" placeholder="Name">
+                    <input ng-model="newData.name" type="text" placeholder="Name">
                 </div>
                 <div>
-                    <label>Shared<input type="checkbox" ng-model="addData.shared"></label>
+                    <label>Shared<input type="checkbox" ng-model="newData.shared"></label>
                 </div>
                 <div>
-                    <input ng-click="add(addData)" type="button" value="Create"> 
+                    <input ng-click="add(newData)" type="button" value="Create"> 
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
                 <button class="building-button del" ng-click="del(Building.pid, $event, $index)">
                     삭제
                 </button>
-                <button class="building-button modify" ng-click="del(Building.pid, $event, $index)">
+                <button class="building-button modify" ng-click="modify(Building.pid, $event, $index)">
                     수정
                 </button>
             </li> 
