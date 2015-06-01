@@ -6,7 +6,7 @@
 			<span style="display:inline-block;width:20px;">{{quest.order}}</span> <!-- for debugging -->
 			<span>{{quest.contents}}</span>
 			<span>{{quest.due}}</span>
-			<button name="delete">X</button>
+			<button class="delete" name="delete" ng-click="deleteQuest(quest)">X</button>
 		</li>
 	</ul>
 	<form ng-submit="addQuest()">

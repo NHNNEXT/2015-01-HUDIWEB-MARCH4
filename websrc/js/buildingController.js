@@ -142,6 +142,7 @@
 
                 } else {
                     $scope.addFailMessage = data;
+                    $scope.newData = {};
 
                 }
                 $timeout($scope.arrange, 0);
@@ -443,6 +444,7 @@
 
         //프론트에 띄워주기 위함.
         $scope.updateQuests = function (data) {
+            console.log("qweofhqwopefhopwqehf", data);
             $scope.quests = data;
             var lastQuest = data[data.length - 1];
             var lastOrder = 0;
@@ -474,16 +476,14 @@
         };
 
         $scope.deleteQuest = function (deleteQuestElement) {
-            console.log('hohoho' + deleteQuestElement);
-            debugger;
-            var path = $scope.path + "/" + $scope.getqId(deleteQuestElement);
+            console.log(deleteQuestElement); 
+            var path = $scope.path + "/" + deleteQuestElement.qId;
             $http.delete(path).success(function (data, status, headers, config) {
                 console.log("delete good", status, "!");
                 console.log(data);
                 $scope.updateQuests(data);
-                debugger;
                 $scope.initQuest();
-                $scope.quests.pop($scope.newQuest);
+//                $scope.quests.pop($scope.newQuest);
             }).error(function (data, status, headers, config) {
                 console.log("delete bad", status, "!");
                 console.log(data);
@@ -525,7 +525,7 @@
         $scope.makeItSortable = function (el) {
             new march4.util.Sortable(el, function (movingEl, nextEl) {
                 $scope.insertBefore($scope.getqId(movingEl), $scope.getqId(nextEl));
-            });
+            },0,".delete");
         };
 
         $scope.getqId = function (element) {
