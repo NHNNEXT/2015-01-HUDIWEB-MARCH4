@@ -24,15 +24,16 @@
 
             if (!$scope.panelOpened) {
                 QuestService.getQuests(pId);
-                /*march4.util.setPathNoReloading($location.path().match(/(.*?)\/?$/)[1] + "/" + pId);*/
+                //march4.util.setPathNoReloading($location.path().match(/(.*?)\/?$/)[1] + "/" + pId);
                 $scope.panelOpened = true;
                 $scope.panelID = pId;
             }
         };
 
         $scope.closePanel = function () {
+            console.log(1);
             if ($scope.panelOpened) {
-                march4.util.setPathNoReloading($location.path().replace(/\/panel\/.*/g, ""));
+                //march4.util.setPathNoReloading($location.path().replace(/\/panel\/.*/g, ""));
                 $scope.panelOpened = false;
             }
         };

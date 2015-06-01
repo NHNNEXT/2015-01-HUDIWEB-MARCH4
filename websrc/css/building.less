@@ -306,12 +306,12 @@ button.building-button {
 
 /*-----------------------------------------------*/
 
-// .panel {
-//     visibility: visible;
-//     transform: perspective( 1000px) rotateX(0deg) translate3D(0, 0, 0)!important;
-//     webkit-transform: perspective( 1000px) rotateX(0deg) translate3D(0, 0, 0)!important;
-//     transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
-// }
+.panel {
+    visibility: visible;
+    transform: perspective( 1000px) rotateX(0deg) translate3D(0, 0, 0)!important;
+    webkit-transform: perspective( 1000px) rotateX(0deg) translate3D(0, 0, 0)!important;
+    transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
 
 .panel .close{
     position: absolute;
@@ -319,10 +319,12 @@ button.building-button {
     left:10px;
     text-indent:-9999px;
     overflow:hidden;
-    width:50px;
-    height:50px;
+    width:40px;
+    height:40px;
     background:none;
     border:0;
+    z-index:1;
+    cursor:pointer;
 }
 .panel .close:after{
     content:'';
