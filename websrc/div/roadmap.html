@@ -6,13 +6,13 @@
 			<span style="display:inline-block;width:20px;">{{quest.order}}</span> <!-- for debugging -->
 			<span>{{quest.contents}}</span>
 			<span>{{quest.due}}</span>
-			<button name="delete">X</button>
+			<button class="delete" name="delete" ng-click="deleteQuest($index, $event)">X</button>
 		</li>
 	</ul>
 	<form ng-submit="addQuest()">
 		<label>내용</label> <input ng-model="newQuest.contents" name="contents" type="text">
 		<label>마감</label> <input ng-model="newQuest.due" name="due" type="text" value="2011-05-25 04:52:23"><br />
-		<label>위치</label> 
+		<label>위치</label>
 		<input ng-model="newQuest.posX" name="posX" type="number">
 		<input ng-model="newQuest.posY" name="posY" type="number">
 		<input ng-model="newQuest.order" name="order" type="number" style="display:none;" ng-value="$scope.lastId">
@@ -24,10 +24,15 @@
 		<li class="quest" ng-repeat="(index, quest) in quests" style="bottom:{{quest.posX}}px; left:{{quest.posY}}px; left:50%">
 			{{quest.contents}} : {{quest.posX}} , {{quest.posY}}<br>
 			{{quests[index+1].contents}} : {{quests[index+1].posX}} , {{quests[index+1].posY}}
-			<svg>
 		</li>
 	</ul>
-	<svg height="100%" width="100%">
-	  <line x1="0" y1="0" x2="200" y2="200" style="stroke:rgb(255,0,0);stroke-width:2" />
-	</svg>
+	<!--svg height="100%" width="100%">
+		  <line ng-repeat="(index, quest) in quests" 
+			  x1="{{quest.posX}}" 
+			  y1="{{quest.posY}}" 
+			  x2="{{quests[index+1].posX}}" 
+			  y2="{{quests[index+1].posY}}" 
+			  style="stroke:rgb(255,0,0);stroke-width:2"
+		/>
+	</svg-->
 </div>

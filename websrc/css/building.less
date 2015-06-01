@@ -122,7 +122,7 @@
     }
 }
 
-.delete {
+.buildingBox .delete {
     margin-top: 300px !important;
     opacity: 0;
 }
@@ -283,7 +283,7 @@ body {
     background: url(../img/map_background.jpg);
     overflow: hidden;
     position: absolute;
-    top: 80px;
+    top: 0px;
     left: 0px;
     right: 0px;
     bottom: 0px;
@@ -305,13 +305,14 @@ button.building-button {
 
 
 /*-----------------------------------------------*/
-
+/*
 .panel {
     visibility: visible;
     transform: perspective( 1000px) rotateX(0deg) translate3D(0, 0, 0)!important;
     webkit-transform: perspective( 1000px) rotateX(0deg) translate3D(0, 0, 0)!important;
     transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
+*/
 
 .panel .close{
     position: absolute;
@@ -383,4 +384,14 @@ button.building-button {
             }
         }
     }
+}
+
+
+
+.add-building{
+    position:fixed;
+    top:80px;
+    right:50px;
+    width:50px;
+    height:50px;
 }

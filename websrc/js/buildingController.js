@@ -232,17 +232,10 @@
         $scope.st = 0;
         
         $scope.positionable = function (el) {
-           
-            console.dir($(el).find('button.building-button'));
-            
-            $(el).find('button.building-button').click(function(){
-                
-            });
-
+                      
             $scope.dragpos = {};
             $scope.boxDiff = {};
             var collision = {};
-            
             //클릭의 시작
             var openPanelStart = function(){
                 console.log($scope.st);
@@ -465,22 +458,19 @@
             });
         };
         
-        $scope.deleteQuest = function(deleteQuestElement) {
-            console.log('hohoho'+deleteQuestElement);
-            debugger;
-            var path = $scope.path+"/"+$scope.getqId(deleteQuestElement);
+        $scope.deleteQuest = function(idx, e) {
+            var deleteQuest = $scope.quests[idx];
+            var path = $scope.path+"/"+deleteQuest.qId;
             $http.delete(path).success(function(data, status, headers, config) {
                 console.log("delete good", status, "!");
-                console.log(data);
                 $scope.updateQuests(data);
-                debugger;
                 $scope.initQuest();
                 $scope.quests.pop($scope.newQuest);
             }).error(function(data, status, headers, config) {
                 console.log("delete bad", status, "!");
                 console.log(data);
-                debugger;
             });
+            e.stopPropagation();
         };
         
         $scope.getQuests = function() {
@@ -517,7 +507,7 @@
         $scope.makeItSortable = function(el) {
             new march4.util.Sortable(el, function(movingEl, nextEl){
                 $scope.insertBefore($scope.getqId(movingEl), $scope.getqId(nextEl));
-            });
+            },0,".delete");
         };
         
         $scope.getqId = function(element) {

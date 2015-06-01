@@ -135,14 +135,14 @@ march4.util.Draggable = function(el, downFunc, moveFunc, upFunc, wait, exclude) 
         e.preventDefault();
     });
     if(exclude){
-        $(exclude).on('mousedown',function(event) {
+        $(this.$el).find(exclude).on('mousedown',function(event) {
             event.stopPropagation();
         });
     }
 };
 
 
-march4.util.Sortable = function(el, upFunc) {
+march4.util.Sortable = function(el, upFunc, wait, exclude) {
     var that = this;
     this.$el = $(el);
     this.$dummy = null;
@@ -172,7 +172,7 @@ march4.util.Sortable = function(el, upFunc) {
         that.$dummy.remove();
         $(document).off('.sort');
         upFunc(that.$el, that.$el.next());
-    });
+    }, wait, exclude);
 };
 
 march4.util.Sortable.prototype.exchangeEl = null;
