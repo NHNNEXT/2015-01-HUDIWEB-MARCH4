@@ -2,8 +2,9 @@
 	'use strict';
 	march4.app.registerController('signinController', function($scope, $http,
 			$location, $rootScope, UserService, ToolTip) {
+
+
 		$scope.loginUser = {};
-		
 		$scope.signin = function () {
 			$scope.loading = true;
 			
@@ -11,7 +12,7 @@
 			.success(function(){
 				ToolTip.Success("sign in successful", true);
 				$rootScope.getUser();
-    			$location.path('/');
+    			$location.path('/building');
     			console.log("succeed in login");
 			})
 			.error(function (response, status, headers, config) {
@@ -28,5 +29,11 @@
 					}
 			});
 		}
+
+		$scope.$on("$routeChangeSuccess", function($currentRoute, $previousRoute) {
+		    if($rootScope.user){
+				$location.path('/building');
+		    }
+		});
 	});
 }());

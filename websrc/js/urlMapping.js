@@ -21,24 +21,24 @@
 	march4.app.config([ '$routeProvider', '$locationProvider', '$httpProvider', '$provide',
 			function($routeProvider, $locationProvider, $httpProvider, $provide) {
 				$routeProvider.when('/', {
-					templateUrl : '/div/frontpage',
-					controller : 'frontpageController',
-					resolve : addControllerJs()
-				}).when('/building/:buildingId?', {
-					templateUrl : '/div/building',
-					controller : 'buildingController',
-					resolve : addControllerJs()
-				}).when('/signup', {
-					templateUrl : '/div/signup',
-					controller : 'signupController',
+					templateUrl : '/div/signin',
+					controller : 'signinController',
 					resolve : addControllerJs()
 				}).when('/signin', {
 					templateUrl : '/div/signin',
 					controller : 'signinController',
 					resolve : addControllerJs()
+				}).when('/signup', {
+					templateUrl : '/div/signup',
+					controller : 'signupController',
+					resolve : addControllerJs()
 				}).when('/signout', {
 					templateUrl : '/div/signout',
 					controller : 'signoutController',
+					resolve : addControllerJs()
+				}).when('/building/:buildingId?', {
+					templateUrl : '/div/building',
+					controller : 'buildingController',
 					resolve : addControllerJs()
 				}).when('/errorPage/:errorNumber?', {
 					templateUrl : '/div/errorPage/',
