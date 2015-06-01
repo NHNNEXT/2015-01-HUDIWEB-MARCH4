@@ -1,51 +1,58 @@
 <link rel="stylesheet" href="<%- cssDir %>/building.css" />
 <div class="building-wrap">
-    <div class="bd-addform bd-effect bd-hide" ng-class="{'bd-show' : floatingForm.show}">
-        <div class="bd-content">
-            <h3>Create Building</h3>
-            <div>
-                {{addFailMessage}}
-                <div>
-                    <input ng-model="addData.name" type="text" placeholder="Name">
-                </div>
-                <div>
-                    <input ng-model="addData.shared" type="text" placeholder="shared">
-                </div>
-                <div>
-                    <input ng-click="add(addData)" type="button" value="Create"> 
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="bd-overlay" ng-click="closeFloatingForm()"></div>
-    <div>
-        <button ng-click="openFloatingForm()">빌딩추가</button>
-    </div>
-    <div>
-        <ul class="buildingArea">
-            <li ng-repeat="Building in Buildings" class="buildingBox" ng-class="{hide : Building.hide, delete : Building.delete}" repeat-func="positionable" ng-mousedown="setPid(Building.pid)">
-                pid : {{Building.pid}}<br>
-                host_uid : {{Building.host_uid}}<br>
-                name : {{Building.name}}<br>
-                shared : {{Building.shared}}<br>
-                
-                <span class="building-button" ng-click="openPanel(Building.pid)">
-                    열기
-                </span>
+	<div class="bd-addform bd-effect bd-hide"
+		ng-class="{'bd-show' : floatingForm.show}">
+		<div class="bd-content">
+			<h3>Create Building</h3>
+			<div>
+				{{addFailMessage}}
+				<div>
+					<input ng-model="addData.name" type="text" placeholder="Name">
+				</div>
+				<div>
+					<input ng-model="addData.shared" type="text" placeholder="shared">
+				</div>
+				<div>
+					<input ng-click="add(addData)" type="button" value="Create">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="bd-overlay" ng-click="closeFloatingForm()"></div>
+	<div>
+		<button ng-click="openFloatingForm()"type="button" class="btn btn-block ink-reaction btn-default-dark">빌딩추가 </button>
+	</div>
+	<div>
+		<ul class="buildingArea">
+			<li ng-repeat="Building in Buildings" class="buildingBox"
+				ng-class="{hide : Building.hide, delete : Building.delete}"
+				repeat-func="positionable" ng-mousedown="setPid(Building.pid)">
+				<div class="card-head card-head-lg style-primary">
+					<header>name : {{Building.name}}</header>
+				</div>
 
-                <button class="building-button" ng-click="del(Building.pid, $event, $index)">
-                    삭제
-                </button>
-            </li> 
-        </ul>
-    </div>
+				<div class="card-body">
+					pid : {{Building.pid}}<br> host_uid : {{Building.host_uid}}<br>
+					<blockquote>
+						<small>shared : {{Building.shared}}</small>
+					</blockquote>
+				</div>
+				<div class = "btnBuilding">
+					<button type="button" class="btn ink-reaction btn-flat btn-primary" ng-click="openPanel(Building.pid)">열기</button>
+					<button type="button" class="btn btn-block ink-reaction btn-default-bright" ng-click="del(Building.pid, $event, $index)">삭제</button>				
+				</div>
+
+
+			</li>
+		</ul>
+	</div>
 </div>
 
 <div class="perspective">
-    <section class="panel" id="dummy-panel" ng-class="{active: panelOpened}">
-        <!--        <section class="panel" id="dummy-panel" ng-include="'/div/roadmap'" ng-class="{active: panelOpened}" ng-controller="roadmapController">-->
-        <button class="close" ng-click="closePanel()">Close</button>
-        <div ng-include="'/div/roadmap'">
-        </div>
-    </section>
+	<section class="panel" id="dummy-panel"
+		ng-class="{active: panelOpened}">
+		<!--        <section class="panel" id="dummy-panel" ng-include="'/div/roadmap'" ng-class="{active: panelOpened}" ng-controller="roadmapController">-->
+		<button class="close" ng-click="closePanel()">Close</button>
+		<div ng-include="'/div/roadmap'"></div>
+	</section>
 </div>
