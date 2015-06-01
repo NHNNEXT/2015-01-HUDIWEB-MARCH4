@@ -23,13 +23,11 @@
 </div>
 <div class="field">
 	<ul class="quests">
-		<li class="quest" ng-repeat="(index, quest) in quests" style="bottom:{{quest.posX}}px; left:{{quest.posY}}px; left:50%">
-			{{quest.contents}} : {{quest.posX}} , {{quest.posY}}<br>
-			{{quests[index+1].contents}} : {{quests[index+1].posX}} , {{quests[index+1].posY}}
-			<svg>
+		<li class="quest" ng-repeat="(index, quest) in quests" style="position:absolute; top:{{quest.posY}}px; left:{{quest.posX}}px;">
+			{{quest.contents}}
 		</li>
 	</ul>
 	<svg height="100%" width="100%">
-	  <line x1="0" y1="0" x2="200" y2="200" style="stroke:rgb(255,0,0);stroke-width:2" />
+	  <line ng-show="quests[index+1]" ng-repeat="(index, quest) in quests" x1="{{quest.posX+50}}" y1="{{quest.posY+30}}" x2="{{quests[index+1].posX+50}}" y2="{{quests[index+1].posY+30}}" style="stroke:rgb(0,0,0);stroke-width:5" />
 	</svg>
 </div>
