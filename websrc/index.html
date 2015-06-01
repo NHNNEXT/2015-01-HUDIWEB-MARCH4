@@ -2,27 +2,49 @@
 <html>
 
 <head>
-    <meta charset="<%- encoding %>">
-    <title>
-        <%- title %>
-    </title>
-    <link rel="stylesheet" href="<%- cssDir %>/style.css" />
-    <script src="<%- jsLibDir %>/<%- jsLibFile %>"></script>
-    <script src="<%- jsDir %>/namespaces.js"></script>
-    <script src="<%- jsDir %>/main.js"></script>
-    <script src="<%- jsDir %>/toolTip.js"></script>
-    <script src="<%- jsDir %>/urlMapping.js"></script>
-    <base href="/">
+<meta charset="<%- encoding %>">
+<title><%- title %></title>
+<link rel="stylesheet" href="<%- cssDir %>/style.css" />
+<script src="<%- jsLibDir %>/<%- jsLibFile %>"></script>
+<script src="<%- jsDir %>/namespaces.js"></script>
+<script src="<%- jsDir %>/main.js"></script>
+<script src="<%- jsDir %>/toolTip.js"></script>
+<script src="<%- jsDir %>/urlMapping.js"></script>
+<base href="/">
 </head>
 
 <body ng-app="march4" ng-controller="mainController">
-    <div  id="main-controller">
-        <header id="main-header">
-            <div class="wrap">
-                <h1 id="main-title">
-                    <a href="/">March4</a>
-                </h1>
-                <section id="user-information" ng-show="user">
+	<div id="main-controller">
+		<header id="main-header" class="card">
+			<div class="wrap350">
+				<h1 id="main-title">
+					<img src="../img/logoMarch.gif" class="logoImg">
+					<!--                     <a href="/">March4</a>
+ -->
+				</h1>
+				<ul class = "ulMenu">
+					<li><a href = "/building"></a>Building</a></li>
+					<li><a href = "/roadmap">Road Map</a></li>
+					<li><a href = "/signout">Sign out</a></li>
+					
+				</ul>
+				<section id="user-information" ng-show="user" class="">
+					<figure>
+						<div class="avatar">
+							<div class="default" ng-class="user.defaultImg"
+								ng-show="user.defaultImg"></div>
+							<img width="32" height="32" ng-show="user.avatarImg"
+								ng-src="{{user.avatarImg}}" alt="{{user.name}}">
+						</div>
+						<figcaption>
+							<span class="name">{{user.name}}</span><br /> <span
+								class="email">{{user.email}}</span>
+						</figcaption>
+					</figure>
+				</section>
+
+
+				<!--               <section id="user-information" ng-show="user" class = "btn-flat dropdown-toggle" data-toggle="dropdown">
                     <figure>
                         <div class="avatar">
                             <div class="default" ng-class="user.defaultImg" ng-show="user.defaultImg"></div>
@@ -35,12 +57,12 @@
                         </figcaption>
                     </figure>
                 </section>
-                <!--//user-->
-            </div>
-        </header>
-        {{$scope.user}}
-        <main ng-view></main>
-    </div>
-    <%=liveReload%>
+                user -->
+			</div>
+		</header>
+		{{$scope.user}}
+		<main ng-view></main>
+	</div>
+	<%=liveReload%>
 </body>
 </html>

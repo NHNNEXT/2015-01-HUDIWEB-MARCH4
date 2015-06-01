@@ -42,15 +42,26 @@ body{
 	min-width: 640px;
 	margin:0 auto;
 }
+.wrap350{
+	width: 100%;
+	max-width:1000px;
+	min-width: 350px;
+	margin:0 auto;
+}
 
 /*header*/
 #main-header{
-	overflow:hidden;
-	background:transparent;
-	line-height: 5em;
-	vertical-align: center;	
-	position:fixed;
-	z-index:9999;
+	 overflow:hidden;
+/* 	background:transparent; */
+	  line-height: 1.2em;
+	  vertical-align: center;	
+	  position:fixed;
+	  z-index:9999;
+	  width: 350px;
+	  padding: 0px;
+	  border-left: 1px solid transparent;
+	  border-right: 1px solid transparent;	
+	
 
 	#main-title{
 		float:left;
@@ -58,7 +69,8 @@ body{
 	}
 
 	#user-information{
-		float:right;
+/*
+		float:left;
 		margin-left: 1em;
 		margin-top: 0.7em;
 		overflow:hidden;
@@ -66,14 +78,21 @@ body{
 		width:180px;
 		padding: 1.3em 0 0.3em;
 		border-left: solid 1px #ddd;
-
+*/
+		  float: right;
+		  overflow: hidden;
+		  line-height: 1em;
+		  width: 97px;
+		  border-left: solid 1px #ddd;
+		  padding: 10px;
+		  height: 83px;
 		.avatar{
-			border-radius: 50%;
-			overflow: hidden;
-			width: 32px;
-			height: 32px;
-			float: left;
-			margin: -0.6em 1em 0;
+			  border-radius: 50%;
+			  overflow: hidden;
+			  width: 32px;
+			  height: 32px;
+			  float: left;
+			  margin: 0.4em 2.4em 0;
 			
 			.default {
 			    background: url(/img/avatar.png) no-repeat;
@@ -100,9 +119,10 @@ body{
 		}
 
 		figcaption{
-			overflow: hidden;
-			padding-top:5px;
-			margin-top:-5px;
+			 overflow: hidden;
+			 padding-top: 10px;
+			 padding-left: 2%;
+			 text-align: center;
 			.email{
 				font-size: .6em;
 			}	
@@ -140,4 +160,38 @@ a:link {
 }
 input {
 	padding-left: 8px;
+}
+
+/*add june1 for user part*/
+.card {
+  position: relative;
+  margin-bottom: 24px;
+  background-color: #ffffff;
+  color: #313534;
+  border-radius: 2px;
+  -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);
+}
+
+.logoImg {
+  padding: 12px 25px;
+  width: 80px;	
+} 
+.ulMenu{ 
+  margin: 20px 0 10px;
+  float: left;
+  font-family: 'Montserrat',sans-serif;
+  font-size: 97%;
+  color: #5E5D5D;
+}
+
+.ulMenu li {
+  margin-bottom: 3px;
+}
+
+.ulMenu li:hover {
+  background-color: #e6e6e6;
+  border-color: #c5c9c8;
+  color: #5e5d5d;
+  cursor:default 
 }
