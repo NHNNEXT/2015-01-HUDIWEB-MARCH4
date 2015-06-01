@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`quest` (
   `posY` INT NULL,
   `order` INT NULL,
   `contents` TEXT NULL,
-  `due` DATETIME NULL,
+  `due` INT NULL,
   PRIMARY KEY (`qId`),
   INDEX `fk_quest_project1_idx` (`pId` ASC),
   UNIQUE INDEX `order_UNIQUE` (`pId` ASC, `order` ASC),

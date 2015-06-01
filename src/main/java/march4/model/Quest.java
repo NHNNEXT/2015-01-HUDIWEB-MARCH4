@@ -8,13 +8,13 @@ public class Quest {
 	private Integer posY;
 	private Integer order;
 	private String contents;
-	private String due;
+	private Integer due;
 
 	// RowMapper 에서 기본생성자 필요.
 	public Quest(){}
 	
 	public Quest(Integer qId, Integer pId, Integer posX, Integer posY, Integer order,
-			String contents, String due) {
+			String contents, Integer due) {
 		this.qId = qId;
 		this.pId = pId;
 		this.posX = posX;
@@ -24,7 +24,7 @@ public class Quest {
 		this.due = due;
 	}
 	public Quest(Integer pId, Integer posX, Integer posY, Integer order,
-			String contents, String due) {
+			String contents, Integer due) {
 		this.pId = pId;
 		this.posX = posX;
 		this.posY = posY;
@@ -34,7 +34,7 @@ public class Quest {
 	}
 	
 	public Quest(String pId, String posX, String posY, String order,
-			String contents, String due) {
+			String contents, Integer due) {
 		this.pId = Integer.parseInt(pId);
 		this.posX = Integer.parseInt(posX);
 		this.posY = Integer.parseInt(posY);
@@ -94,11 +94,11 @@ public class Quest {
 		this.contents = contents;
 	}
 
-	public String getDue() {
+	public Integer getDue() {
 		return due;
 	}
 
-	public void setDue(String due) {
+	public void setDue(Integer due) {
 		this.due = due;
 	}
 	

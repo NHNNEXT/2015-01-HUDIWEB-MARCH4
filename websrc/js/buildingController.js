@@ -136,17 +136,16 @@
                         $scope.Buildings[$scope.Buildings.length - 1].hide = true;
                         $scope.Buildings[$scope.Buildings.length - 1].hide = false;
                     }, 0);
-                    
-                    $(".inputname").attr("value", "");
-                    addData.shared = false;
+
+                    $scope.newData = {}; 
                     $scope.closeFloatingForm();
-                    
+
                 } else {
                     $scope.addFailMessage = data;
-                     
+
                 }
                 $timeout($scope.arrange, 0);
-                
+
             }).
             error(function (data, status, headers, config) {
                 if (status == 400) {
@@ -185,8 +184,8 @@
 
             e.stopPropagation();
         };
-        
-        $scope.modify = function (pid, e, i){
+
+        $scope.modify = function (pid, e, i) {
             alert("한 번 등록한 계획은 수정할 수 없습니다. 신중하세요");
             $scope.st = 1;
         };
@@ -230,32 +229,32 @@
 
         //패널을 위한 상태 저장 변수
         $scope.st = 0;
-        
+
         $scope.positionable = function (el) {
-           
+
             console.dir($(el).find('button.building-button'));
-            
-            $(el).find('button.building-button').click(function(){
-                
+
+            $(el).find('button.building-button').click(function () {
+
             });
 
             $scope.dragpos = {};
             $scope.boxDiff = {};
             var collision = {};
-            
+
             //클릭의 시작
-            var openPanelStart = function(){
+            var openPanelStart = function () {
                 console.log($scope.st);
-                if($scope.st === 0){
+                if ($scope.st === 0) {
                     $scope.openPanel(angular.element(el).scope().Building.pid);
-                }else{
+                } else {
                     $scope.st = 0;
                 }
             };
-            $(el).on('click',openPanelStart);
-            
-            
-            
+            $(el).on('click', openPanelStart);
+
+
+
             march4.util.Draggable(el,
                 function (e, el) {
                     console.log("press");
@@ -290,7 +289,7 @@
                     console.log("realese");
                     var mouseX = e.pageX;
                     var mouseY = e.pageY;
-                    
+
                     if (collision.top !== false)
                         mouseY = collision.top + $scope.boxDiff.y;
                     if (collision.left !== false)
@@ -304,13 +303,13 @@
                     var diffy = mouseY - $scope.dragpos.starty;
                     $(el).css("left", parseInt($(el).css("left")) + diffx + "px");
                     $(el).css("top", parseInt($(el).css("top")) + diffy + "px");
-                    
+
                     $scope.updatePosition(el);
                     $scope.arrange();
                     e.preventDefault();
                     //$(el).on('click',openPanelStart);
-                
-                },500,"button.building-button");
+
+                }, 500, "button.building-button");
         };
 
         $scope.updatePosition = function (el) {
@@ -340,7 +339,7 @@
             var container = $(".buildingArea");
             var elements = container.children();
             var sortMe = [];
-            
+
             for (var i = 0; i < elements.length; i++) {
                 if (!elements.eq(i).css("top")) {
                     continue;
@@ -354,7 +353,7 @@
             sortMe.sort(function (x, y) {
                 return x[0] - y[0];
             });
-            
+
             for (i = 0; i < sortMe.length; i++) {
                 sortMe[i][1].style.zIndex = i;
             }
@@ -414,149 +413,162 @@
     });
 
 
-    march4.app.registerController('roadmapController', function($http, $scope, $routeParams, $q, QuestService) {
+    march4.app.registerController('roadmapController', function ($http, $scope, $routeParams, $q, QuestService) {
         $scope.lastOrder = 0;
         $scope.quests = [];
         $scope.pid = 2;
-        $scope.path = '/api/projects/'+$scope.pid+'/quests';
+        $scope.path = '/api/projects/' + $scope.pid + '/quests';
 
-        $scope.$watch(function(){
+        $scope.$watch(function () {
             return QuestService.quests;
         }, function (quests) {
             $scope.updateQuests(quests);
         });
 
-        $scope.$watch(function(){
+        $scope.$watch(function () {
             return QuestService.pid;
         }, function (pid) {
             $scope.pid = pid;
-            $scope.path = '/api/projects/'+$scope.pid+'/quests';
+            $scope.path = '/api/projects/' + $scope.pid + '/quests';
         });
 
-        $scope.initQuest = function() {
+        $scope.initQuest = function () {
             console.log(QuestService);
             console.log('init', $scope.lastOrder);
             $scope.newQuest = {
                 order: ++($scope.lastOrder)
             };
         };
-        
-        $scope.updateQuests = function(data) {
+
+        //프론트에 띄워주기 위함.
+        $scope.updateQuests = function (data) {
             $scope.quests = data;
             $scope.lastOrder = parseInt(data[data.length - 1]);
-            $scope.lastOrder = (typeof($scope.lastOrder) !== 'number')? 0 : $scope.lastOrder.order;
+            $scope.lastOrder = (typeof ($scope.lastOrder) !== 'number') ? 0 : $scope.lastOrder.order;
             console.log('update last order', $scope.lastOrder);
-            $scope.updatePosition();
+            //$scope.updatePosition();
         };
-        
-        $scope.addQuest = function() {
+
+        $scope.addQuest = function () {
             console.log($scope.newQuest);
             $scope.quests.push($scope.newQuest);
             var data = $scope.newQuest;
-            $http.post($scope.path, data).success(function(data, status, headers, config) {
+            $http.post($scope.path, data).success(function (data, status, headers, config) {
                 console.log("post good", status, "!");
                 console.log(data);
                 $scope.updateQuests(data);
                 $scope.initQuest();
-            }).error(function(data, status, headers, config) {
+            }).error(function (data, status, headers, config) {
                 console.log("post bad", status, "!");
                 console.log(data);
                 debugger;
             });
         };
-        
-        $scope.deleteQuest = function(deleteQuestElement) {
-            console.log('hohoho'+deleteQuestElement);
+
+        $scope.deleteQuest = function (deleteQuestElement) {
+            console.log('hohoho' + deleteQuestElement);
             debugger;
-            var path = $scope.path+"/"+$scope.getqId(deleteQuestElement);
-            $http.delete(path).success(function(data, status, headers, config) {
+            var path = $scope.path + "/" + $scope.getqId(deleteQuestElement);
+            $http.delete(path).success(function (data, status, headers, config) {
                 console.log("delete good", status, "!");
                 console.log(data);
                 $scope.updateQuests(data);
                 debugger;
                 $scope.initQuest();
                 $scope.quests.pop($scope.newQuest);
-            }).error(function(data, status, headers, config) {
+            }).error(function (data, status, headers, config) {
                 console.log("delete bad", status, "!");
                 console.log(data);
                 debugger;
             });
         };
-        
-        $scope.getQuests = function() {
+
+        $scope.getQuests = function () {
             console.log('getting quests');
-            $http.get($scope.path).success(function(data, status, headers, config) {
+            $http.get($scope.path).success(function (data, status, headers, config) {
                 console.log("get good", status, "!");
                 console.log(data);
                 $scope.updateQuests(data);
                 $scope.initQuest();
-            }).error(function(data, status, headers, config) {
+            }).error(function (data, status, headers, config) {
                 console.log("get bad", status, "!");
                 console.log(data);
                 debugger;
             });
         };
-        
-        $scope.init = function() {
+
+        $scope.init = function () {
             $scope.getQuests();
         };
-        
-        $scope.insertBefore = function(movingIdx, nextIdx) {
+
+        $scope.insertBefore = function (movingIdx, nextIdx) {
             console.log('insert before path');
-            var path = $scope.path+"/"+movingIdx+"/movetobefore?qId="+nextIdx;
+            var path = $scope.path + "/" + movingIdx + "/movetobefore?qId=" + nextIdx;
             console.log(path);
-            $http.put(path).success(function(data, status, headers, config) {
+            $http.put(path).success(function (data, status, headers, config) {
                 console.log("insert success");
                 console.log(data);
                 $scope.updateQuests(data);
-            }).error(function(data, status, headers, config) {
+            }).error(function (data, status, headers, config) {
                 console.log("insert fail");
             });
         };
-        
-        $scope.makeItSortable = function(el) {
-            new march4.util.Sortable(el, function(movingEl, nextEl){
+
+        $scope.makeItSortable = function (el) {
+            new march4.util.Sortable(el, function (movingEl, nextEl) {
                 $scope.insertBefore($scope.getqId(movingEl), $scope.getqId(nextEl));
             });
         };
-        
-        $scope.getqId = function(element) {
+
+        $scope.getqId = function (element) {
             var scope = angular.element(element).scope();
-            return (scope)? scope.quest.qId : 0;
+            return (scope) ? scope.quest.qId : 0;
         };
 
-        $scope.toMillisec = function(sqlDatetime) {
-            var t = sqlDatetime.split(/[- :]/);
-            var d = new Date(t[0], t[1]-1, t[2], t[3] || 0, t[4] || 0, t[5] || 0);
-            var s = d.getTime();
-            return s;
-        };
-
-        $scope.calculatePosition = function(millisec) {
-        };
-
-        $scope.updatePosition = function() {
-            var baseDuesec = $scope.toMillisec('2010-01-01 00:00:00');
-            // var baseDuesec = new Date(); // 혹은 제일 가까운 날짜.
-            var viewMaxHeight = 500;
-
-            var accumulatedDuesec = 0;
-            for (var i = $scope.quests.length - 1; i >= 0; i--) {
-                var q = $scope.quests[i];
-                q.duesec = ($scope.toMillisec(q.due) - baseDuesec) / 1000;
-                accumulatedDuesec += q.duesec;
-            };
-
-            if($scope.quests.length > 0) $scope.quests[0].position = 0;
-            for (var i = 1; i < $scope.quests.length; i++) {
-                var q = $scope.quests[i];
-                q.position = $scope.quests[i-1].position
-                    + parseInt((q.duesec * viewMaxHeight) / accumulatedDuesec);
-            };
-            // debugger;
-            $scope.calculatePosition();
-        };
         
+        
+        ///////////////////////////////////////////////////////////
+//        //이거 안쓸듯 아니 못쓸듯
+//        $scope.toMillisec = function (sqlDatetime) {
+//            var t = sqlDatetime.split(/[- :]/);
+//            var d = new Date(t[0], t[1] - 1, t[2], t[3] || 0, t[4] || 0, t[5] || 0);
+//            var s = d.getTime();
+//            return s;
+//        };
+//
+//        //위치를 계산하는데...
+//        $scope.calculatePosition = function (millisec) {
+//            //뭘 받아서 뭘 내뿜어줄지 생각해보자.
+//            
+//            //바닥에서부터 듀 데이트로 거리를 잡을꺼야
+//            //듀 데이트는 날짜를 받았으니 
+//        };
+//
+//        //이것도 위치를 계산하는데...
+//        $scope.updatePosition = function () {
+//            var baseDuesec = $scope.toMillisec('2010-01-01 00:00:00');
+//            // var baseDuesec = new Date(); // 혹은 제일 가까운 날짜.
+//            var viewMaxHeight = 500;
+//
+//            var accumulatedDuesec = 0;
+//            for (var i = $scope.quests.length - 1; i >= 0; i--) {
+//                var q = $scope.quests[i];
+//                q.duesec = ($scope.toMillisec(q.due) - baseDuesec) / 1000;
+//                accumulatedDuesec += q.duesec;
+//            };
+//
+//            if ($scope.quests.length > 0) $scope.quests[0].position = 0;
+//            for (var i = 1; i < $scope.quests.length; i++) {
+//                var q = $scope.quests[i];
+//                q.position = $scope.quests[i - 1].position + parseInt((q.duesec * viewMaxHeight) / accumulatedDuesec);
+//            };
+//            // debugger;
+//            $scope.calculatePosition();
+//        };
+        ///////////////////////////////////////////////////////////
+        
+        
+
         $scope.init();
     });
 })();
