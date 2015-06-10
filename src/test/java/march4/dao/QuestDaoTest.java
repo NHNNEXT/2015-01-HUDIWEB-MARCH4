@@ -30,13 +30,6 @@ public class QuestDaoTest {
 	public void dataSource(){
 		assertNotNull(dataSource);
 	}
-
-	@Test
-	public void insert() {
-		Quest quest = new Quest(1, 0, 0, 1, "tt", 10);
-		questDao.insert(quest);
-		log.debug("Insert quest : {}", quest);
-	}
 	
 	@Test
 	public void select(){

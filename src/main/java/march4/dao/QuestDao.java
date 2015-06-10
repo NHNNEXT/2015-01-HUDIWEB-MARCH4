@@ -93,13 +93,6 @@ public class QuestDao {
 		String sql = "UPDATE quest SET `order`=`order`+1 WHERE pId=? AND `order`>=? ORDER BY `order` DESC";
 		jdbcTemplate.update(sql, quest.getpId(), quest.getOrder());
 	}
-//	public void decreaseOrderAfter(int qId) throws EmptyResultDataAccessException {
-//		Quest quest = jdbcTemplate.queryForObject("SELECT * FROM quest WHERE qId="+qId,
-//				new BeanPropertyRowMapper<Quest>(Quest.class), qId);
-//		
-//		String sql = "UPDATE quest SET `order`=`order`-1 WHERE pId=? AND order>?";
-//		jdbcTemplate.update(sql, quest.getpId(), quest.getOrder());
-//	}
 	public void decreaseOrderAfter(int pId, int order) throws EmptyResultDataAccessException {
 		String sql = "UPDATE quest SET `order`=`order`-1 WHERE pId=? AND `order`>? ORDER BY `order` ASC";
 		jdbcTemplate.update(sql, pId, order);
