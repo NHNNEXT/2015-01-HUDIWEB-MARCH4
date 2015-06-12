@@ -55,4 +55,9 @@ public class QuestService {
 		log.debug("quest : {}, qid : {}", removedQuest, targetQuestId);
 		insertBefore(removedQuest, targetQuestId);
 	}
+
+	public void updateQuest(int qId, Quest quest) {
+		log.debug("간닺ㄷ);ㅐㄱ롲;ㅐㅁ돎ㅈ;ㅑ도랮모ㅑㄷ래;조ㅑㄷ");
+		questDao.updateMultipleColumn(qId, quest);
+	}
 }

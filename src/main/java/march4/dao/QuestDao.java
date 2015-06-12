@@ -1,5 +1,6 @@
 package march4.dao;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -96,6 +97,33 @@ public class QuestDao {
 	public void decreaseOrderAfter(int pId, int order) throws EmptyResultDataAccessException {
 		String sql = "UPDATE quest SET `order`=`order`-1 WHERE pId=? AND `order`>? ORDER BY `order` ASC";
 		jdbcTemplate.update(sql, pId, order);
+	}
+	
+	// 매우 찜찜한 방식 으으으으으음
+	public void updateMultipleColumn(int qId, Quest quest) {
+		String sql = "UPDATE quest SET ";
+		//TODO quest 모든값이 null일리는 없다고 가정.
+		for(Field field : quest.getClass().getDeclaredFields()) {
+			Object value;
+			field.setAccessible(true);
+			try {
+				value = field.get(quest);
+				log.debug("field : {}, value : {}", field.getName(), value);
+				if(value != null) {
+					if(!sql.endsWith(" ")) sql+= ",";
+					sql += field.getName()+"='"+value+"'";
+				}
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				// 에러 노 처리 ㅜㅠ
+				e.printStackTrace();
+			}
+			field.setAccessible(false);
+		}
+		sql += "WHERE qId="+qId;
+		log.debug("sql : {}", sql);
+		
+		jdbcTemplate.update(sql);
 	}
 		
 	

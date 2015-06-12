@@ -43,6 +43,15 @@ public class QuestController {
 		return qs.selectBypIdOrderedAsc(pId);
 	}
 	
+	@RequestMapping(value = "/{qId}", method = RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
+	public List<Quest> updateQuest(@RequestBody Quest quest, @PathVariable("qId") int qId, @PathVariable("pId") String pId) {
+		log.debug("roadmap UPDATE", qId);
+		qs.updateQuest(qId, quest);
+		log.debug("updateQuest : {}", quest);
+		
+		return qs.selectBypIdOrderedAsc(pId);
+	}
+	
 	@RequestMapping(value = "/{qId}/movetobefore", method = RequestMethod.PUT, produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<Quest> updateOrder(@PathVariable("qId") int movingQuestId, @RequestParam("qId") int targetQuestId, @PathVariable("pId") String pId) {
 		log.debug("roadmap UPDATE change order", pId);
@@ -54,7 +63,7 @@ public class QuestController {
 
 	@RequestMapping(value = {"/{qId}"}, method = RequestMethod.DELETE, produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<Quest> deleteQuest(@PathVariable("qId") int qId, @PathVariable("pId") String pId) {
-		log.debug("roadmap DELETE", pId);
+		log.debug("roadmap DELETE", qId);
 		qs.remove(qId);
 		return qs.selectBypIdOrderedAsc(pId);
 	}
