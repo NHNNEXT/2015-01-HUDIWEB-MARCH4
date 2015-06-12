@@ -549,7 +549,7 @@
                     left:obj.posX,
                     top:obj.posY
                 });
-            },500);
+            },0);
         }
 
         $scope.getqId = function (element) {
